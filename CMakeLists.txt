@@ -28,5 +28,6 @@ include(Tools)
 add_subdirectory(logic)
 add_subdirectory(board)
 add_subdirectory(drivers)
+add_subdirectory(lib)
 
 size(${TARGET})
