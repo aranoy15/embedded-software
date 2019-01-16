@@ -16,7 +16,7 @@ endfunction ()
 
 function(size NAME)
 	add_custom_target(size ALL
-		arm-none-eabi-size ${CMAKE_BINARY_DIR}/${NAME}/${NAME}
+		arm-none-eabi-size ${CMAKE_BINARY_DIR}/logic/${LOGIC}/${NAME}
 		DEPENDS ${NAME}
 	)	
 endfunction(size NAME)

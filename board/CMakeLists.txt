@@ -3,4 +3,4 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \
 		-Xlinker -Map=${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.map \
         -Xlinker --no-wchar-size-warning")
 
-add_subdirectory(${BOARD})
+add_subdirectory(${CHIP})
