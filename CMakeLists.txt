@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
 
-option(DBG "Enable or disable debugging" ON)
-
 if (NOT DEFINED CHIP)
     set(CHIP STM32F103xB)
 endif()

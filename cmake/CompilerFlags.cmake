@@ -1,33 +1,13 @@
 # specify the cross compiler
+enable_language(ASM)
 set(CMAKE_C_COMPILER arm-none-eabi-gcc)
 set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
+set(CMAKE_ASM_COMPILER arm-none-eabi-gcc)
 
-set(CMAKE_ASM-ATT_COMPILER arm-none-eabi-gcc)
-enable_language(ASM-ATT)
-set(CMAKE_ASM-ATT_COMPILER arm-none-eabi-gcc)
+SET(CMAKE_C_FLAGS "-mthumb -g -fno-builtin -mcpu=cortex-m3 -Wall -std=gnu99 -ffunction-sections -fdata-sections -fomit-frame-pointer -mabi=aapcs -fno-unroll-loops -ffast-math -ftree-vectorize" CACHE INTERNAL "c compiler flags")
+SET(CMAKE_CXX_FLAGS "-mthumb -g -Weffc++ -fno-exceptions -fno-builtin -mcpu=cortex-m3 -Wall -std=c++11 -ffunction-sections -fdata-sections -fomit-frame-pointer -mabi=aapcs -fno-unroll-loops -ffast-math -ftree-vectorize" CACHE INTERNAL "cxx compiler flags")
+SET(CMAKE_ASM_FLAGS "-mthumb -g -mcpu=cortex-m3 -x assembler-with-cpp")
 
-# search for programs in the build host directories
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-
-# for libraries and headers in the target directories
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-
-set(CMAKE_EXPORT_COMPILE_COMMANDS True)
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-#set(COMMON_FLAGS "-W -Wall -fdiagnostics-color=always")
-
-if (DBG)
-    set(COMMON_FLAGS "-g ${COMMON_FLAGS}")
-endif ()
-
-add_definitions(-DUSE_HAL_DRIVER)
-
-set(OPT_FLAGS "-Os -ffunction-sections -fdata-sections")
-set(PLATFORM_FLAGS "-mcpu=cortex-m3 -mthumb")
-set(CMAKE_CXX_FLAGS "-Weffc++ -fno-exceptions ${CMAKE_CXX_FLAGS} ${COMMON_FLAGS} ${OPT_FLAGS} ${PLATFORM_FLAGS}")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${COMMON_FLAGS} ${OPT_FLAGS} ${PLATFORM_FLAGS}")
-set(CMAKE_ASM-ATT_FLAGS "${CMAKE_ASM-ATT_FLAGS} -c ${COMMON_FLAGS} ${PLATFORM_FLAGS}")
-set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} ${COMMON_FLAGS} ${PLATFORM_FLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -specs=nosys.specs -lnosys -lc -lm -Xlinker --gc-sections")
+SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -mthumb -mcpu=cortex-m3 -mabi=aapcs -T ${CMAKE_CURRENT_SOURCE_DIR}/board/${CHIP}/link.ld")
+SET(CMAKE_MODULE_LINKER_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs")
+SET(CMAKE_SHARED_LINKER_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs")
