@@ -31,3 +31,5 @@ add_subdirectory(drivers)
 add_subdirectory(lib)
 
 size(${TARGET})
+generate_bin(${TARGET})
+flash(${TARGET})

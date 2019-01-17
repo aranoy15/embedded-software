@@ -1,6 +1,6 @@
 function (add_trace NAME)
 	add_custom_target(${NAME}.trace
-		arm-none-eabi-gdb --batch --command=${CMAKE_SOURCE_DIR}/debug/trace_gdb.py --args ${CMAKE_CURRENT_BINARY_DIR}/${NAME}
+		arm-none-eabi-gdb --batch --command=${CMAKE_SOURCE_DIR}/debug/trace_gdb.py --args ${CMAKE_CURRENT_BINARY_DIR}/logic/${LOGIC}/${NAME}
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		USES_TERMINAL
 		)
@@ -20,6 +20,18 @@ function(size NAME)
 		DEPENDS ${NAME}
 	)	
 endfunction(size NAME)
+
+function(generate_bin NAME)
+	add_custom_target(generate_bin ALL
+		arm-none-eabi-objcopy -Obinary ${CMAKE_BINARY_DIR}/logic/${LOGIC}/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.bin
+		DEPENDS ${NAME}
+	)	
+	add_custom_target(generate_hex ALL
+		arm-none-eabi-objcopy -Oihex ${CMAKE_BINARY_DIR}/logic/${LOGIC}/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.hex
+		DEPENDS ${NAME}
+	)	
+endfunction(generate_bin NAME)
+
 
 
 add_custom_target(openocd
