@@ -17,9 +17,9 @@ int main()
 
 	while (true) {
 		ErrorNormal::On();
-		HAL_Delay(1000);
+		HAL_Delay(500);
 		ErrorNormal::Off();
-		HAL_Delay(1000);
+		HAL_Delay(500);
 
 		Watchdog::Reload();
 	}
