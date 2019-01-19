@@ -1,8 +1,6 @@
 add_library(lib 
-    gpio.cpp
-    rcc.cpp
-    watchdog.cpp
-    usbdevice.cpp
+    rcc.c
+    gpio.c
 )
 
 target_include_directories(lib PUBLIC
