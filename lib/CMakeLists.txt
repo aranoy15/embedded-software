@@ -1,6 +1,7 @@
 add_library(lib 
-    rcc.c
-    gpio.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/rcc.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/gpio.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/usbdevice.c
 )
 
 target_include_directories(lib PUBLIC

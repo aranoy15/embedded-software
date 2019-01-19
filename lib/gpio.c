@@ -47,10 +47,10 @@ void GpioOff(CSP_DEV_NBR port, CSP_GPIO_MSK pin)
 
 uint8_t GpioState(CSP_DEV_NBR port, CSP_GPIO_MSK pin)
 {
-	return HAL_GPIO_ReadPin(GPIO_GetPointer(port), pin);
+	return HAL_GPIO_ReadPin(GpioGetPointer(port), pin);
 }
 
 void GpioRemove(CSP_DEV_NBR port, CSP_GPIO_MSK pin)
 {
-	HAL_GPIO_DeInit(GPIO_GetPointer(port), pin);
+	HAL_GPIO_DeInit(GpioGetPointer(port), pin);
 }

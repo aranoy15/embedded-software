@@ -8,4 +8,4 @@ set(TARGET_SOURCES
 
 add_executable(${TARGET} ${TARGET_SOURCES})
 
-target_link_libraries(${TARGET} drivers lib)
+target_link_libraries(${TARGET} drivers lib FreeRTOS)
