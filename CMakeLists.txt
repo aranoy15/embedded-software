@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 
+add_definitions(-DDBG=0)
+
 if (NOT DEFINED CHIP)
     set(CHIP STM32F103xB)
 endif()

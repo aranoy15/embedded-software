@@ -1,4 +1,4 @@
-#include <rcc.h>
+#include <lib/rcc.h>
 
 void rcc::Init()
 {
