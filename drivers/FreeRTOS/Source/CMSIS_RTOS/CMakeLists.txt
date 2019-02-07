@@ -1,0 +1,3 @@
+target_sources(FreeRTOS PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmsis_os.c
+)
