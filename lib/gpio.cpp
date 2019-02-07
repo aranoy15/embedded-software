@@ -1,6 +1,6 @@
 #include <gpio.h>
 
-GPIO_TypeDef *GpioGetPointer(CSP_DEV_NBR portNum)
+GPIO_TypeDef *gpio::GPIO_GetPointer(CSP_DEV_NBR portNum)
 {
 	switch (portNum) {
 		case CSP_GPIO_PORT_NBR_A:
@@ -23,8 +23,8 @@ GPIO_TypeDef *GpioGetPointer(CSP_DEV_NBR portNum)
 	return NULL;
 }
 
-void GpioSetup(CSP_DEV_NBR port, CSP_GPIO_MSK pins, uint32_t mode, uint16_t speed,
-                 uint32_t pull)
+void gpio::Setup(CSP_DEV_NBR port, CSP_GPIO_MSK pins, Mode mode, Speed speed,
+                 Pull pull)
 {
     GPIO_InitTypeDef cfg;
     cfg.Pin = pins;
@@ -32,25 +32,5 @@ void GpioSetup(CSP_DEV_NBR port, CSP_GPIO_MSK pins, uint32_t mode, uint16_t spee
     cfg.Pull = pull;
     cfg.Speed = speed;
 
-    HAL_GPIO_Init(GpioGetPointer(port), &cfg);
-}
-
-void GpioOn(CSP_DEV_NBR port, CSP_GPIO_MSK pin)
-{
-	HAL_GPIO_WritePin(GpioGetPointer(port), pin, GPIO_PIN_SET);
-}
-
-void GpioOff(CSP_DEV_NBR port, CSP_GPIO_MSK pin)
-{
-	HAL_GPIO_WritePin(GpioGetPointer(port), pin, GPIO_PIN_RESET);
-}
-
-uint8_t GpioState(CSP_DEV_NBR port, CSP_GPIO_MSK pin)
-{
-	return HAL_GPIO_ReadPin(GpioGetPointer(port), pin);
-}
-
-void GpioRemove(CSP_DEV_NBR port, CSP_GPIO_MSK pin)
-{
-	HAL_GPIO_DeInit(GpioGetPointer(port), pin);
+    HAL_GPIO_Init(GPIO_GetPointer(port), &cfg);
 }

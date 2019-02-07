@@ -11,3 +11,5 @@ SET(CMAKE_ASM_FLAGS "-mthumb -g -mcpu=cortex-m3 -x assembler-with-cpp")
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -mthumb -mcpu=cortex-m3 -mabi=aapcs -T ${CMAKE_CURRENT_SOURCE_DIR}/board/${CHIP}/link.ld")
 SET(CMAKE_MODULE_LINKER_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs")
 SET(CMAKE_SHARED_LINKER_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs")
+
+add_definitions(-D__FILENAME__="")
