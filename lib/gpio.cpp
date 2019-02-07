@@ -1,4 +1,4 @@
-#include <lib/gpio.h>
+#include <gpio.h>
 
 GPIO_TypeDef *gpio::GPIO_GetPointer(CSP_DEV_NBR portNum)
 {

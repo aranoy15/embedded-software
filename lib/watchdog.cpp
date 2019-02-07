@@ -1,4 +1,4 @@
-#include <lib/watchdog.h>
+#include <watchdog.h>
 
 IWDG_HandleTypeDef Watchdog::m_hiwdg;
 
