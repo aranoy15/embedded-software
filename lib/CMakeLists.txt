@@ -1,15 +1,12 @@
 add_library(lib 
-    gpio.cpp
-    rcc.cpp
-    watchdog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/rcc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/gpio.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/watchdog.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/usbdevice.c
 )
 
 target_include_directories(lib PUBLIC
     ${CMAKE_SOURCE_DIR}
 )
 
-#target_include_directories(lib PUBLIC
-#    ${CMAKE_CURRENT_SOURCE_DIR}
-#)
-
-target_link_libraries(lib PRIVATE drivers)
+target_link_libraries(lib PRIVATE drivers FreeRTOS)

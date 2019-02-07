@@ -1,29 +1,27 @@
-//#include <gpio.h>
-#include <lib/rcc.h>
-#include <lib/watchdog.h>
-#include <lib/gpio.h>
-#include <tuple>
-#include <vector>
-
+#include <stdint.h>
+#include <stm32f1xx_hal.h>
+#include <rcc.h>
+#include <gpio.h>
+#include <watchdog.h>
 #include <cmsis_os.h>
 
 using namespace gpio;
 
-extern "C" void* malloc(size_t size)
+void* malloc(size_t size)
 {
 	return pvPortMalloc(size);
 }
 
 
-extern "C" void free(void* block)
+void free(void* block)
 {
 	return vPortFree(block);
 }
 
-
 void* operator new(size_t size)
 {
-	return malloc(size);
+	void* block = malloc(size);
+	return block;
 }
 
 
@@ -32,39 +30,46 @@ void operator delete(void* block)
 	free(block);
 }
 
-typedef GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP> ErrorNormal;
-
 __attribute__((constructor))
-void initAll()
+void InitAll()
 {
 	HAL_Init();
 	rcc::Init();
 }
 
-void testThread(const void *arguments)
+void blinkTask(const void *data)
 {
+	typedef GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP> ErrorNormal;
 	ErrorNormal::Setup();
-	for(;;)	{
+
+	for(;;) {
 		ErrorNormal::On();
-		osDelay(500);
+		osDelay(250);
 		ErrorNormal::Off();
-		osDelay(500);
+		osDelay(250);
+	}
+}
+
+void sendTask(const void *data)
+{
+	for(;;) {
+		osDelay(1);
 	}
 }
 
 int main()
 {
-	osThreadDef(testThread, testThread, osPriorityNormal, 0, 512);	
-	osThreadCreate(osThread(testThread), NULL);
-	osKernelStart();
+	osThreadDef(blink, blinkTask, osPriorityNormal, 0, 2 * 1024 /sizeof(size_t));
+	osThreadCreate(osThread(blink), NULL);
 
-	//ErrorNormal::Setup();
-	//for(;;) {
-	//	ErrorNormal::On();
-	//	HAL_Delay(500);
-	//	ErrorNormal::Off();
-	//	HAL_Delay(500);
-	//}
+	osThreadDef(send, sendTask, osPriorityNormal, 0, 1 * 1024 / sizeof(size_t));
+	osThreadCreate(osThread(send), NULL);
+
+	Watchdog::Init();
+	Watchdog::Start();
+	Watchdog::Reload();
+
+	osKernelStart();
 }
 
 extern "C" {
