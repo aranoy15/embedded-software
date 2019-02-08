@@ -5,6 +5,11 @@
 #include <watchdog.h>
 #include <cmsis_os.h>
 
+#include <thread.h>
+#include <mutex.h>
+#include <singleton.h>
+#include <time.h>
+
 using namespace gpio;
 
 void* malloc(size_t size)
@@ -37,37 +42,47 @@ void InitAll()
 	rcc::Init();
 }
 
-void blinkTask(const void *data)
+class BlinkThread : public Thread, public Singleton<BlinkThread>
 {
-	typedef GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP> ErrorNormal;
-	ErrorNormal::Setup();
+public:
+	BlinkThread() : Thread(osPriorityNormal, 1024, "blink") {}
 
-	for(;;) {
-		ErrorNormal::On();
-		osDelay(250);
-		ErrorNormal::Off();
-		osDelay(250);
+	virtual void ThreadFunc()
+	{
+		typedef GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP>
+		    ErrorNormal;
+		ErrorNormal::Setup();
+
+		Watchdog::Init();
+		Watchdog::Start();
+		Watchdog::Reload();
+		Mutex mutex;
+
+		for (;;) {
+			Lock lock(mutex);
+			ErrorNormal::On();
+			Time::Sleep(Time(250));
+			ErrorNormal::Off();
+			Time::Sleep(Time(250));
+
+			Watchdog::Reload();
+		}
 	}
-}
+};
 
-void sendTask(const void *data)
+void mainThread(const void* arguments)
 {
-	for(;;) {
-		osDelay(1);
+	BlinkThread::Instance()->Start();
+
+	for(;;){
+		Time::Sleep(Time(1));
 	}
 }
 
 int main()
 {
-	osThreadDef(blink, blinkTask, osPriorityNormal, 0, 2 * 1024 /sizeof(size_t));
-	osThreadCreate(osThread(blink), NULL);
-
-	osThreadDef(send, sendTask, osPriorityNormal, 0, 1 * 1024 / sizeof(size_t));
-	osThreadCreate(osThread(send), NULL);
-
-	Watchdog::Init();
-	Watchdog::Start();
-	Watchdog::Reload();
+	osThreadDef(main, mainThread, osPriorityNormal, 0, 1024);
+	osThreadCreate(osThread(main), NULL);
 
 	osKernelStart();
 }
