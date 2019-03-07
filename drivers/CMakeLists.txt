@@ -7,5 +7,7 @@ target_include_directories(drivers PUBLIC
 )
 
 add_subdirectory(STM32${FAMILY}xx_HAL_Driver)
-#add_subdirectory(STM32_USB_Device_Library)
-add_subdirectory(FreeRTOS)
+
+if (HAVE_FREERTOS)
+    add_subdirectory(FreeRTOS)
+endif()

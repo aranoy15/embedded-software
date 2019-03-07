@@ -8,4 +8,8 @@ set(TARGET_SOURCES
 
 add_executable(${TARGET} ${TARGET_SOURCES})
 
-target_link_libraries(${TARGET} drivers lib FreeRTOS)
+target_link_libraries(${TARGET} drivers lib c_nano)
+
+if (NEED_FREERTOS)
+    target_link_libraries(${TARGET} FreeRTOS)
+endif()

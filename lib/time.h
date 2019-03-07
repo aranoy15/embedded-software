@@ -1,7 +1,10 @@
 #ifndef TIME_H
 #define TIME_H
 
+#if NEED_FREERTOS
 #include <cmsis_os.h>
+#endif
+
 #include <stdint.h>
 #include <stm32f1xx_hal.h>
 
@@ -17,7 +20,7 @@ public:
 	{
 		nullVal = (uint64_t(1) << 63) - 1
 	};
-	static const uint32_t t_infinite = osWaitForever;
+	//static const uint32_t t_infinite = osWaitForever;
 
 public:
 	Time() : m_time(nullVal) {}

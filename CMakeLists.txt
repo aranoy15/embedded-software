@@ -24,6 +24,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 include(CompilerFlags)
 include(Tools)
+include(Setting)
 
 add_subdirectory(logic)
 add_subdirectory(board)
