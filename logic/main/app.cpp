@@ -119,8 +119,7 @@ int main()
 	osThreadCreate(osThread(main), NULL);
 
 	osKernelStart();
-	#endif
-
+	#else
 	typedef GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP>
 		    ErrorNormal;
 	ErrorNormal::Setup();
@@ -148,6 +147,7 @@ int main()
 		if (result)
 			debug::instance()->send("Have message");
 	}
+	#endif
 }
 
 extern "C" {

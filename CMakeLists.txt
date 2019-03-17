@@ -1,6 +1,9 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.6)
 
 add_definitions(-DDBG=0)
+add_definitions(-DNEED_FREERTOS=0)
+
+project(test C CXX ASM)
 
 if (NOT DEFINED CHIP)
     set(CHIP STM32F103xB)
