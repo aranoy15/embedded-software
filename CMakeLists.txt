@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 
 add_definitions(-DDBG=0)
-add_definitions(-DNEED_FREERTOS=0)
 
 project(test C CXX ASM)
 
@@ -22,12 +21,13 @@ if (NOT DEFINED TARGET)
 endif()
 
 add_definitions(-D${CHIP})
+set(HAVE_FREERTOS ON)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+#include(Setting)
 include(CompilerFlags)
 include(Tools)
-include(Setting)
 
 add_subdirectory(logic)
 add_subdirectory(board)

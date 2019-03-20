@@ -10,6 +10,6 @@ add_executable(${TARGET} ${TARGET_SOURCES})
 
 target_link_libraries(${TARGET} drivers lib c_nano)
 
-if (NEED_FREERTOS)
+if (HAVE_FREERTOS)
     target_link_libraries(${TARGET} FreeRTOS)
 endif()

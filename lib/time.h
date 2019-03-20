@@ -1,7 +1,7 @@
 #ifndef TIME_H
 #define TIME_H
 
-#if NEED_FREERTOS
+#if HAVE_FREERTOS
 #include <cmsis_os.h>
 #endif
 

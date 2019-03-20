@@ -1,7 +1,7 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
-#if NEED_FREERTOS
+#if HAVE_FREERTOS
 #include <mutex.h>
 #endif
 
@@ -11,7 +11,7 @@ class Singleton
 private:
 	static T* m_instance;
 
-	#if NEED_FREERTOS
+	#if HAVE_FREERTOS
 	static Mutex m_mutex;
 	#endif
 
@@ -31,14 +31,14 @@ public:
 	static T* instance()
 	{
 		if (not m_instance) {
-			#if NEED_FREERTOS
+			#if HAVE_FREERTOS
 			if (osKernelRunning()) {
 				Lock lock(m_mutex);
 				if (not m_instance) Create();
 			} else {
 			#endif
 				Create();
-			#if NEED_FREERTOS
+			#if HAVE_FREERTOS
 			}
 			#endif
 		}
@@ -47,7 +47,7 @@ public:
 
 	static void deleteInstance()
 	{
-		#if NEED_FREERTOS
+		#if HAVE_FREERTOS
 		Lock lock(m_mutex);
 		#endif
 
@@ -59,7 +59,7 @@ public:
 template <class T>
 T* Singleton<T>::m_instance = nullptr;
 
-#if NEED_FREERTOS
+#if HAVE_FREERTOS
 template <class T>
 Mutex Singleton<T>::m_mutex;
 #endif

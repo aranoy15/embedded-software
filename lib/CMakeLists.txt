@@ -7,7 +7,7 @@ set(LIB_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/uartbuffer.cpp
 )
 
-if (NEED_FREERTOS)
+if (HAVE_FREERTOS)
     set(LIB_SOURCES 
         ${LIB_SOURCES}
         ${CMAKE_CURRENT_SOURCE_DIR}/thread.cpp

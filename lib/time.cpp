@@ -4,7 +4,7 @@ void Time::Sleep(const Time& t)
 {
 	if (t.m_time <= 0) return;
 
-	#if NEED_FREERTOS
+	#if HAVE_FREERTOS
 	if (osKernelRunning())
 		osDelay(t.m_time);
 	else
@@ -14,7 +14,7 @@ void Time::Sleep(const Time& t)
 
 uint32_t Time::GetTicks()
 {
-	#if NEED_FREERTOS
+	#if HAVE_FREERTOS
 	if(osKernelRunning())
 		return osKernelSysTick();
 	else

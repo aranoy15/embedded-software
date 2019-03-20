@@ -6,7 +6,7 @@
 #include <gpio.h>
 #include <tuple>
 
-#if NEED_FREERTOS
+#if HAVE_FREERTOS
 #include <mutex.h>
 #endif
 
@@ -58,7 +58,7 @@ public:
 private:
 	UART_HandleTypeDef m_huart;
 
-	#if NEED_FREERTOS
+	#if HAVE_FREERTOS
     Mutex m_mutex;
 	#endif
 
@@ -71,7 +71,7 @@ private:
 public:
 	Uart()
 	    : m_huart(),
-#if NEED_FREERTOS
+#if HAVE_FREERTOS
 	      m_mutex(),
 #endif
 	      m_buffer(NULL)
@@ -100,7 +100,7 @@ public:
 
 	void send(std::string message, char end = '\n')
 	{
-		#if NEED_FREERTOS
+		#if HAVE_FREERTOS
 		if (osKernelRunning()) Lock lock(m_mutex);
 		#endif
 

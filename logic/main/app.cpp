@@ -4,7 +4,9 @@
 #include <gpio.h>
 #include <watchdog.h>
 
-#if NEED_FREERTOS
+//#define HAVE_FREERTOS ON
+
+#if HAVE_FREERTOS
 #include <cmsis_os.h>
 #include <thread.h>
 #include <mutex.h>
@@ -20,7 +22,7 @@
 using namespace gpio;
 using namespace uart;
 
-#if NEED_FREERTOS
+#if HAVE_FREERTOS
 void* malloc(size_t size)
 {
 	return pvPortMalloc(size);
@@ -53,7 +55,7 @@ void InitAll()
 	Uart<usart1>::instance()->init(512, 115200);
 }
 
-#if NEED_FREERTOS
+#if HAVE_FREERTOS
 class BlinkThread : public Thread, public Singleton<BlinkThread>
 {
 public:
@@ -114,17 +116,16 @@ void mainThread(const void* arguments)
 
 int main()
 {
-	#if NEED_FREERTOS
+	#if HAVE_FREERTOS
 	osThreadDef(main, mainThread, osPriorityNormal, 0, 1024);
 	osThreadCreate(osThread(main), NULL);
 
 	osKernelStart();
 	#else
-	typedef GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP>
-		    ErrorNormal;
+	using ErrorNormal = GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP>;
 	ErrorNormal::Setup();
 
-	typedef Uart<usart1> debug;
+	using debug = Uart<usart1>;
 	debug::instance()->init(128, 115200);
 
 	Watchdog::Init();
@@ -155,7 +156,7 @@ void SysTick_Handler(void)
 {
 	HAL_IncTick();
 
-	#if NEED_FREERTOS
+	#if HAVE_FREERTOS
 	osSystickHandler();
 	#endif
 }
