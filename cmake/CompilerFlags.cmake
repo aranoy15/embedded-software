@@ -21,13 +21,18 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 SET(CMAKE_SYSTEM_NAME Generic)
 SET(CMAKE_SYSTEM_PROCESSOR arm)
 
-SET(CMAKE_C_FLAGS "-mthumb -g -fno-builtin -mcpu=cortex-m3 -Wall -std=gnu99 -ffunction-sections -fdata-sections -fomit-frame-pointer -mabi=aapcs -fno-unroll-loops -ffast-math -ftree-vectorize" CACHE INTERNAL "c compiler flags")
-SET(CMAKE_CXX_FLAGS "-mthumb -g -Weffc++ -fno-exceptions -fno-builtin -mcpu=cortex-m3 -Wall -std=c++11 -ffunction-sections -fdata-sections -fomit-frame-pointer -mabi=aapcs -fno-unroll-loops -ffast-math -ftree-vectorize" CACHE INTERNAL "cxx compiler flags")
-SET(CMAKE_ASM_FLAGS "-mthumb -g -mcpu=cortex-m3 -x assembler-with-cpp")
+SET(PLATFORM_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs")
+SET(SPECS "-specs=nosys.specs -specs=nano.specs")
+SET(SECTIONS "-ffunction-sections -fdata-sections")
+SET(SHARE_SETTINGS "-fno-builtin -fomit-frame-pointer -fno-unroll-loops -ffast-math -ftree-vectorize")
 
-SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections -mthumb -mcpu=cortex-m3 -mabi=aapcs -specs=nosys.specs -specs=nano.specs -T ${CMAKE_CURRENT_SOURCE_DIR}/board/${CHIP}/link.ld")
-SET(CMAKE_MODULE_LINKER_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs")
-SET(CMAKE_SHARED_LINKER_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs")
+SET(CMAKE_C_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} -g -Wall -std=gnu99")
+SET(CMAKE_CXX_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} -g -Weffc++ -fno-exceptions")
+SET(CMAKE_ASM_FLAGS "${PLATFORM_FLAGS} -g -x assembler-with-cpp")
+
+SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections ${PLATFORM_FLAGS} ${SPECS} -T ${CMAKE_CURRENT_SOURCE_DIR}/board/${CHIP}/link.ld")
+SET(CMAKE_MODULE_LINKER_FLAGS "${PLATFORM_FLAGS}")
+SET(CMAKE_SHARED_LINKER_FLAGS "${PLATFORM_FLAGS}")
 
 set(HAVE_FLAG_SEARCH_PATHS_FIRST 0)
 
