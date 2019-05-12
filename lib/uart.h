@@ -5,28 +5,25 @@
 #include <uartbuffer.h>
 #include <gpio.h>
 #include <tuple>
-
-#if HAVE_FREERTOS
-#include <mutex.h>
-#endif
-
+#include <memory>
 
 namespace uart
 {
-extern "C" void USART1_IRQHandler(void);
 
 using namespace gpio;
 
-enum UartPort
+enum class UartPort
 {
 	usart1 = 1,
 	usart2 = 2,
 	usart3 = 3
 };
 
-typedef GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9 | GPIO_PIN_10>, mAfPP, sHi, pNo> usart1Pins;
+using usart1TxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9>, mAfPP, sHi, pUp>;
+using usart1RxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_10>, mInput, sHi, pUp>;
+}
 
-template <UartPort port>
+template <uart::UartPort port>
 class Uart : public Singleton<Uart<port> >
 {
 public:
@@ -49,39 +46,30 @@ public:
 		sb2 = UART_STOPBITS_2
 	};
 
-private:
-	friend void USART1_IRQHandler(void);
-
 public:
-	void IRQHandler() { HAL_UART_IRQHandler(&m_huart); }
+	void IRQHandler() { 
+		HAL_UART_IRQHandler(&m_huart); 
+	}
 
 private:
-	UART_HandleTypeDef m_huart;
-
-	#if HAVE_FREERTOS
-    Mutex m_mutex;
-	#endif
-
-    UartBuffer *m_buffer;
-
 
     Uart(const Uart&);
 	Uart operator=(const Uart&);
 
 public:
+	UART_HandleTypeDef m_huart;
+    std::unique_ptr<UartBuffer> m_buffer;
+
 	Uart()
 	    : m_huart(),
-#if HAVE_FREERTOS
-	      m_mutex(),
-#endif
-	      m_buffer(NULL)
+	      m_buffer()
 	{
 	}
 
 	void init(uint16_t size, uint32_t baudRate, Parity parity = none,
 	          StopBits stopBits = sb1, DataBits bits = db8)
 	{
-		m_buffer = new UartBuffer(size);
+		m_buffer = std::make_unique<UartBuffer>(size);
 
 		m_huart.Instance = port2CSP();
 		m_huart.Init.BaudRate = baudRate;
@@ -95,15 +83,11 @@ public:
 		usartInitGpio();
 		HAL_UART_Init(&m_huart);
 
-		HAL_UART_Receive_IT(&m_huart, m_buffer->Buffer(), m_buffer->Size());
+		HAL_UART_Receive_IT(&m_huart, m_buffer->buffer(), m_buffer->size());
 	}
 
 	void send(std::string message, char end = '\n')
 	{
-		#if HAVE_FREERTOS
-		if (osKernelRunning()) Lock lock(m_mutex);
-		#endif
-
 		message += end;
 
 		HAL_UART_Transmit(&m_huart, (uint8_t*)message.c_str(), message.length(), 1000);
@@ -113,7 +97,7 @@ public:
 	{
 		std::string message = "";
 
-		bool result = m_buffer->GetFirstPacket(&message, end);
+		bool result = m_buffer->getFirstPacket(&message, end);
 
 		return std::make_tuple(result, message);
 	}
@@ -121,11 +105,11 @@ public:
 	static USART_TypeDef* port2CSP()
 	{
 		switch (port) {
-			case usart1:
+			case uart::UartPort::usart1:
 				return USART1;
-			case usart2:
+			case uart::UartPort::usart2:
 				return USART2;
-			case usart3:
+			case uart::UartPort::usart3:
 				return USART3;
 		}
 	}
@@ -134,12 +118,15 @@ private:
 	static void usartInitGpio()
 	{
 		switch (port) {
-			case usart1:
+			case uart::UartPort::usart1:
 				if (__HAL_RCC_USART1_IS_CLK_DISABLED()) __HAL_RCC_USART1_CLK_ENABLE();
 
-				uart::usart1Pins::Setup();
+				uart::usart1RxPin::setup();
+				uart::usart1TxPin::setup();
+
+				HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
+				HAL_NVIC_EnableIRQ(USART1_IRQn);
 				break;
 		}
 	}
 };
-}

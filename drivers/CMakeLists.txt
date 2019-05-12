@@ -7,7 +7,3 @@ target_include_directories(drivers PUBLIC
 )
 
 add_subdirectory(STM32${FAMILY}xx_HAL_Driver)
-
-if (HAVE_FREERTOS)
-    add_subdirectory(FreeRTOS)
-endif()

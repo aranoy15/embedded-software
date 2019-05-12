@@ -3,17 +3,8 @@ set(LIB_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/gpio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/watchdog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/time.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/uartbuffer.cpp
 )
-
-if (HAVE_FREERTOS)
-    set(LIB_SOURCES 
-        ${LIB_SOURCES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/thread.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/mutex.cpp
-    )
-endif()
 
 add_library(lib ${LIB_SOURCES})
 
@@ -22,7 +13,3 @@ target_include_directories(lib PUBLIC
 )
 
 target_link_libraries(lib PRIVATE drivers)
-
-if (HAVE_FREERTOS)
-    target_link_libraries(lib PRIVATE FreeRTOS)
-endif()

@@ -1,10 +1,6 @@
 #ifndef TIME_H
 #define TIME_H
 
-#if HAVE_FREERTOS
-#include <cmsis_os.h>
-#endif
-
 #include <stdint.h>
 #include <stm32f1xx_hal.h>
 
@@ -27,11 +23,11 @@ public:
 	Time(const Time& t) : m_time(t.m_time) {}
 	explicit Time(TInt t) : m_time(t) {}
 
-    static void Sleep(const Time& t);
+    static void sleep(const Time& t);
 
-	static Time MilliSeconds(int n) { return Time(n); }
-	static Time Seconds(int n) { return Time(n * 1000); }
-	static uint32_t GetTicks();
+	static Time milliSeconds(int n) { return Time(n); }
+	static Time seconds(int n) { return Time(n * 1000); }
+	static uint32_t getTicks();
 };
 
 #endif /* TIME_H */

@@ -69,32 +69,32 @@ struct GPIO
 {
 	typedef PinConfig Pins;
 
-	static void Setup()
+	static void setup()
 	{
 		gpio::Setup(PinConfig::Port, PinConfig::Pin, mode, speed, pull);
 	}
 
-	static void On()
+	static void on()
 	{
 		//StaticAssert<mode == mOutputPP or mode == mOutputOD>();
 		HAL_GPIO_WritePin(GPIO_GetPointer(PinConfig::Port), PinConfig::Pin,
 		                  GPIO_PIN_SET);
 	}
 
-	static void Off()
+	static void off()
 	{
 		//StaticAssert<mode == mOutputPP or mode == mOutputOD>();
 		HAL_GPIO_WritePin(GPIO_GetPointer(PinConfig::Port), PinConfig::Pin,
 		                  GPIO_PIN_RESET);
 	}
 
-	static bool State()
+	static bool state()
 	{
 		return HAL_GPIO_ReadPin(GPIO_GetPointer(PinConfig::Port),
 		                        PinConfig::Pin);
 	}
 
-	static void Remove()
+	static void remove()
 	{
 		HAL_GPIO_DeInit(GPIO_GetPointer(PinConfig::Port), PinConfig::Pin);
 	}

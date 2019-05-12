@@ -1,23 +1,13 @@
 #include <time.h>
 
-void Time::Sleep(const Time& t)
+void Time::sleep(const Time& t)
 {
 	if (t.m_time <= 0) return;
 
-	#if HAVE_FREERTOS
-	if (osKernelRunning())
-		osDelay(t.m_time);
-	else
-	#endif
-		HAL_Delay(t.m_time);
+	HAL_Delay(t.m_time);
 }
 
-uint32_t Time::GetTicks()
+uint32_t Time::getTicks()
 {
-	#if HAVE_FREERTOS
-	if(osKernelRunning())
-		return osKernelSysTick();
-	else
-	#endif
-		return HAL_GetTick();
+	return HAL_GetTick();
 }

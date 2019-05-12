@@ -2,10 +2,6 @@
 
 #include <singleton.h>
 
-#if HAVE_FREERTOS
-#include <mutex.h>
-#endif
-
 namespace i2c
 {
 
@@ -21,19 +17,12 @@ class I2C : public Singleton<I2C<port> >
 private:
 	I2C_HandleTypeDef m_hndl;
 
-    #if HAVE_FREERTOS
-	Mutex m_mutex;
-    #endif
-
 private:
 	I2C(const I2C&);
 	I2C operator=(const I2C&);
 
 public:
 	I2C() : m_hndl(),
-		#if HAVE_FREERTOS
-		m_mutex()
-		#endif 
 	{
 	}
 

@@ -1,1 +1,1 @@
-set(HAVE_FREERTOS 1)
+set(HAVE_FREERTOS 0)

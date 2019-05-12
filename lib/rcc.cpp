@@ -4,7 +4,6 @@ void rcc::Init()
 {
 	RCC_OscInitTypeDef RCC_OscInitStruct = {0};
 	RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
-	RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
 
 	/**Initializes the CPU, AHB and APB busses clocks
 	 */
@@ -27,8 +26,5 @@ void rcc::Init()
 
 	O_ASSERT(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) == HAL_OK);
 
-	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
-	PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
-
-	O_ASSERT(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) == HAL_OK);
+	__HAL_AFIO_REMAP_SWJ_NOJTAG();
 }
