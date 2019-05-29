@@ -4,6 +4,7 @@ set(LIB_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/watchdog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/time.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/uartbuffer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/lcd.cpp
 )
 
 add_library(lib ${LIB_SOURCES})
