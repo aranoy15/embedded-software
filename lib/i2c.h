@@ -3,6 +3,7 @@
 #include <singleton.h>
 #include <stm32f1xx_hal.h>
 #include <gpio.h>
+#include <vector>
 
 namespace i2c
 {
@@ -62,6 +63,20 @@ public:
 	{
 		uint8_t result;
 		HAL_I2C_Master_Receive(&m_hndl, address << 1, &result, 1, timeout);
+		return result;
+	}
+
+	std::vector<uint8_t> seatchAddresses()
+	{
+		std::vector<uint8_t> result;
+
+		for (uint16_t i = 0; i < 128; i++) {
+			bool resRead = (HAL_I2C_IsDeviceReady(&m_hndl, i << 1, 1, 10) == HAL_OK);
+
+			if (resRead)
+				result.push_back(i);
+		}
+
 		return result;
 	}
 
