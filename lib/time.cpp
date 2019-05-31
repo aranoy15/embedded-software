@@ -1,13 +1,20 @@
 #include <time.h>
+#include <cmsis_os.h>
 
 void Time::sleep(const Time& t)
 {
 	if (t.m_time <= 0) return;
 
-	HAL_Delay(t.m_time);
+	if (osKernelRunning())
+		osDelay(t.m_time);
+	else
+		HAL_Delay(t.m_time);
 }
 
 uint32_t Time::getTicks()
 {
-	return HAL_GetTick();
+	if(osKernelRunning())
+		return osKernelSysTick();
+	else
+		return HAL_GetTick();
 }
