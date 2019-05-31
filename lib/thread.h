@@ -9,22 +9,21 @@ private:
 	osThreadDef_t m_tinfo;
 	osThreadId m_id;
 
-	static void ThreadFuncStatic(const void* argument);
-	
+	static void threadFuncStatic(const void* argument);
 
 private:
 	Thread(const Thread&);
-	Thread operator=(const Thread&);
+	Thread& operator=(const Thread&);
 
 public:
 	Thread(osPriority prio, uint32_t stackSize, const char* name);
 	    
 	virtual ~Thread(){}
 
-	bool Start();
+	bool start();
 
 protected:
-	virtual void ThreadFunc() {};
+	virtual void threadFunc() = 0;
 };
 
 #endif /* THREAD_H */
