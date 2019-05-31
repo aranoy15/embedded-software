@@ -16,7 +16,7 @@ endfunction ()
 
 function(size NAME)
 	add_custom_target(size ALL
-		arm-none-eabi-size ${CMAKE_BINARY_DIR}/logic/${LOGIC}/${NAME}
+		arm-none-eabi-size ${CMAKE_BINARY_DIR}/logic/${NAME}
 		DEPENDS ${NAME}
 	)	
 endfunction(size NAME)
@@ -34,11 +34,11 @@ endfunction(read)
 
 function(generate_bin NAME)
 	add_custom_target(generate_bin ALL
-		arm-none-eabi-objcopy -Obinary ${CMAKE_BINARY_DIR}/logic/${LOGIC}/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.bin
+		arm-none-eabi-objcopy -Obinary ${CMAKE_BINARY_DIR}/logic/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.bin
 		DEPENDS ${NAME}
 	)	
 	add_custom_target(generate_hex ALL
-		arm-none-eabi-objcopy -Oihex ${CMAKE_BINARY_DIR}/logic/${LOGIC}/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.hex
+		arm-none-eabi-objcopy -Oihex ${CMAKE_BINARY_DIR}/logic/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.hex
 		DEPENDS ${NAME}
 	)	
 endfunction(generate_bin NAME)
