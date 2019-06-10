@@ -29,13 +29,15 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include(CompilerFlags)
 include(Tools)
 
-add_subdirectory(logic)
+add_subdirectory(app)
 add_subdirectory(board)
 add_subdirectory(drivers)
 add_subdirectory(lib)
 
 size(${TARGET})
 generate_bin(${TARGET})
-flash(${TARGET})
+flash(${TARGET} 0x8000000)
 add_trace(${TARGET})
 read()
+
+add_subdirectory(boot)

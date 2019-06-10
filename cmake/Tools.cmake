@@ -6,9 +6,9 @@ function (add_trace NAME)
 		)
 endfunction ()
 
-function (flash NAME)
+function (flash NAME ADDRESS)
 	add_custom_target(${NAME}.flash
-		st-flash write ${CMAKE_BINARY_DIR}/${NAME}.bin 0x8000000
+		st-flash write ${CMAKE_BINARY_DIR}/${NAME}.bin ${ADDRESS}
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		USES_TERMINAL
 		)
