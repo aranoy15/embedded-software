@@ -1,23 +1,23 @@
 #include <mutex.h>
 
-osMutexId MutexOneImpl::Create() const
+osMutexId MutexOneImpl::create() const
 {
     // osMutexDef_t need only to static allocation
     osMutexId id = osMutexCreate(NULL);
     return id;
 }
 
-bool MutexOneImpl::Lock(osMutexId mid) const
+bool MutexOneImpl::lock(osMutexId mid) const
 {
     return (osMutexWait(mid, osWaitForever) == osOK);
 }
 
-void MutexOneImpl::Unlock(osMutexId mid) const
+void MutexOneImpl::unlock(osMutexId mid) const
 {
     osMutexRelease(mid);
 }
 
-void MutexOneImpl::Remove(osMutexId mid) const
+void MutexOneImpl::remove(osMutexId mid) const
 {
     osMutexDelete(mid);
 }
