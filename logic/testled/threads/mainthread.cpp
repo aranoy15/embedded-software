@@ -1,37 +1,7 @@
 #include <mainthread.h>
-
-/*
-namespace Test
-{
-using rsPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_8>, mOutputPP>;
-using ePin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9>, mOutputPP>;
-using d4Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_5>, mOutputPP>;
-using d5Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_4>, mOutputPP>;
-using d6Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_3>, mOutputPP>;
-using d7Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_15>, mOutputPP>;
-
-void lcdSendByte(uint8_t data)
-{
-	if ((data & (1 << 0)) == 0) rsPin::off(); 
-    else rsPin::on();
-
-	if ((data & (1 << 2)) == 0) ePin::off();
-	else ePin::on();
-
-    if ((data & (1 << 4)) == 0) d4Pin::off();
-	else d4Pin::on();
-
-    if ((data & (1 << 5)) == 0) d5Pin::off();
-	else d5Pin::on();
-
-    if ((data & (1 << 6)) == 0) d6Pin::off();
-	else d6Pin::on();
-
-    if ((data & (1 << 7)) == 0) d7Pin::off();
-	else d7Pin::on();
-}
-}
-*/
+#include <blinkthread.h>
+#include <spi.h>
+#include <timer.h>
 
 MainThread::MainThread() : Thread(osPriorityNormal, 0, "main") {}
 
@@ -39,36 +9,60 @@ MainThread::~MainThread() {}
 
 void MainThread::threadFunc()
 {
-	blink::setup();
+	using logUart = Uart<uart::UartPort::usart1>;
+	logUart& log = *logUart::instance();
 
-	I2C<i2c::i2cPort1>::instance()->init();
+	using AdcSpi = Spi<spi::spiPort1>;
+	AdcSpi& adc = *AdcSpi::instance();
 
-	/*
-	rsPin::setup();
-	ePin::setup();
-	d4Pin::setup();
-	d5Pin::setup();
-	d6Pin::setup();
-	d7Pin::setup();
-	*/
+	adc.init();
+	log.init(64, 115200);
 
-	Lcd i2cLcd(0x27, 16, 2, 1);
-	//Lcd gpioLcd(20, 4, 1, lcdSendByte);
+	log.send("Start mainthread");
 
-	i2cLcd.init();
-	i2cLcd.setCursor(0, 1);
-	i2cLcd.sendString("Test!!!!");
+	BlinkThread blinkThread;
+	blinkThread.start();
 
-	/*
-	gpioLcd.init();
-	gpioLcd.setCursor(0, 1);
-	gpioLcd.sendString("Test!!!!");
-	*/
+	Timer timer;
 
 	for (;;) {
-		blink::on();
-		Time::sleep(Time(500));
-		blink::off();
-		Time::sleep(Time(500));
+		log.send(std::string("Busy state 1: ") + std::to_string(spi::adcBusy::state()));
+
+		spi::adcCs::on();
+		//Time::sleep(Time(100));
+		log.send(std::string("Busy state 2: ") + std::to_string(spi::adcBusy::state()));
+
+		uint8_t sendData = ((1 << 7) | (0 << 4) | (1 << 2) | (1 << 1) | (1 << 0));
+
+		log.send(std::string("Send data: ") + std::to_string(sendData));
+
+		adc.sendByte(sendData);
+
+		log.send(std::string("Busy state 3: ") + std::to_string(spi::adcBusy::state()));
+
+		timer.start(2000);
+		bool result = true;
+		while (not spi::adcBusy::state()) {
+			if (timer.elapsed()) {
+				result = false;
+				break;
+			}
+
+			Time::sleep(Time(5));
+		}
+
+		log.send(std::string("Busy state 4: ") + std::to_string(spi::adcBusy::state()));
+
+		if (result) {
+			uint8_t resultH = adc.receiveByte();
+			uint8_t resultL = adc.receiveByte();
+	
+			log.send(std::string("resultH: ") + std::to_string(resultH));
+			log.send(std::string("resultL: ") + std::to_string(resultL));
+		}
+
+		spi::adcCs::off();
+
+		Time::sleep(Time::seconds(1));
 	}
 }

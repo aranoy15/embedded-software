@@ -2,7 +2,7 @@
 
 using namespace gpio;
 
-BlinkThread::BlinkThread() : Thread(osPriorityLow, 1 * 1024, "blink") {}
+BlinkThread::BlinkThread() : Thread(osPriorityLow, 256, "blink") {}
 
 void BlinkThread::threadFunc()
 {
