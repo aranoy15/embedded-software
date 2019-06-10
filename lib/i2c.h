@@ -4,6 +4,9 @@
 #include <stm32f1xx_hal.h>
 #include <gpio.h>
 #include <vector>
+//#include <mutex.h>
+#include <string.h>
+
 
 namespace i2c
 {
@@ -24,6 +27,7 @@ class I2C : public Singleton<I2C<port> >
 {
 public:
 	I2C_HandleTypeDef m_hndl;
+	//Mutex m_mutex;
 	const uint32_t timeout = 100;
 
 private:
@@ -31,9 +35,7 @@ private:
 	I2C operator=(const I2C&);
 
 public:
-	I2C() : m_hndl()
-	{
-	}
+	I2C() : m_hndl()/*, m_mutex()*/ {}
 
 	I2C_HandleTypeDef* getHandle() { return &m_hndl; }
 
@@ -66,18 +68,30 @@ public:
 		return result;
 	}
 
-	std::vector<uint8_t> seatchAddresses()
+	std::vector<uint8_t> searchAddresses()
 	{
 		std::vector<uint8_t> result;
 
 		for (uint16_t i = 0; i < 128; i++) {
-			bool resRead = (HAL_I2C_IsDeviceReady(&m_hndl, i << 1, 1, 10) == HAL_OK);
+			bool resRead =
+			    (HAL_I2C_IsDeviceReady(&m_hndl, i << 1, 1, 10) == HAL_OK);
 
-			if (resRead)
-				result.push_back(i);
+			if (resRead) result.push_back(i);
 		}
 
 		return result;
+	}
+
+	template <typename TypeReg, typename TypeData>
+	bool writeReg(uint16_t address, TypeReg reg, TypeData data)
+	{
+		uint8_t sendingData[sizeof(TypeReg) + sizeof(TypeData)];
+
+		memcpy(sendingData, reinterpret_cast<uint8_t*>(&reg), sizeof(TypeReg));
+		memcpy(sendingData + sizeof(TypeReg), reinterpret_cast<uint8_t*>(&data),
+		       sizeof(TypeData));
+
+		return HAL_I2C_Master_Transmit(&m_hndl, address << 1, sendingData, sizeof(sendingData), timeout) == HAL_OK;
 	}
 
 private:
