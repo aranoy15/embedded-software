@@ -15,8 +15,8 @@ function (flash NAME)
 endfunction ()
 
 function(size NAME)
-	add_custom_target(size ALL
-		arm-none-eabi-size ${CMAKE_BINARY_DIR}/logic/${NAME}
+	add_custom_target(${NAME}.size ALL
+		arm-none-eabi-size ${CMAKE_BINARY_DIR}/${NAME}/${NAME}
 		DEPENDS ${NAME}
 	)	
 endfunction(size NAME)
@@ -33,12 +33,12 @@ function(read)
 endfunction(read)
 
 function(generate_bin NAME)
-	add_custom_target(generate_bin ALL
-		arm-none-eabi-objcopy -Obinary ${CMAKE_BINARY_DIR}/logic/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.bin
+	add_custom_target(${NAME}.generate_bin ALL
+		arm-none-eabi-objcopy -Obinary ${CMAKE_BINARY_DIR}/${NAME}/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.bin
 		DEPENDS ${NAME}
 	)	
-	add_custom_target(generate_hex ALL
-		arm-none-eabi-objcopy -Oihex ${CMAKE_BINARY_DIR}/logic/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.hex
+	add_custom_target(${NAME}.generate_hex ALL
+		arm-none-eabi-objcopy -Oihex ${CMAKE_BINARY_DIR}/${NAME}/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.hex
 		DEPENDS ${NAME}
 	)	
 endfunction(generate_bin NAME)
