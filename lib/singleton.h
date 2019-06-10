@@ -7,10 +7,6 @@ class Singleton
 private:
 	static T* m_instance;
 
-	#if HAVE_FREERTOS
-	static Mutex m_mutex;
-	#endif
-
 	Singleton(const Singleton&);
 	const Singleton& operator=(Singleton&);
 
