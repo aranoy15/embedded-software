@@ -125,7 +125,9 @@ class Commands(object):
                 self.history.append(command)
             self.history_index = len(self.history)
 
-            if command == "!q" or command == "!quit" or command == "!exit":
+            if command == "!reset" or command == "!dtr":
+                self.device.reset()
+            elif command == "!q" or command == "!quit" or command == "!exit":
                 self.do_exit(command)
             else:
                 self.device.write(command + "\n")

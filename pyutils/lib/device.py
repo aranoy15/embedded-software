@@ -62,3 +62,8 @@ class Device(object):
     def open(self, baud=config.DEFAULT_BAUD):
 
         self.__open(baud)
+
+    def reset(self):
+        self.device.dtr = True
+        time.sleep(0.2)
+        self.device.dtr = False
