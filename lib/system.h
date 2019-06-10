@@ -2,12 +2,12 @@
 
 #include <stm32f1xx_hal.h>
 
-namespace rcc
+namespace stm32system
 {
 #define O_ASSERT(x)                                                            \
 	while (not x) {                                                            \
 	}
-void Init();
+void init();
 }
 
 /*

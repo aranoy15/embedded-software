@@ -1,5 +1,5 @@
 set(LIB_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/rcc.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/system.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gpio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/watchdog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/time.cpp

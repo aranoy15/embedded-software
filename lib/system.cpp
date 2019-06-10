@@ -1,9 +1,24 @@
-#include <rcc.h>
+#include <system.h>
+#include <stdint.h>
 
-void rcc::Init()
+static void cpuInit();
+
+extern uint32_t* g_pfnVectors;
+
+void stm32system::init()
 {
-	RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-	RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+	SystemInit();
+
+	SCB->VTOR = uint32_t(&g_pfnVectors);
+
+	HAL_Init();
+	cpuInit();
+}
+
+void cpuInit()
+{
+	RCC_OscInitTypeDef RCC_OscInitStruct;
+	RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
 	/**Initializes the CPU, AHB and APB busses clocks
 	 */
