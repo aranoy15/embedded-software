@@ -7,7 +7,7 @@
 #include <tuple>
 #include <memory>
 #include <timer.h>
-#include <mutex.h>
+//#include <mutex.h>
 #include <cstring>
 
 namespace uart
@@ -24,6 +24,10 @@ enum class UartPort
 
 using usart1TxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9>, mAfPP, sHi, pUp>;
 using usart1RxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_10>, mInput, sHi, pUp>;
+
+void usartInitGpio(UartPort port);
+USART_TypeDef* port2CSP(UartPort port);
+	
 }
 
 template <uart::UartPort port>
@@ -134,8 +138,8 @@ private:
 
 	UART_HandleTypeDef m_huart;
 	CyclicBuffer<uint8_t> m_buf;
-	Mutex writeMutex;
-	Mutex readMutex;
+	//Mutex writeMutex;
+	//Mutex readMutex;
 	Timer m_timer;
 
 public:
@@ -144,8 +148,8 @@ public:
 	Uart()
 	    : m_huart(),
 		  m_buf(),
-		  writeMutex(),
-		  readMutex(),
+		  //writeMutex(),
+		  //readMutex(),
 		  m_timer()
 	{
 	}
@@ -153,10 +157,9 @@ public:
 	void init(uint16_t size, uint32_t baudRate, Parity parity = none,
 	          StopBits stopBits = sb1, DataBits bits = db8)
 	{
-		//m_buffer = std::make_unique<UartBuffer>(size);
 		m_buf.alloc(size);
 
-		m_huart.Instance = port2CSP();
+		m_huart.Instance = uart::port2CSP(port);
 		m_huart.Init.BaudRate = baudRate;
 		m_huart.Init.WordLength = bits;
 		m_huart.Init.StopBits = stopBits;
@@ -165,7 +168,8 @@ public:
 		m_huart.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 		m_huart.Init.OverSampling = UART_OVERSAMPLING_16;
 
-		usartInitGpio();
+		//usartInitGpio();
+		uart::usartInitGpio(port);
 
 		__HAL_UART_ENABLE_IT(&m_huart, UART_IT_RXNE);
 		HAL_UART_Init(&m_huart);
@@ -173,14 +177,14 @@ public:
 
 	void send(std::string message, char end = '\n')
 	{
-		Lock lock(writeMutex);
+		//Lock lock(writeMutex);
 		message += end;
 		HAL_UART_Transmit(&m_huart, (uint8_t*)message.c_str(), message.length(), 1000);
 	}
 
 	std::string readln(uint32_t timeout = 2000)
 	{
-		Lock lock(readMutex);
+		//Lock lock(readMutex);
 		std::string message;
 
 		m_timer.start(timeout);
@@ -209,7 +213,7 @@ public:
 
 	bool readCount(uint8_t* data, uint32_t size, uint32_t timeout = 2000)
 	{
-		Lock lock(readMutex);
+		//Lock lock(readMutex);
 		m_timer.start(timeout);
 
 		while (not m_timer.elapsed()) {
@@ -225,34 +229,4 @@ public:
 		return false;
 	}
 
-
-private:
-
-	static USART_TypeDef* port2CSP()
-	{
-		switch (port) {
-			case uart::UartPort::usart1:
-				return USART1;
-			case uart::UartPort::usart2:
-				return USART2;
-			case uart::UartPort::usart3:
-				return USART3;
-		}
-	}
-
-	static void usartInitGpio()
-	{
-		switch (port) {
-			case uart::UartPort::usart1:
-				if (__HAL_RCC_USART1_IS_CLK_DISABLED()) __HAL_RCC_USART1_CLK_ENABLE();
-
-				uart::usart1RxPin::setup();
-				uart::usart1TxPin::setup();
-
-				HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
-				HAL_NVIC_EnableIRQ(USART1_IRQn);
-
-				break;
-		}
-	}
 };

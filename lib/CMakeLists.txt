@@ -8,6 +8,7 @@ set(LIB_SOURCES
     #${CMAKE_CURRENT_SOURCE_DIR}/mutex.cpp
     #${CMAKE_CURRENT_SOURCE_DIR}/thread.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/spi.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/uart.cpp
 )
 
 add_library(lib ${LIB_SOURCES})
