@@ -11,7 +11,7 @@ Lcd::Lcd(uint16_t address, uint8_t lcdCols, uint8_t lcdRows,
       m_cols(lcdCols),
       m_rows(lcdRows),
       m_charSize(charSize),
-      m_backLightVal(static_cast<uint8_t>(FlagsBlacklightControl::BACKLIGHT))
+      m_backLightVal(BACKLIGHT)
 {
 	init();
 }
@@ -53,27 +53,25 @@ void Lcd::command(uint8_t value)
 
 void Lcd::display()
 {
-    m_displayControl |= static_cast<uint8_t>(FlagsOnOffControl::DISPLAYON);
-    command(static_cast<uint8_t>(Commands::DISPLAYCONTROL) | m_displayControl);
+    m_displayControl |= DISPLAYON;
+    command(DISPLAYCONTROL | m_displayControl);
 }
 
 void Lcd::noDisplay()
 {
-    m_displayControl &= ~static_cast<uint8_t>(FlagsOnOffControl::DISPLAYON);
-    command(static_cast<uint8_t>(Commands::DISPLAYCONTROL) | m_displayControl);
+    m_displayControl &= ~DISPLAYON;
+    command(DISPLAYCONTROL | m_displayControl);
 }
 
 void Lcd::init()
 {
-	m_displayFunction = static_cast<uint8_t>(FlagsFunctionSet::FOURBITMODE) |
-	                    static_cast<uint8_t>(FlagsFunctionSet::ONELINE) |
-	                    static_cast<uint8_t>(FlagsFunctionSet::FIVEx8DOTS);
+	m_displayFunction = FOURBITMODE | ONELINE | FIVEx8DOTS;
 
-    if (m_rows > 1)
-        m_displayFunction |= static_cast<uint8_t>(FlagsFunctionSet::TWOLINE);
+	if (m_rows > 1)
+        m_displayFunction |= TWOLINE;
 
     if (m_charSize != 0 and m_rows == 1) 
-        m_displayFunction |= static_cast<uint8_t>(FlagsFunctionSet::FIVEx10DOTS);
+        m_displayFunction |= FIVEx10DOTS;
 
     Time::sleep(Time(50));
 
@@ -91,18 +89,16 @@ void Lcd::init()
 
     write4Bits(0x02 << 4);
 
-    command(static_cast<uint8_t>(Commands::FUNCTIONSET) | m_displayFunction);
+    command(FUNCTIONSET | m_displayFunction);
 
-	m_displayControl = static_cast<uint8_t>(FlagsOnOffControl::DISPLAYON) |
-	                   static_cast<uint8_t>(FlagsOnOffControl::CURSOROFF) |
-	                   static_cast<uint8_t>(FlagsOnOffControl::BLINKOFF);
-    display();
+	m_displayControl = DISPLAYON | CURSOROFF | BLINKOFF;
+	display();
 
     clear();
 
-	m_displayMode = static_cast<uint8_t>(FlagsEntryMode::ENTRYLEFT) |
-	                static_cast<uint8_t>(FlagsEntryMode::ENTRYSHIFTDECREMENT);
-    command(static_cast<uint8_t>(Commands::ENTRYMODESET) | m_displayMode);
+	m_displayMode = ENTRYLEFT |
+	                ENTRYSHIFTDECREMENT;
+    command(ENTRYMODESET | m_displayMode);
 
     home();
 }
@@ -115,13 +111,13 @@ void Lcd::delayMicro(uint32_t micros)
 
 void Lcd::clear()
 {
-    command(static_cast<uint8_t>(Commands::CLEARDISPLAY));
+    command(CLEARDISPLAY);
     Time::sleep(Time(2));
 }
 
 void Lcd::home()
 {
-    command(static_cast<uint8_t>(Commands::RETURNHOME));
+    command(RETURNHOME);
     Time::sleep(Time(2));
 }
 
@@ -144,5 +140,19 @@ void Lcd::setCursor(uint8_t col, uint8_t row)
     if (row > m_rows)
         row = m_rows - 1;
 
-    command(static_cast<uint8_t>(Commands::SETDDRAMADDR) | (col + rowOffsets[row]));
+    command(SETDDRAMADDR | (col + rowOffsets[row]));
+}
+
+void Lcd::write(uint8_t value)
+{
+    send(value, Rs);
+}
+
+void Lcd::createChar(uint8_t location, uint8_t charmap[])
+{
+    location &= 0x7;
+    command(SETCGRAMADDR | (location << 3));
+    for (uint8_t i = 0; i < 8; i++) {
+        write(charmap[i]);
+    }
 }

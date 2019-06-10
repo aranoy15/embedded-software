@@ -6,7 +6,7 @@
 class Lcd
 {
 private:
-    enum class Commands
+    enum Commands
     {
         CLEARDISPLAY = 0x01,
         RETURNHOME = 0x02,
@@ -18,7 +18,7 @@ private:
         SETDDRAMADDR = 0x80
     };
 
-    enum class FlagsEntryMode
+    enum FlagsEntryMode
     {
         ENTRYRIGHT = 0x00,
         ENTRYLEFT = 0x02,
@@ -26,7 +26,7 @@ private:
         ENTRYSHIFTDECREMENT = 0x00
     };
 
-    enum class FlagsOnOffControl
+    enum FlagsOnOffControl
     {
         DISPLAYON = 0x04,
         DISPLAYOFF = 0x00,
@@ -36,7 +36,7 @@ private:
         BLINKOFF = 0x00
     };
 
-	enum class FlagsDisplayCursorShift
+	enum FlagsDisplayCursorShift
 	{
 		DISPLAYMOVE = 0x08,
 		CURSORMOVE = 0x00,
@@ -44,7 +44,7 @@ private:
 		MOVELEFT = 0x00
 	};
 
-    enum class FlagsFunctionSet
+    enum FlagsFunctionSet
     {
         EIGHTBITMODE = 0x10,
         FOURBITMODE = 0x00,
@@ -54,7 +54,7 @@ private:
         FIVEx8DOTS = 0x00
     };
 
-    enum class FlagsBlacklightControl
+    enum FlagsBlacklightControl
     {
         BACKLIGHT = 0x08,
         NOBACKLIGHT = 0x00
@@ -101,6 +101,7 @@ public:
     void noBlink();
     void cursor();
     void noCursor();
+    void createChar(uint8_t, uint8_t[]);
 
 private:
     void delayMicro(uint32_t);
@@ -108,4 +109,5 @@ private:
     void expanderWrite(uint8_t);
     void send(uint8_t, uint8_t);
     void pulseEnable(uint8_t);
+    void write(uint8_t);
 };
