@@ -11,6 +11,7 @@ set(LIB_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/bme280.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/mhz19.cpp
 )
 
 add_library(lib ${LIB_SOURCES})
