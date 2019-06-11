@@ -14,6 +14,18 @@ void uart::usartInitGpio(uart::UartPort port)
 			HAL_NVIC_EnableIRQ(USART1_IRQn);
 
 			break;
+
+		case UartPort::usart2:
+			if (__HAL_RCC_USART2_IS_CLK_DISABLED())
+				__HAL_RCC_USART2_CLK_ENABLE();
+
+			uart::usart2RxPin::setup();
+			uart::usart2TxPin::setup();
+
+			HAL_NVIC_SetPriority(USART2_IRQn, 5, 0);
+			HAL_NVIC_EnableIRQ(USART2_IRQn);
+
+			break;
 	}
 }
 

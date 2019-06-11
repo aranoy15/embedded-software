@@ -25,6 +25,9 @@ enum class UartPort
 using usart1TxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9>, mAfPP, sHi, pUp>;
 using usart1RxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_10>, mInput, sHi, pUp>;
 
+using usart2TxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_2>, mAfPP, sHi, pUp>;
+using usart2RxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_3>, mInput, sHi, pUp>;
+
 void usartInitGpio(UartPort port);
 USART_TypeDef* port2CSP(UartPort port);
 	
@@ -182,6 +185,11 @@ public:
 		HAL_UART_Transmit(&m_huart, (uint8_t*)message.c_str(), message.length(), 1000);
 	}
 
+	void send(uint8_t data[], uint16_t size)
+	{
+		HAL_UART_Transmit(&m_huart, data, size, 1000);
+	}
+
 	std::string readln(uint32_t timeout = 2000)
 	{
 		//Lock lock(readMutex);
@@ -223,7 +231,7 @@ public:
 				return true;
 			}
 
-			Time::sleep(Time(100));
+			Time::sleep(Time(10));
 		}
 		
 		return false;
