@@ -102,6 +102,7 @@ public:
     void cursor();
     void noCursor();
     void createChar(uint8_t, uint8_t[]);
+    void write(uint8_t);
 
 private:
     void delayMicro(uint32_t);
@@ -109,5 +110,4 @@ private:
     void expanderWrite(uint8_t);
     void send(uint8_t, uint8_t);
     void pulseEnable(uint8_t);
-    void write(uint8_t);
 };
