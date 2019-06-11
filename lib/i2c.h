@@ -94,6 +94,28 @@ public:
 		return HAL_I2C_Master_Transmit(&m_hndl, address << 1, sendingData, sizeof(sendingData), timeout) == HAL_OK;
 	}
 
+	template <typename TypeResult, typename TypeReg>
+	TypeResult readReg(uint16_t address, TypeReg reg)
+	{
+		TypeResult resultData;
+		readReg(address, reg, reinterpret_cast<uint8_t*>(&resultData), sizeof(TypeResult));
+		return resultData;
+	}
+
+	template <typename TypeReg>
+	bool readReg(uint16_t address, TypeReg reg, uint8_t* data, uint16_t size)
+	{
+		if (HAL_I2C_Master_Transmit(&m_hndl, address << 1,
+									reinterpret_cast<uint8_t*>(&reg),
+									sizeof(TypeReg), timeout) != HAL_OK)
+			return false;
+
+		if (HAL_I2C_Master_Receive(&m_hndl, address << 1, data, size, timeout) != HAL_OK)
+			return false;
+
+		return true;
+	}
+
 private:
 	static void initGpio()
 	{
