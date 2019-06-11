@@ -61,6 +61,11 @@ public:
 		HAL_I2C_Master_Transmit(&m_hndl, address << 1, &data, 1, timeout);
 	}
 
+	bool write(uint16_t address, uint8_t data[], uint16_t size)
+	{
+		return HAL_I2C_Master_Transmit(&m_hndl, address << 1, data, size, timeout) == HAL_OK;
+	}
+
 	uint8_t readByte(uint16_t address)
 	{
 		uint8_t result;
