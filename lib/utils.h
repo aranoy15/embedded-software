@@ -22,4 +22,6 @@ namespace utils
 
 	    return result;
     }
+
+	uint8_t conv2d(const char* p); 
 }  // namespace utils
