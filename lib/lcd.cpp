@@ -2,6 +2,8 @@
 #include <stm32f1xx_hal.h>
 #include <time.h>
 
+using namespace utils;
+
 Lcd::Lcd(uint16_t address, uint8_t lcdCols, uint8_t lcdRows,
                  uint8_t charSize)
     : m_address(address),
@@ -101,12 +103,6 @@ void Lcd::init()
     command(ENTRYMODESET | m_displayMode);
 
     home();
-}
-
-void Lcd::delayMicro(uint32_t micros)
-{
-	micros *= (SystemCoreClock / 1000000) / 5;
-	while (micros--);
 }
 
 void Lcd::clear()

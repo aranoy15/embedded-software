@@ -2,6 +2,8 @@
 
 #include <i2c.h>
 #include <string>
+#include <utils.h>
+
 
 class Lcd
 {
@@ -105,7 +107,6 @@ public:
     void write(uint8_t);
 
 private:
-    void delayMicro(uint32_t);
     void write4Bits(uint8_t);
     void expanderWrite(uint8_t);
     void send(uint8_t, uint8_t);
