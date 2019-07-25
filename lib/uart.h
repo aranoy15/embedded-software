@@ -185,6 +185,20 @@ public:
 		HAL_UART_Transmit(&m_huart, (uint8_t*)message.c_str(), message.length(), 1000);
 	}
 
+	void dump(uint8_t *data, uint16_t size, std::string prefix = "")
+	{
+		std::string result;
+
+		result.append(prefix);
+		for (uint8_t i = 0; i < size; i++) {
+			char hex[10];
+			sprintf(hex, "0x%02X ", data[i]);
+			result.append(hex);
+		}
+
+		send(result);
+	}
+
 	void send(uint8_t data[], uint16_t size)
 	{
 		HAL_UART_Transmit(&m_huart, data, size, 1000);
