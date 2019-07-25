@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 
-add_definitions(-DDBG=0)
+set(DEBUG 0)
 
 project(test C CXX ASM)
 

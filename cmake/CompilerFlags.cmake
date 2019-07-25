@@ -21,14 +21,20 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 SET(CMAKE_SYSTEM_NAME Generic)
 SET(CMAKE_SYSTEM_PROCESSOR arm)
 
+if (DEBUG)
+    SET(OPT_FLAGS "-g")
+else()
+    SET(OPT_FLAGS "-Os")
+endif()
+
 SET(PLATFORM_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs")
 SET(SPECS "-specs=nosys.specs -specs=nano.specs")
 SET(SECTIONS "-ffunction-sections -fdata-sections")
 SET(SHARE_SETTINGS "-fno-builtin -fomit-frame-pointer -fno-unroll-loops -ffast-math -ftree-vectorize")
 
-SET(CMAKE_C_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} -g -Wall -std=gnu99")
-SET(CMAKE_CXX_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} -g -Weffc++ -fno-exceptions")
-SET(CMAKE_ASM_FLAGS "${PLATFORM_FLAGS} -g -x assembler-with-cpp")
+SET(CMAKE_C_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Wall -std=gnu99")
+SET(CMAKE_CXX_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Weffc++ -fno-exceptions")
+SET(CMAKE_ASM_FLAGS "${PLATFORM_FLAGS} ${OPT_FLAGS} -x assembler-with-cpp")
 
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections ${PLATFORM_FLAGS} ${SPECS} -T ${CMAKE_CURRENT_SOURCE_DIR}/board/${CHIP}/link.ld")
 SET(CMAKE_MODULE_LINKER_FLAGS "${PLATFORM_FLAGS}")
