@@ -8,6 +8,10 @@ std::string utils::ftostring(float number, uint8_t fractionDeep)
         f *= 10;
 
     int fraction = (int)((number - (long)number) * f);
+
+    if (fraction < 0)
+        fraction *= -1;
+
     return std::to_string((int)number) + std::string(".") + std::to_string(fraction);
 }
 
@@ -19,3 +23,8 @@ uint8_t utils::conv2d(const char *p)
     return 10 * v + *++p - '0';
 }
 
+void utils::delayMicro(uint32_t micros)
+{
+	micros *= (SystemCoreClock / 1000000) / 9;
+	while (micros--);
+}
