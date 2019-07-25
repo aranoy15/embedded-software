@@ -2,37 +2,29 @@
 
 IWDG_HandleTypeDef Watchdog::m_hiwdg;
 
-void Watchdog::Init(uint32_t timeout)
+void Watchdog::init(uint32_t timeout)
 {
-#if !DBG
 	m_hiwdg.Instance = IWDG;
 	m_hiwdg.Init.Prescaler = IWDG_PRESCALER_256;
 	m_hiwdg.Init.Reload = uint32_t(float(timeout) / 32 * 4095);
 	HAL_IWDG_Init(&m_hiwdg);
-#endif
 }
 
-void Watchdog::Start()
+void Watchdog::start()
 {
-#if !DBG
 	__HAL_IWDG_START(&m_hiwdg);
-#endif
 }
 
-void Watchdog::Reload()
+void Watchdog::reload()
 {
-#if !DBG
 	HAL_IWDG_Refresh(&m_hiwdg);
-#endif
 }
 
-void Watchdog::RebootDevice()
+void Watchdog::rebootDevice()
 {
-#if !DBG
-	Init(0);
-	Reload();
+	init(0);
+	reload();
 
 	while (true) {
 	}
-#endif
 }
