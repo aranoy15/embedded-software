@@ -203,6 +203,7 @@ void applogic::startLogic()
     log.init(128, 115200);
     Uart<uart::UartPort::usart2>::instance()->init(16, 9600);
     Mhz19 mhz19;
+    mhz19.setAutoCalibration(false);
 
     mainI2C.init();
     log.send("Start application");
