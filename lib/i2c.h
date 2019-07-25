@@ -77,7 +77,7 @@ public:
 	{
 		std::vector<uint8_t> result;
 
-		for (uint16_t i = 0; i < 128; i++) {
+		for (uint16_t i = 1; i < 128; i++) {
 			bool resRead =
 			    (HAL_I2C_IsDeviceReady(&m_hndl, i << 1, 1, 10) == HAL_OK);
 
