@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include <datetime.h>
 #include <i2c.h>
+#include <bsp.h>
 
 class Ds3231
 {
@@ -21,7 +22,7 @@ private:
 
 private:
     uint16_t m_address;
-	I2C<i2c::i2cPort1>& getI2C() { return *I2C<i2c::i2cPort1>::instance(); }
+	I2C<bsp::i2crtc::ds3231Port>& getI2C() { return *I2C<bsp::i2crtc::ds3231Port>::instance(); }
 
 private:
     static const uint8_t CONTROL = 0x0E;

@@ -24,6 +24,7 @@ private:
 private:
     std::unique_ptr<Lcd> lcd;
     std::unique_ptr<Timer> mTimer;
+    std::unique_ptr<Timer> mChartTimer;
     bool mDotState;
 
 private:
@@ -35,7 +36,13 @@ private:
     void drawDate(const DateTime&, uint8_t, uint8_t);
     void drawCO2(uint16_t, uint8_t, uint8_t);
     void drawTemp(float, uint8_t, uint8_t);
-    void drawHumidity(float, uint8_t, uint8_t);
+    void drawHumidity(uint8_t, uint8_t, uint8_t);
+    void drawPressure(uint16_t, uint8_t, uint8_t);
+    void drawRainPercent(int8_t, uint8_t, uint8_t);
+
+    void mainShow();
+    void drawCo2DayChart();
+    void drawCo2HourChart();
 
 public:
     LcdLogic();

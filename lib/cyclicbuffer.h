@@ -64,8 +64,13 @@ public:
 
     uint8_t* buffer()
     {
-        return &m_data[m_first];
+        return reinterpret_cast<uint8_t*>(&m_data[m_first]);
     }
+
+	uint16_t bufferSize()
+	{
+		return (m_data.capacity() * sizeof(T));
+	}
 };
 
 #endif /* SHARELIB_CIRCLEBUFFER_H */

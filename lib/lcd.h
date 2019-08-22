@@ -71,8 +71,11 @@ private:
 
 private:
 
-    using i2cT = I2C<i2c::i2cPort1>;
-	I2C<i2c::i2cPort1>& getI2c() { return *i2cT::instance(); }
+    //using i2cT = I2C<i2c::i2cPort1>;
+	I2C<bsp::lcd::lcdI2CPort>& getI2c()
+	{
+		return *I2C<bsp::lcd::lcdI2CPort>::instance();
+	}
 
 private:
     uint16_t m_address;

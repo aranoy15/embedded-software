@@ -1,7 +1,24 @@
 #include <logic.h>
-#include <gpio.h>
 #include <time.h>
 #include <uart.h>
+#include <bsp.h>
+
+
+void applogic::startLogic()
+{
+  using blinkLed = GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, bsp::mOutputPP>;
+
+  blinkLed::setup();
+
+	for (;;) {
+    blinkLed::on();
+    Time::sleep(Time(500));
+    blinkLed::off();
+    Time::sleep(Time(500));
+	}
+}
+
+/*
 #include <i2c.h>
 #include <lcd.h>
 #include <math.h>
@@ -10,9 +27,11 @@
 #include <ds3231.h>
 #include <algorithm>
 #include <mhz19.h>
+*/
 
-using namespace gpio;
+//using namespace gpio;
 
+/*
 uint8_t LT[8] = {0b00111,  0b01111,  0b11111,  0b11111,  0b11111,  0b11111,  0b11111,  0b11111};
 uint8_t UB[8] = {0b11111,  0b11111,  0b11111,  0b00000,  0b00000,  0b00000,  0b00000,  0b00000};
 uint8_t RT[8] = {0b11100,  0b11110,  0b11111,  0b11111,  0b11111,  0b11111,  0b11111,  0b11111};
@@ -186,14 +205,9 @@ void drawClock(uint8_t hours, uint8_t minutes, uint8_t x, uint8_t y, bool dotSta
   lcd.home();
 }
 
+*/
 
-
-void applogic::startLogic()
-{
-    //using led = GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP>;
-    //led::setup();
-    //led::off();
-
+/*
     using LogUart = Uart<uart::UartPort::usart1>;
     LogUart& log = *LogUart::instance();
 
@@ -207,6 +221,7 @@ void applogic::startLogic()
 
     mainI2C.init();
     log.send("Start application");
+    */
 
     /*
     std::vector<uint8_t> addresses = mainI2C.searchAddresses();
@@ -224,6 +239,7 @@ void applogic::startLogic()
     log.send(" ");
     */
 
+   /*
     Ds3231 ds3231(0x68);
     Bme280 bme(0x76);
     bme.init();
@@ -301,4 +317,4 @@ void applogic::startLogic()
 
         Time::sleep(Time::seconds(1));
     }
-}
+    */

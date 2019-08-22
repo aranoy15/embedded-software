@@ -231,3 +231,12 @@ float Bme280::readTemperature()
     float T = (t_fine * 5 + 128) >> 8;
     return T/100;
 }
+
+void Bme280::takeForcedMeasurement()
+{
+    if (m_measreg.mode == MODE_FORCED) {
+        write8(BME280_REGISTER_CONTROL, m_measreg.get());
+        while(read8(BME280_REGISTER_STATUS) & 0x08)
+            Time::sleep(Time(1));
+    }
+}

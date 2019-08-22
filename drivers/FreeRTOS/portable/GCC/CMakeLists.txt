@@ -1,1 +1,1 @@
-add_subdirectory(ARM_CM3)
+add_subdirectory(${ARCHITECTURE})

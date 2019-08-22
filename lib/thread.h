@@ -11,11 +11,10 @@ private:
 
 	static void threadFuncStatic(const void* argument);
 
-private:
-	Thread(const Thread&);
-	Thread& operator=(const Thread&);
-
 public:
+	Thread(const Thread&) = delete;
+	Thread& operator=(const Thread&) = delete;
+
 	Thread(osPriority prio, uint32_t stackSize, const char* name);
 	    
 	virtual ~Thread(){}

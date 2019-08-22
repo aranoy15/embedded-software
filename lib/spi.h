@@ -1,39 +1,13 @@
 #pragma once
 
-#include <gpio.h>
-#include <relay.h>
 //#include <mutex.h>
 #include <singleton.h>
-#include <stm32f1xx_hal.h>
+#include <bsp.h>
 
-namespace spi
-{
-    using namespace gpio;
-
-    enum SpiPort
-    {
-        spiPort1 = 1,
-        spiPort2 = 2
-    };
-
-    using adcSck = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_5>, mAfPP, sHi>;
-    using adcMiso = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_6>, mInput>;
-    using adcMosi = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_7>, mAfPP, sHi>;
-
-    using adcCsPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_4>, mOutputPP>;
-    using adcCs = Relay<adcCsPin, PinManageLogic::Inverse>;
-
-    using adcBusy = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_3>, mInput>;
-
-    void init(SpiPort port);
-    void chipSelect(SpiPort port);
-    void chipUnselect(SpiPort port);
-}
-
-template <spi::SpiPort port>
+template <bsp::SpiPort port>
 class Spi;
 
-template <spi::SpiPort port>
+template <bsp::SpiPort port>
 class ChipSelectTrigger
 {
 private:
@@ -43,17 +17,17 @@ public:
     ChipSelectTrigger(uint8_t chip) : m_chip(chip)
     {
         //Spi<port>::instance()->lock();
-        spi::chipSelect(m_chip);
+        bsp::spi::chipSelect(m_chip);
     }
 
     ~ChipSelectTrigger()
     {
-        spi::chipUnselect(m_chip);
+        bsp::spi::chipUnselect(m_chip);
         //Spi<port>::instance()->unlock();
     }
 };
 
-template <spi::SpiPort port>
+template <bsp::SpiPort port>
 class Spi : public Singleton<Spi<port>>
 {
 private:
@@ -76,7 +50,7 @@ public:
 
 	bool init()
     {
-        m_config.Instance = port2CSP();
+        m_config.Instance = bsp::spi::port2CSP(port);
         m_config.Init.Mode = SPI_MODE_MASTER;
         m_config.Init.Direction = SPI_DIRECTION_2LINES;
         m_config.Init.DataSize = SPI_DATASIZE_8BIT;
@@ -89,7 +63,7 @@ public:
         m_config.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
         m_config.Init.CRCPolynomial = 10;
 
-        spi::init(port);
+        bsp::spi::init(port);
         return HAL_SPI_Init(&m_config) == HAL_OK;
     }
 
@@ -121,15 +95,4 @@ public:
     {
         return HAL_SPI_Transmit(&m_config, const_cast<uint8_t*>(bytes), size, getTimeout() * size) == HAL_OK;
     }
-
-private:
-	SPI_TypeDef* port2CSP()
-	{
-		switch (port) {
-			case spi::spiPort1:
-				return SPI1;
-			case spi::spiPort2:
-				return SPI2;
-		}
-	}
 };

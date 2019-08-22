@@ -1,20 +1,20 @@
 #include <stdint.h>
-#include <stm32f1xx_hal.h>
-#include <system.h>
+#include <bsp.h>
 #include <logic.h>
 
-/*
+#if (USE_FREERTOS)
+#include <FreeRTOS.h>
+#include <task.h>
+
 extern "C" void* malloc(size_t size)
 {
 	return pvPortMalloc(size);
 }
 
-
 extern "C" void free(void* block)
 {
 	return vPortFree(block);
 }
-
 
 void* operator new(size_t size)
 {
@@ -22,18 +22,19 @@ void* operator new(size_t size)
 	return block;
 }
 
-
 void operator delete(void* block) 
 {
 	free(block);
 }
 
-void operator delete(void* block, std::size_t size) 
+void operator delete(void* block, size_t size) 
 {
 	(void)size;
 	free(block);
 }
+#endif
 
+/*
 static const size_t mainRamHeapSize = 17 * 1024;
 static uint8_t mainRamHeapBlock[mainRamHeapSize];
 HeapRegion_t xHeapRegions[] = {{mainRamHeapBlock, mainRamHeapSize},
@@ -48,7 +49,8 @@ void initMem()
 __attribute__((constructor))
 void initAll()
 {
-	stm32system::init();
+	//stm32system::init();
+	bsp::init();
 	//initMem();
 }
 
@@ -74,5 +76,15 @@ void SysTick_Handler(void)
 {
 	HAL_IncTick();
 	//osSystickHandler();
+
+#if (USE_FREERTOS)
+#if (INCLUDE_xTaskGetSchedulerState == 1)
+	if (xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED) {
+#endif /* INCLUDE_xTaskGetSchedulerState */
+		xPortSysTickHandler();
+#if (INCLUDE_xTaskGetSchedulerState == 1)
+	}
+#endif
+#endif
 }
 }

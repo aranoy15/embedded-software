@@ -2,6 +2,15 @@
 
 #include <uart.h>
 #include <vector>
+#include <bsp.h>
+
+enum class Mhz19Range {
+	Range1000,
+	Range2000,
+	Range3000,
+	Range5000,
+	Range10000	
+};
 
 struct Mhz19Data
 {
@@ -15,14 +24,9 @@ struct Mhz19Data
 class Mhz19
 {
 private:
-	Uart<uart::UartPort::usart2>& getUart()
+	Uart<bsp::mhz19uart::mhzPort>& getUart()
 	{
-		return *Uart<uart::UartPort::usart2>::instance();
-	}
-
-	Uart<uart::UartPort::usart1>& getLog()
-	{
-		return *Uart<uart::UartPort::usart1>::instance();
+		return *Uart<bsp::mhz19uart::mhzPort>::instance();
 	}
 
 	static const uint8_t bufferSize = 9;
@@ -43,9 +47,10 @@ public:
 	void init();
     uint16_t getCO2();
 	void setAutoCalibration(bool);
+	void setRange(Mhz19Range);
 
 private:
-	void command(uint8_t, uint8_t = 0, uint8_t = 0);
+	void command(uint8_t, uint8_t = 0, uint8_t = 0, uint8_t = 0, uint8_t = 0, uint8_t = 0);
 	bool readResponse();
 
     uint8_t calcCrc();

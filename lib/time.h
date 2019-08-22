@@ -1,5 +1,4 @@
-#ifndef TIME_H
-#define TIME_H
+#pragma once
 
 #include <stdint.h>
 #include <stm32f1xx_hal.h>
@@ -18,6 +17,10 @@ public:
 	};
 	//static const uint32_t t_infinite = osWaitForever;
 
+	static constexpr uint32_t second() { return 1000; }
+	static constexpr uint32_t minute() { return 60 * 1000; }
+	static constexpr uint32_t hour() { return 60 * minute(); }
+
 public:
 	Time() : m_time(nullVal) {}
 	Time(const Time& t) : m_time(t.m_time) {}
@@ -29,5 +32,3 @@ public:
 	static Time seconds(int n) { return Time(n * 1000); }
 	static uint32_t getTicks();
 };
-
-#endif /* TIME_H */

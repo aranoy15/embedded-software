@@ -4,28 +4,22 @@ set(DEBUG 0)
 
 project(test C CXX ASM)
 
-if (NOT DEFINED CHIP)
-    set(CHIP STM32F103xB)
-endif()
-
 if (NOT DEFINED LOGIC)
-    set(LOGIC main)
+    message(FATAL_ERROR "-- Logic is not defined")
 endif()
 
-if (NOT DEFINED FAMILY)
-    set(FAMILY F1)
+if (NOT DEFINED BOARD)
+    message(FATAL_ERROR "-- Board is not defined")
 endif()
 
-if (NOT DEFINED TARGET)
-    set(TARGET app)
-endif()
+set(COMPILER GCC)
 
-add_definitions(-D${CHIP})
-set(HAVE_FREERTOS ON)
+set(TARGET app)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
-#include(Setting)
+include(Board/${BOARD})
+include(Logic/${LOGIC})
 include(CompilerFlags)
 include(Tools)
 
@@ -40,4 +34,4 @@ flash(${TARGET} 0x8000000)
 add_trace(${TARGET})
 read()
 
-add_subdirectory(boot)
+#add_subdirectory(boot)

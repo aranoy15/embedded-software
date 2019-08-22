@@ -1,39 +1,15 @@
 #pragma once
 
 #include <singleton.h>
-#include <stm32f1xx_hal.h>
 #include <cyclicbuffer.h>
-#include <gpio.h>
 #include <tuple>
 #include <memory>
 #include <timer.h>
-//#include <mutex.h>
 #include <cstring>
+#include <utils.h>
+#include <bsp.h>
 
-namespace uart
-{
-
-using namespace gpio;
-
-enum class UartPort
-{
-	usart1 = 1,
-	usart2 = 2,
-	usart3 = 3
-};
-
-using usart1TxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9>, mAfPP, sHi, pUp>;
-using usart1RxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_10>, mInput, sHi, pUp>;
-
-using usart2TxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_2>, mAfPP, sHi, pUp>;
-using usart2RxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_3>, mInput, sHi, pUp>;
-
-void usartInitGpio(UartPort port);
-USART_TypeDef* port2CSP(UartPort port);
-	
-}
-
-template <uart::UartPort port>
+template <bsp::UartPort port>
 class Uart : public Singleton<Uart<port> >
 {
 public:
@@ -162,7 +138,7 @@ public:
 	{
 		m_buf.alloc(size);
 
-		m_huart.Instance = uart::port2CSP(port);
+		m_huart.Instance = bsp::uart::port2CSP(port);
 		m_huart.Init.BaudRate = baudRate;
 		m_huart.Init.WordLength = bits;
 		m_huart.Init.StopBits = stopBits;
@@ -172,7 +148,7 @@ public:
 		m_huart.Init.OverSampling = UART_OVERSAMPLING_16;
 
 		//usartInitGpio();
-		uart::usartInitGpio(port);
+		bsp::uart::usartInitGpio(port);
 
 		__HAL_UART_ENABLE_IT(&m_huart, UART_IT_RXNE);
 		HAL_UART_Init(&m_huart);

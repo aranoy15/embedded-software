@@ -6,7 +6,7 @@ add_executable(${TARGET}
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/bootuart.cpp
     ${CMAKE_SOURCE_DIR}/lib/system.cpp
-    ${CMAKE_SOURCE_DIR}/lib/gpio.cpp
+    #${CMAKE_SOURCE_DIR}/lib/gpio.cpp
 )
 
 target_include_directories(boot PRIVATE 

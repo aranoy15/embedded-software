@@ -1,1 +1,0 @@
-set(HAVE_FREERTOS 0)

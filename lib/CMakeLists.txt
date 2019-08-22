@@ -1,6 +1,4 @@
 set(LIB_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/system.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/gpio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/watchdog.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/time.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/uartbuffer.cpp
@@ -13,6 +11,7 @@ set(LIB_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mhz19.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/taskscheduler.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/sdcard.cpp
 )
 
 add_library(lib ${LIB_SOURCES})
@@ -23,4 +22,4 @@ target_include_directories(lib PUBLIC
 
 add_subdirectory(rtc)
 
-target_link_libraries(lib PRIVATE drivers) #FreeRTOS
+target_link_libraries(lib PRIVATE drivers) #FreeRTOS FatFS

@@ -1,7 +1,6 @@
 #ifndef MUTEX_H
 #define MUTEX_H
 
-#include <cmsis_os.h>
 #include <lock.h>
 
 template<class MutexImpl>

@@ -1,6 +1,7 @@
 #include <lcdlogic.h>
 #include <clocklogic.h>
 #include <sensorlogic.h>
+#include <logicstate.h>
 
 uint8_t LcdLogic::LT[8] = {0b00111, 0b01111, 0b11111, 0b11111,
                            0b11111, 0b11111, 0b11111, 0b11111};
@@ -31,7 +32,10 @@ std::vector<std::string> LcdLogic::weekDay = {
 };
 
 LcdLogic::LcdLogic()
-    : lcd(new Lcd(0x27, 20, 4, 1)), mTimer(new Timer(1000)), mDotState(false)
+    : lcd(new Lcd(0x27, 20, 4, 1)),
+      mTimer(new Timer(1000)),
+      mChartTimer(new Timer(10 * Time::second())),
+      mDotState(false)
 {
     lcd->init();
 }
@@ -170,10 +174,11 @@ void LcdLogic::loadClock()
 
 void LcdLogic::drawDots(bool dotState, uint8_t x, uint8_t y)
 {
+	uint8_t dot = dotState ? 0xA5 : 0x20;
     lcd->setCursor(x + 7, y);
-    lcd->sendChar(dotState ? '*' : ' ');
+    lcd->sendChar(dot);
     lcd->setCursor(x + 7, y + 1);
-    lcd->sendChar(dotState ? '*' : ' ');
+    lcd->sendChar(dot);
 }
 
 void LcdLogic::drawClock(uint8_t hours, uint8_t minutes, uint8_t x, uint8_t y)
@@ -213,27 +218,68 @@ void LcdLogic::drawCO2(uint16_t co2, uint8_t x, uint8_t y)
 void LcdLogic::drawTemp(float temp, uint8_t x, uint8_t y)
 {
 	lcd->setCursor(x, y);
-	lcd->sendString(utils::stringFormat("%s*C", utils::ftostring(temp).c_str()));
+	lcd->sendString(utils::stringFormat("%s", utils::ftostring(temp).c_str()));
+	lcd->sendChar(0xDF);
+	lcd->sendChar('C');
 }
 
-void LcdLogic::drawHumidity(float hum, uint8_t x, uint8_t y)
+void LcdLogic::drawHumidity(uint8_t hum, uint8_t x, uint8_t y)
 {
 	lcd->setCursor(x, y);
-	lcd->sendString(utils::stringFormat("%u", static_cast<uint8_t>(hum)) + "%");
+	lcd->sendString(utils::stringFormat("%u", hum) + "%");
 }
 
-void LcdLogic::processLcd()
+
+void LcdLogic::drawPressure(uint16_t press, uint8_t x, uint8_t y)
+{
+	lcd->setCursor(x, y);
+	lcd->sendString(utils::stringFormat("%4u mm", press));
+}
+
+void LcdLogic::drawRainPercent(int8_t percent, uint8_t x, uint8_t y)
+{
+	lcd->setCursor(x, y);
+	lcd->sendString(utils::stringFormat("rain %3i%%", percent));
+}
+
+void LcdLogic::mainShow()
 {
 	if (mTimer->elapsed()) {
 		loadClock();
-
 		const DateTime& dateTime = ClockLogic::instance()->getDateTime();
+
 		drawClock(dateTime.hour(), dateTime.minute(), 0, 0);
 		drawDate(dateTime, 15, 0);
 		drawCO2(SensorLogic::instance()->getCO2(), 12, 2);
 		drawTemp(SensorLogic::instance()->getTemp(), 0, 2);
 		drawHumidity(SensorLogic::instance()->getHumidity(), 8, 2);
-
+		drawPressure(SensorLogic::instance()->getPressure(), 0, 3);
+		drawRainPercent(SensorLogic::instance()->getRainPercent(), 10, 3);
 		mTimer->start();
 	}
+}
+
+void drawCo2DayChart()
+{
+	
+}
+void drawCo2HourChart();
+
+void LcdLogic::processLcd()
+{
+
+		LogicStateType logicState = LogicState::instance()->currentState();
+
+		switch (logicState) {
+			default:
+			case LogicStateType::MainInfo:
+				mainShow();
+				break;
+			case LogicStateType::Co2DayChart:
+				lcd->clear();
+				lcd->setCursor(0, 0);
+				lcd->sendString("Hello day chart");
+				break;
+		}
+
 }

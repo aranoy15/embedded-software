@@ -1,2 +1,2 @@
-add_subdirectory(GCC)
+add_subdirectory(${COMPILER})
 add_subdirectory(MemMang)

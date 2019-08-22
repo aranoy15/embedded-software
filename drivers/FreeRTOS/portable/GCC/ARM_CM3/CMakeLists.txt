@@ -1,3 +1,7 @@
-target_sources(FreeRTOS PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/port.c)
+target_sources(drivers PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/port.c
+)
 
-target_include_directories(FreeRTOS PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(drivers PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)

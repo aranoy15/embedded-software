@@ -1,28 +1,13 @@
 #pragma once
 
 #include <singleton.h>
-#include <stm32f1xx_hal.h>
-#include <gpio.h>
 #include <vector>
 //#include <mutex.h>
 #include <string.h>
+#include <bsp.h>
 
 
-namespace i2c
-{
-using namespace gpio;
-
-enum I2CPorts
-{
-	i2cPort1 = 1,
-	i2cPort2 = 2
-};
-
-using i2cPins =
-    GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_6 | GPIO_PIN_7>, mAfOD, sHi, pUp>;
-}  // namespace i2c
-
-template<i2c::I2CPorts port>
+template<bsp::I2CPort port>
 class I2C : public Singleton<I2C<port> >
 {
 public:
@@ -41,7 +26,7 @@ public:
 
 	void init()
 	{
-		m_hndl.Instance = port2CSP();
+		m_hndl.Instance = bsp::i2c::port2CSP(port);//port2CSP();
 		m_hndl.Init.ClockSpeed = 100000;
 		m_hndl.Init.DutyCycle = I2C_DUTYCYCLE_2;
 		m_hndl.Init.OwnAddress1 = 0;
@@ -51,7 +36,8 @@ public:
 		m_hndl.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
 		m_hndl.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
 
-		initGpio();
+		//initGpio();
+		bsp::i2c::init(port);
 
 		HAL_I2C_Init(&m_hndl);
 	}
@@ -119,24 +105,5 @@ public:
 			return false;
 
 		return true;
-	}
-
-private:
-	static void initGpio()
-	{
-		switch(port) {
-			case i2c::i2cPort1:
-				if (__HAL_RCC_I2C1_IS_CLK_DISABLED()) __HAL_RCC_I2C1_CLK_ENABLE();
-
-				i2c::i2cPins::setup();
-				break;
-		}
-	}
-
-	static I2C_TypeDef* port2CSP()
-	{
-		if (port == i2c::i2cPort1) return I2C1;
-
-		return I2C2;
 	}
 };

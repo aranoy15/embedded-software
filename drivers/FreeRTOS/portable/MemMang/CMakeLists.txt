@@ -1,1 +1,3 @@
-target_sources(FreeRTOS PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/heap_5.c)
+target_sources(drivers PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/heap_5.c
+)

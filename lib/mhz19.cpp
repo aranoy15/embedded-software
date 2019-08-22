@@ -23,23 +23,24 @@ uint16_t Mhz19::getCO2()
 	return result;
 }
 
-void Mhz19::command(uint8_t command, uint8_t high, uint8_t low)
+void Mhz19::command(uint8_t command, uint8_t b3, uint8_t b4, uint8_t b5, uint8_t b6, uint8_t b7)
 {
     buffer[0] = 0xFF;
     buffer[1] = 0x01;
     buffer[2] = command;
-    buffer[3] = high;
-    buffer[4] = low;
+    buffer[3] = b3;
+    buffer[4] = b4;
+    buffer[5] = b5;
+    buffer[6] = b6;
+    buffer[7] = b7;
     buffer[8] = calcCrc();
 
-    //getLog().dump(buffer, bufferSize, "Command data: ");
     getUart().send(buffer, bufferSize);
 }
 
 bool Mhz19::readResponse()
 {
     bool result = getUart().readCount(buffer, bufferSize, 100);
-    //getLog().dump(buffer, bufferSize, "Response data: ");
 
     if (result)
         result = (buffer[8] == calcCrc());
@@ -67,4 +68,27 @@ uint8_t Mhz19::calcCrc()
     crc++;
 
     return crc;
+}
+
+void Mhz19::setRange(Mhz19Range range)
+{
+    switch (range) {
+		case Mhz19Range::Range1000:
+			command(DetectionRangeSetting, 0x00, 0x00, 0x00, 0x03, 0xE8);
+			break;
+		case Mhz19Range::Range2000:
+			command(DetectionRangeSetting, 0x00, 0x00, 0x00, 0x07, 0xD0);
+			break;
+		case Mhz19Range::Range3000:
+			command(DetectionRangeSetting, 0x00, 0x00, 0x00, 0x0B, 0xB8);
+			break;
+		case Mhz19Range::Range5000:
+			command(DetectionRangeSetting, 0x00, 0x00, 0x00, 0x13, 0x88);
+ 			break;
+		case Mhz19Range::Range10000:
+			command(DetectionRangeSetting, 0x00, 0x00, 0x00, 0x27, 0x10);
+ 			break;
+		default:
+			break;
+	}
 }

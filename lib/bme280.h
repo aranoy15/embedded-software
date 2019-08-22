@@ -161,8 +161,11 @@ private:
     uint16_t m_address;
     int32_t t_fine;
 
-    using I2CType = I2C<i2c::i2cPort1>;
-    I2CType& getI2C() { return *I2CType::instance(); }
+    //using I2CType = I2C<i2c::i2cPort1>;
+	I2C<bsp::i2ctemp::bmeI2CPort>& getI2C()
+	{
+		return *I2C<bsp::i2ctemp::bmeI2CPort>::instance();
+	}
 
 public:
         enum SensorSampling {
