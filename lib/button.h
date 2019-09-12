@@ -1,6 +1,6 @@
 #pragma once
 
-#include <gpio.h>
+#include <bsp.h>
 #include <timer.h>
 
 template<class Pin>
