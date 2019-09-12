@@ -16,25 +16,6 @@ namespace utils
     std::string ftostring(float, uint8_t = 1);
     void delayMicro(uint32_t);
 
-    /*
-    template <typename T>
-    std::string tohex(T data)
-    {
-	    std::string result = "0x";
-
-        uint8_t* bytes = reinterpret_cast<uint8_t*>(&data);
-
-	    for (int8_t i = sizeof(T) - 1; i >= 0; i--) {
-		    char hexStr[3];
-
-		    sprintf(hexStr, "%02X", bytes[i]);
-		    result += std::string(hexStr);
-	    }
-
-	    return result;
-    }
-    */
-
     template<typename T>
     std::string to_string(T data, DataType type = DataType::INT)
     {
@@ -74,12 +55,7 @@ namespace utils
 	    return std::string(buf.get(), buf.get() + size - 1);
     }
 
-    /* 
-    long map(long x, long in_min, long in_max, long out_min, long out_max)
-    {
-	    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
-    */
+    float map(float x, float in_min, float in_max, float out_min, float out_max);
 
 #if defined(__arm__)
     extern "C" char* sbrk(int incr);

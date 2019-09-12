@@ -1,0 +1,8 @@
+set(USE_FREERTOS 0)
+set(USE_LCD 1)
+set(USE_FLASH 1)
+set(USE_I2CONEWIRE 1)
+set(USE_ADS7844 1) 
+set(USE_FATFS 1)
+
+add_definitions(-DUSE_FREERTOS=${USE_FREERTOS})
