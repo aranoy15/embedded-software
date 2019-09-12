@@ -1,23 +1,50 @@
 #include <mutex.h>
 
-osMutexId MutexOneImpl::create() const
+#if (USE_FREERTOS)
+SemaphoreHandle_t MutexOneImpl::create() const
 {
-    // osMutexDef_t need only to static allocation
-    osMutexId id = osMutexCreate(NULL);
-    return id;
+	return xSemaphoreCreateMutex();
 }
 
-bool MutexOneImpl::lock(osMutexId mid) const
+
+bool MutexOneImpl::lock(SemaphoreHandle_t sem) const
 {
-    return (osMutexWait(mid, osWaitForever) == osOK);
+	return xSemaphoreTake(sem, portMAX_DELAY) == pdTRUE;
 }
 
-void MutexOneImpl::unlock(osMutexId mid) const
+
+void MutexOneImpl::unlock(SemaphoreHandle_t sem) const
 {
-    osMutexRelease(mid);
+	xSemaphoreGive(sem);
 }
 
-void MutexOneImpl::remove(osMutexId mid) const
+
+void MutexOneImpl::remove(SemaphoreHandle_t sem) const
 {
-    osMutexDelete(mid);
+	vSemaphoreDelete(sem);
 }
+
+
+SemaphoreHandle_t MutexReImpl::create() const
+{
+	return xSemaphoreCreateRecursiveMutex();
+}
+
+
+bool MutexReImpl::lock(SemaphoreHandle_t sem) const
+{
+	return xSemaphoreTakeRecursive(sem, portMAX_DELAY) == pdTRUE;
+}
+
+
+void MutexReImpl::unlock(SemaphoreHandle_t sem) const
+{
+	xSemaphoreGiveRecursive(sem);
+}
+
+
+void MutexReImpl::remove(SemaphoreHandle_t sem) const
+{
+	vSemaphoreDelete(sem);
+}
+#endif

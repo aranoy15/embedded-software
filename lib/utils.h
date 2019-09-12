@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include <stm32f1xx_hal.h>
 #include <memory>
+#include <bsp.h>
 
 enum class DataType
 {

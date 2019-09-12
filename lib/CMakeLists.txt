@@ -16,6 +16,11 @@ set(LIB_SOURCES
 
 add_library(lib ${LIB_SOURCES})
 
+if (USE_FREERTOS)
+    target_sources(lib PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/thread.cpp
+    )
+endif()
 target_include_directories(lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )

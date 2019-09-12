@@ -1,6 +1,6 @@
 #pragma once
 
-//#include <mutex.h>
+#include <mutex.h>
 #include <singleton.h>
 #include <bsp.h>
 
@@ -16,14 +16,14 @@ private:
 public:
     ChipSelectTrigger(uint8_t chip) : m_chip(chip)
     {
-        //Spi<port>::instance()->lock();
+        Spi<port>::instance()->lock();
         bsp::spi::chipSelect(m_chip);
     }
 
     ~ChipSelectTrigger()
     {
         bsp::spi::chipUnselect(m_chip);
-        //Spi<port>::instance()->unlock();
+        Spi<port>::instance()->unlock();
     }
 };
 
@@ -37,15 +37,15 @@ private:
 	Spi operator=(const Spi&);
 
 private:
-	//Mutex m_mutex;
+	Mutex m_mutex;
 	uint16_t m_timeout;
 	SPI_HandleTypeDef m_config;
 
-	//void lock() { m_mutex.lock(); }
-	//void unlock() { m_mutex.unlock(); }
+	void lock() { m_mutex.lock(); }
+	void unlock() { m_mutex.unlock(); }
 
 public:
-    Spi() : /*m_mutex(),*/ m_timeout(100), m_config() {}
+    Spi() : m_mutex(), m_timeout(100), m_config() {}
 	virtual ~Spi() { deinit(); }
 
 	bool init()
@@ -57,7 +57,7 @@ public:
         m_config.Init.CLKPolarity = SPI_POLARITY_LOW;
         m_config.Init.CLKPhase = SPI_PHASE_1EDGE;
         m_config.Init.NSS = SPI_NSS_SOFT;
-        m_config.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_4;
+        m_config.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_16;
         m_config.Init.FirstBit = SPI_FIRSTBIT_MSB;
         m_config.Init.TIMode = SPI_TIMODE_DISABLE;
         m_config.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
@@ -83,6 +83,7 @@ public:
 
     bool receive(uint8_t* bytes, uint32_t size)
     {
+        Lock lock(m_mutex);
         return HAL_SPI_Receive(&m_config, bytes, size, getTimeout() * size) == HAL_OK;
 	}
 
@@ -93,6 +94,14 @@ public:
 
     bool send(const uint8_t* bytes, uint32_t size)
     {
+        Lock lock(m_mutex);
         return HAL_SPI_Transmit(&m_config, const_cast<uint8_t*>(bytes), size, getTimeout() * size) == HAL_OK;
+    }
+
+    bool sendRead(uint8_t* sendBytes, uint8_t* receiveBytes, uint32_t size)
+    {
+        Lock lock(m_mutex);
+
+        return HAL_SPI_TransmitReceive(&m_config, sendBytes, receiveBytes, size, getTimeout() * size) == HAL_OK;
     }
 };

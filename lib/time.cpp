@@ -1,5 +1,6 @@
 #include <time.h>
-//#include <cmsis_os.h>
+#include <bsp.h>
+#include <os.h>
 
 void Time::sleep(const Time& t)
 {
@@ -10,7 +11,13 @@ void Time::sleep(const Time& t)
 		osDelay(t.m_time);
 	else
 	*/
+	//HAL_Delay(t.m_time);
+
+#if (USE_FREERTOS)
+	if (osRunning()) vTaskDelay(t.m_time / portTICK_PERIOD_MS);
+#else
 	HAL_Delay(t.m_time);
+#endif
 }
 
 uint32_t Time::getTicks()

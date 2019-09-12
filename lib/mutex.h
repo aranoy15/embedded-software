@@ -1,57 +1,89 @@
-#ifndef MUTEX_H
-#define MUTEX_H
+#pragma once
 
 #include <lock.h>
+#include <bsp.h>
+#include <os.h>
 
 template<class MutexImpl>
 
 class MutexBase : public Lockable
 {
 private:
+#if (USE_FREERTOS)
 	MutexImpl m_impl;
 	SemaphoreHandle_t m_mid;
+#endif
 
 	void create()
 	{
+#if (USE_FREERTOS)
 		m_mid = m_impl.create();
 		m_impl.unlock(m_mid);
+#endif
 	}
 
-	MutexBase(const MutexBase&);
-	MutexBase operator=(const MutexBase&);
-
 public:
-	MutexBase() : m_impl(), m_mid(NULL)
+
+	MutexBase(const MutexBase&) = delete;
+	MutexBase operator=(const MutexBase&) = delete;
+
+	MutexBase() 
+#if (USE_FREERTOS)
+	: m_impl(), 
+	  m_mid(NULL)
+#endif
 	{
-		if (osKernelRunning() == 1) create();
+#if (USE_FREERTOS)
+		if (osRunning() == 1) create();
+#endif
 	}
 
 	virtual ~MutexBase()
 	{
+#if (USE_FREERTOS)
 		if (m_mid != NULL) m_impl.remove(m_mid);
+#endif
 	}
 
 	void lock()
 	{
-		if (not(osKernelRunning() == 1)) return;
-        if(m_mid == NULL) create();
+#if (USE_FREERTOS)
+		if (not osRunning()) return;
+		if (m_mid == NULL) create();
+#endif
 	}
 
     void unlock()
     {
-        if(m_mid == NULL) return;
-        m_impl.Unlock(m_mid);
-    }
+#if (USE_FREERTOS)
+		if (m_mid == NULL) return;
+		m_impl.unlock(m_mid);
+#endif
+	}
 };
 
 struct MutexOneImpl
 {
-	osMutexId create() const;	
-	bool lock(osMutexId mid) const;
-	void unlock(osMutexId mid) const;
-	void remove(osMutexId mid) const;
+#if (USE_FREERTOS)
+	SemaphoreHandle_t create() const;
+	bool lock(SemaphoreHandle_t sem) const;
+	void unlock(SemaphoreHandle_t sem) const;
+	void remove(SemaphoreHandle_t sem) const;
+#endif
 };
 
-typedef MutexBase<MutexOneImpl> Mutex;
 
-#endif /* MUTEX_H */
+struct MutexReImpl
+{
+#if (USE_FREERTOS)
+	SemaphoreHandle_t create() const;
+	bool lock(SemaphoreHandle_t sem) const;
+	void unlock(SemaphoreHandle_t sem) const;
+	void remove(SemaphoreHandle_t sem) const;
+#endif
+};
+
+
+typedef MutexBase<MutexOneImpl> Mutex;
+typedef MutexBase<MutexReImpl> MutexRe;
+

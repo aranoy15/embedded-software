@@ -8,6 +8,7 @@
 #include <cstring>
 #include <utils.h>
 #include <bsp.h>
+#include <mutex.h>
 
 template <bsp::UartPort port>
 class Uart : public Singleton<Uart<port> >
@@ -117,25 +118,25 @@ private:
 
 	UART_HandleTypeDef m_huart;
 	CyclicBuffer<uint8_t> m_buf;
-	//Mutex writeMutex;
-	//Mutex readMutex;
 	Timer m_timer;
 
+	Mutex mMutex;
+
 public:
-    //std::unique_ptr<UartBuffer> m_buffer;
 
 	Uart()
 	    : m_huart(),
 		  m_buf(),
-		  //writeMutex(),
-		  //readMutex(),
-		  m_timer()
+		  m_timer(),
+		  mMutex()
 	{
 	}
 
 	void init(uint16_t size, uint32_t baudRate, Parity parity = none,
 	          StopBits stopBits = sb1, DataBits bits = db8)
 	{
+		Lock lock(mMutex);
+
 		m_buf.alloc(size);
 
 		m_huart.Instance = bsp::uart::port2CSP(port);
@@ -156,7 +157,7 @@ public:
 
 	void send(std::string message, char end = '\n')
 	{
-		//Lock lock(writeMutex);
+		Lock lock(mMutex);
 		message += end;
 		HAL_UART_Transmit(&m_huart, (uint8_t*)message.c_str(), message.length(), 1000);
 	}
@@ -177,12 +178,14 @@ public:
 
 	void send(uint8_t data[], uint16_t size)
 	{
+		Lock lock(mMutex);
 		HAL_UART_Transmit(&m_huart, data, size, 1000);
 	}
 
 	std::string readln(uint32_t timeout = 2000)
 	{
-		//Lock lock(readMutex);
+		Lock lock(mMutex);
+
 		std::string message;
 
 		m_timer.start(timeout);
@@ -211,7 +214,8 @@ public:
 
 	bool readCount(uint8_t* data, uint32_t size, uint32_t timeout = 2000)
 	{
-		//Lock lock(readMutex);
+		Lock lock(mMutex);
+
 		m_timer.start(timeout);
 
 		while (not m_timer.elapsed()) {

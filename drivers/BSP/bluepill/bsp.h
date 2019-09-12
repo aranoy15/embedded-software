@@ -5,6 +5,11 @@
 
 namespace bsp
 {
+
+#if (USE_FREERTOS)
+	void initMem();
+#endif
+
 namespace uart
 {
 	using usart1TxPin =

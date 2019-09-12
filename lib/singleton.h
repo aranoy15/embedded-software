@@ -1,16 +1,19 @@
 #ifndef SINGLETON_H
 #define SINGLETON_H
 
+#include <mutex.h>
+
 template <class T>
 class Singleton
 {
 private:
-	static T* m_instance;
+	static T* mInstance;
+	static Mutex mMutex;
 
 	Singleton(const Singleton&);
 	const Singleton& operator=(Singleton&);
 
-	static void Create() { m_instance = new T; }
+	static void create() { mInstance = new T; }
 
 protected:
 	Singleton() {}
@@ -18,24 +21,31 @@ protected:
 public:
 	virtual ~Singleton() {}
 
-	static bool isInstance() { return m_instance != nullptr; }
+	static bool isInstance() { return mInstance != nullptr; }
 
 	static T* instance()
 	{
-		if (not m_instance) {
-			Create();
+		if (not mInstance) {
+			if (osRunning()) {
+				Lock lock(mMutex);
+				if (not mInstance) create();
+			} else
+				create();
 		}
-		return m_instance;
+		return mInstance;
 	}
 
 	static void deleteInstance()
 	{
-		if (m_instance) delete m_instance;
-		m_instance = nullptr;
+		if (mInstance) delete mInstance;
+		mInstance = nullptr;
 	}
 };
 
 template <class T>
-T* Singleton<T>::m_instance = nullptr;
+T* Singleton<T>::mInstance = nullptr;
+
+template <class T>
+Mutex Singleton<T>::mMutex;
 
 #endif /* SINGLETON_H */

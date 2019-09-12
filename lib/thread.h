@@ -1,26 +1,28 @@
 #ifndef THREAD_H
 #define THREAD_H
 
-#include <cmsis_os.h>
+#include <bsp.h>
 
 class Thread
 {
 private:
-	osThreadDef_t m_tinfo;
-	osThreadId m_id;
+	uint8_t mPrio;
+	uint16_t mStackSize;
+	TaskHandle_t mHandle;
 
-	static void threadFuncStatic(const void* argument);
+	static void threadFuncStatic(void* argument);
 
 public:
 	Thread(const Thread&) = delete;
 	Thread& operator=(const Thread&) = delete;
 
-	Thread(osPriority prio, uint32_t stackSize, const char* name);
-	    
+	Thread(uint8_t prio, uint32_t stackSize);
 	virtual ~Thread(){}
 
-	bool start();
+	virtual const char* threadName() { return "noname"; }
+	uint8_t prio() const { return mPrio; }
 
+	bool start();
 protected:
 	virtual void threadFunc() = 0;
 };

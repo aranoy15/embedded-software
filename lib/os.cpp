@@ -1,10 +1,10 @@
 #include <os.h>
 
-#include <FreeRTOS.h>
+#include <bsp.h>
 
 bool osRunning()
 {
-#if USE_FREERTOS
+#if (USE_FREERTOS)
 	return xTaskGetSchedulerState() == taskSCHEDULER_RUNNING;
 #else
 	return false;

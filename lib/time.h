@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <stm32f1xx_hal.h>
 
 typedef uint64_t TInt;
 

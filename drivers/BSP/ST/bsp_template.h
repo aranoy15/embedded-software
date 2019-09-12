@@ -2,6 +2,12 @@
 
 #include <csp.h>
 
+#if (USE_FREERTOS)
+	#include <FreeRTOS.h>
+	#include <task.h>
+	#include <semphr.h>
+#endif
+
 namespace bsp
 {
 

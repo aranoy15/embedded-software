@@ -34,44 +34,36 @@ void operator delete(void* block, size_t size)
 }
 #endif
 
-/*
-static const size_t mainRamHeapSize = 17 * 1024;
-static uint8_t mainRamHeapBlock[mainRamHeapSize];
-HeapRegion_t xHeapRegions[] = {{mainRamHeapBlock, mainRamHeapSize},
-                               {NULL, 0}};
-
-void initMem()
+__attribute__((constructor)) void initAll()
 {
-	vPortDefineHeapRegions(xHeapRegions);
-}
-*/
-
-__attribute__((constructor))
-void initAll()
-{
-	//stm32system::init();
 	bsp::init();
-	//initMem();
+
+#if (USE_FREERTOS)
+	bsp::initMem();
+#endif
 }
 
-/*
-void start(const void*)
+#if (USE_FREERTOS)
+void start(void*)
 {
-	MainThread mainThread;	
-	mainThread.threadFunc();
+	applogic::startLogic();
 }
-*/
+#endif
 
 int main()
 {
-	//osThreadDef_t mainThread = {const_cast<char*>(std::string("main").c_str()), start, osPriorityNormal, 0, (2 * 1024) / sizeof(size_t)};	
-	//osThreadCreate(&mainThread, NULL);
-	//osKernelStart();
-
+#if (USE_FREERTOS)
+	xTaskCreate(start, "main", (2 * 1024)/ sizeof(size_t), NULL, 10, NULL);
+	vTaskStartScheduler();
+#else
 	applogic::startLogic();
+#endif
 }
 
 extern "C" {
+
+extern void xPortSysTickHandler(void);
+
 void SysTick_Handler(void)
 {
 	HAL_IncTick();
