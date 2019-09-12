@@ -4,9 +4,11 @@ set(TARGET boot)
 
 add_executable(${TARGET}
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/bootuart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/bootuart.cpp
-    ${CMAKE_SOURCE_DIR}/lib/system.cpp
-    #${CMAKE_SOURCE_DIR}/lib/gpio.cpp
+    #${CMAKE_CURRENT_SOURCE_DIR}/bootflash.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/sleep.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/bootinfo.cpp
 )
 
 target_include_directories(boot PRIVATE 
@@ -23,4 +25,4 @@ add_subdirectory(${CHIP})
 
 size(${TARGET})
 generate_bin(${TARGET})
-flash(${TARGET} 0x8003000)
+flash(${TARGET} 0x8000000)

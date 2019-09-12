@@ -139,8 +139,19 @@ private:
     };
 
 public:
-	static const uint32_t sectorSize = 1024;
+	static const uint32_t pageSize = 1024;
     static const uint32_t baseAddr = 0x08000000;
-    static const uint32_t appStartOffset = 0x3000;
+    static const uint32_t appStartOffset = 0x2000;
     static const uint32_t appStartAddress = baseAddr + appStartOffset;
+
+
+    static uint32_t getPage(uint32_t address);	
+    static bool eraseAppArea();
+    static uint32_t getEndAddress();
+	static bool writeBlock(uint32_t addr, const uint8_t* data, uint32_t size);
+
+	static void lock();
+    static void unlock();
+
+    static uint16_t crc16(const uint8_t* data, uint32_t size);
 };

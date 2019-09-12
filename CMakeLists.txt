@@ -30,8 +30,8 @@ add_subdirectory(lib)
 
 size(${TARGET})
 generate_bin(${TARGET})
-flash(${TARGET} 0x8000000)
+flash(${TARGET} 0x8002000)
 add_trace(${TARGET})
 read()
 
-#add_subdirectory(boot)
+add_subdirectory(boot)

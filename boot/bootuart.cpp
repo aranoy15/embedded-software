@@ -1,23 +1,18 @@
 #include <string.h>
-#include <stm32f1xx_hal.h>
-#include <bootuart.h>
+#include <bsp.h>
 
-using namespace gpio;
+#include <bootuart.h>
 
 BootUart::BootUart() : m_huart()
 {
 }
 
-void BootUart::init(uint32_t baudrate)
+void BootUart::init()
 {
-	using usart1TxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9>, mAfPP, sHi, pUp>;
-	using usart1RxPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_10>, mInput, sHi, pUp>; 
+	bsp::uart::usartInitGpio(bsp::log::logPort);
 
-	usart1RxPin::setup();
-	usart1TxPin::setup();
-
-    m_huart.Instance = USART1;
-    m_huart.Init.BaudRate = baudrate;
+    m_huart.Instance = bsp::uart::port2CSP(bsp::log::logPort);
+    m_huart.Init.BaudRate = 115200;
     m_huart.Init.WordLength = UART_WORDLENGTH_8B;
 	m_huart.Init.StopBits = UART_STOPBITS_1;
 	m_huart.Init.Parity = UART_PARITY_NONE;
@@ -49,6 +44,13 @@ uint8_t BootUart::getChar()
     uint8_t tmp = 0;
     HAL_UART_Receive(&m_huart, &tmp, 1, 1000);
     return tmp;
+}
+
+bool BootUart::getBuf(uint8_t* data, uint32_t length)
+{
+	auto result = HAL_UART_Receive(&m_huart, data, length, 1000);
+
+	return (result == HAL_OK);
 }
 
 uint32_t BootUart::getLine(char *_data, uint32_t length)
