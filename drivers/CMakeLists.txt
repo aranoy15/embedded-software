@@ -14,4 +14,7 @@ add_subdirectory(BSP)
 if (USE_FREERTOS)
     add_subdirectory(FreeRTOS)
 endif ()
-#add_subdirectory(FatFS)
+
+if (USE_FATFS)
+    add_subdirectory(FatFS)
+endif()
