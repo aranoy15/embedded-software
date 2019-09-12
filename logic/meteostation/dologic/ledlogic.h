@@ -1,10 +1,10 @@
 #pragma once
 
 #include <singleton.h>
-#include <gpio.h>
 #include <timer.h>
+#include <bsp.h>
 
-using namespace gpio;
+using namespace bsp;
 
 class LedLogic : public Singleton<LedLogic>
 {

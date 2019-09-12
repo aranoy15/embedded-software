@@ -46,6 +46,7 @@ void DataStorage::processDataStorage()
 
     if (mInfoTimer.elapsed()) {
         std::string res; 
+        Uart<bsp::uartP1>& log = *Uart<bsp::uartP1>::instance();
 
         res = "Co2 hour: ";
 
@@ -53,7 +54,7 @@ void DataStorage::processDataStorage()
             res.append(utils::stringFormat("%u ", item));
         }
 
-        Uart<uart::UartPort::usart1>::instance()->send(res);
+        log.send(res);
 
         res = "Co2 day: ";
 
@@ -61,7 +62,7 @@ void DataStorage::processDataStorage()
             res.append(utils::stringFormat("%u ", item));
         }
 
-        Uart<uart::UartPort::usart1>::instance()->send(res);
+        log.send(res);
 
         res = "Temp hour: ";
 
@@ -69,7 +70,7 @@ void DataStorage::processDataStorage()
             res.append(utils::stringFormat("%s ", utils::ftostring(item).c_str()));
         }
 
-        Uart<uart::UartPort::usart1>::instance()->send(res);
+        log.send(res);
 
         res = "Temp day: ";
 
@@ -77,7 +78,7 @@ void DataStorage::processDataStorage()
             res.append(utils::stringFormat("%s ", utils::ftostring(item).c_str()));
         }
 
-        Uart<uart::UartPort::usart1>::instance()->send(res);
+        log.send(res);
 
         res = "Pressure hour: ";
 
@@ -85,7 +86,7 @@ void DataStorage::processDataStorage()
             res.append(utils::stringFormat("%u ", item));
         }
 
-        Uart<uart::UartPort::usart1>::instance()->send(res);
+        log.send(res);
 
         res = "Pressure day: ";
 
@@ -93,8 +94,8 @@ void DataStorage::processDataStorage()
             res.append(utils::stringFormat("%u ", item));
         }
 
-        Uart<uart::UartPort::usart1>::instance()->send(res);
-        Uart<uart::UartPort::usart1>::instance()->send(" ");
+        log.send(res);
+        log.send(" ");
 
         mInfoTimer.start();
     }

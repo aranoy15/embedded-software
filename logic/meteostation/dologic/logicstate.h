@@ -3,7 +3,7 @@
 #include <button.h>
 #include <singleton.h>
 
-using namespace gpio;
+using namespace bsp;
 
 enum class LogicStateType
 {
@@ -20,7 +20,7 @@ enum class LogicStateType
 
 class LogicState : public Singleton<LogicState>
 {
-    using button = Button<GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_7>, mInput>>;
+    using button = Button<GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_11>, mInput>>;
 
 private:
     uint8_t mCurrentState;

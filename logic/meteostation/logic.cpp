@@ -1,5 +1,4 @@
 #include <logic.h>
-#include <gpio.h>
 #include <time.h>
 #include <uart.h>
 #include <i2c.h>
@@ -11,17 +10,15 @@
 #include <ledlogic.h>
 #include <logicstate.h>
 
-using namespace gpio;
-
 void applogic::startLogic()
 {
     Watchdog::init(3);
     Watchdog::start();
 
-    Uart<uart::UartPort::usart1>& log = *Uart<uart::UartPort::usart1>::instance();
+    Uart<bsp::UartPort::uartP1>& log = *Uart<bsp::UartPort::uartP1>::instance();
     log.init(128, 115200); 
 
-    I2C<i2c::i2cPort1>::instance()->init();;
+    I2C<bsp::i2cP1>::instance()->init();;
 
     LogicState::instance()->init();
 
