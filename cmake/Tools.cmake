@@ -24,7 +24,6 @@ endfunction(size NAME)
 function(read)
 	if (NOT ${PORT} STREQUAL "")
 		add_custom_target(read
-			#python3 ${CMAKE_SOURCE_DIR}/pyutils/reader.py -b 115200 ${PORT}
 			${CMAKE_SOURCE_DIR}/qtutil/release/reader -c ${PORT} -b 115200
 		)	
 		message("Port is defined. Port is ${PORT}")
@@ -36,7 +35,6 @@ endfunction(read)
 function(upload)
 	if (NOT ${PORT} STREQUAL "")
 		add_custom_target(upload
-			#python3 ${CMAKE_SOURCE_DIR}/pyutils/reader.py -b 115200 ${PORT}
 			${CMAKE_SOURCE_DIR}/qtutil/release/uploader -c ${PORT} -b 115200 -f ${CMAKE_BINARY_DIR}/app.bin && ${CMAKE_SOURCE_DIR}/qtutil/release/reader -c ${PORT} -b 115200
 		)	
 		message("Port is defined. Port is ${PORT}")
