@@ -1,5 +1,4 @@
 #include <lcd.h>
-#include <stm32f1xx_hal.h>
 #include <time.h>
 
 using namespace utils;
@@ -78,7 +77,7 @@ void Lcd::init()
     Time::sleep(Time(50));
 
     expanderWrite(m_backLightVal);
-    Time::sleep(Time::seconds(1));
+    Time::sleep(Time::secs(1));
 
     write4Bits(0x03 << 4);
     delayMicro(4500);

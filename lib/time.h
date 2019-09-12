@@ -27,7 +27,7 @@ public:
 
     static void sleep(const Time& t);
 
-	static Time milliSeconds(int n) { return Time(n); }
-	static Time seconds(int n) { return Time(n * 1000); }
+	static Time msecs(int n) { return Time(n); }
+	static Time secs(int n) { return Time(n * 1000); }
 	static uint32_t getTicks();
 };
