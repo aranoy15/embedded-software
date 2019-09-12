@@ -33,5 +33,6 @@ generate_bin(${TARGET})
 flash(${TARGET} 0x8002000)
 add_trace(${TARGET})
 read()
+upload()
 
 add_subdirectory(boot)
