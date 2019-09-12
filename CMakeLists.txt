@@ -24,7 +24,7 @@ include(CompilerFlags)
 include(Tools)
 
 add_subdirectory(app)
-add_subdirectory(board)
+add_subdirectory(chip)
 add_subdirectory(drivers)
 add_subdirectory(lib)
 
