@@ -23,6 +23,7 @@ enum UartPort
 	uartP3 = 3,
 	uartP4 = 4,
 	uartP5 = 5,
+	uartP6 = 6
 };
 
 enum ADCPort
@@ -62,9 +63,6 @@ enum Mode
 	mAfPP = GPIO_MODE_AF_PP,
 	mAfOD = GPIO_MODE_AF_OD,
 	mAnalog = GPIO_MODE_ANALOG,
-	#if defined F4
-	mAnalogADCCtrl = GPIO_MODE_ANALOG_ADC_CONTROL,
-	#endif
 	mITRising = GPIO_MODE_IT_RISING,
 	mITFalling = GPIO_MODE_IT_FALLING,
 	mITRisingFalling = GPIO_MODE_IT_RISING_FALLING,
@@ -112,17 +110,18 @@ struct PinDef
 };
 
 GPIO_TypeDef *GPIO_GetPointer(CSP_DEV_NBR portNum);
-void setupGpio(CSP_DEV_NBR, CSP_GPIO_MSK, bsp::Mode = bsp::mInput, bsp::Speed = bsp::sLow, bsp::Pull = bsp::pNo);
+void setupGpio(CSP_DEV_NBR, CSP_GPIO_MSK, bsp::Mode = bsp::mInput,
+               bsp::Speed = bsp::sLow, bsp::Pull = bsp::pNo, uint8_t af = 0);
 
 template <class PinConfig, bsp::Mode mode = bsp::mInput, bsp::Speed speed = bsp::sHi,
-          bsp::Pull pull = bsp::pNo>
+          bsp::Pull pull = bsp::pNo, uint8_t af = 0>
 struct GPIO
 {
 	typedef PinConfig Pins;
 
 	static void setup()
 	{
-		setupGpio(PinConfig::Port, PinConfig::Pin, mode, speed, pull);
+		setupGpio(PinConfig::Port, PinConfig::Pin, mode, speed, pull, af);
 	}
 
 	static void on()

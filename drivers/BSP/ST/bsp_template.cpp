@@ -36,13 +36,17 @@ GPIO_TypeDef *GPIO_GetPointer(CSP_DEV_NBR portNum)
 }
 
 void setupGpio(CSP_DEV_NBR port, CSP_GPIO_MSK pins, bsp::Mode mode, bsp::Speed speed,
-                 bsp::Pull pull)
+                 bsp::Pull pull, uint8_t af)
 {
-    GPIO_InitTypeDef cfg;
-    cfg.Pin = pins;
-    cfg.Mode = mode;
-    cfg.Pull = pull;
-    cfg.Speed = speed;
+	GPIO_InitTypeDef cfg;
+	cfg.Pin = pins;
+	cfg.Mode = mode;
+	cfg.Pull = pull;
+	cfg.Speed = speed;
 
-    HAL_GPIO_Init(GPIO_GetPointer(port), &cfg);
+#if defined F4
+	cfg.Alternate = af;
+#endif
+
+	HAL_GPIO_Init(GPIO_GetPointer(port), &cfg);
 }

@@ -34,7 +34,9 @@ public:
 	};
 
 public:
-	void IRQHandler() {
+#if defined F1
+	void IRQHandler()
+	{
 		uint32_t isrflags = READ_REG(m_huart.Instance->SR);
 		uint32_t cr1its = READ_REG(m_huart.Instance->CR1);
 		uint32_t cr3its = READ_REG(m_huart.Instance->CR3);
@@ -99,9 +101,11 @@ public:
 				    ((cr1its & USART_CR1_RXNEIE) != RESET)) {
 					uint8_t data;
 					if (m_huart.Init.Parity == UART_PARITY_NONE) {
-						data = (uint8_t)(m_huart.Instance->DR & (uint8_t)0x00FF);
+						data =
+						    (uint8_t)(m_huart.Instance->DR & (uint8_t)0x00FF);
 					} else {
-						data = (uint8_t)(m_huart.Instance->DR & (uint8_t)0x007F);
+						data =
+						    (uint8_t)(m_huart.Instance->DR & (uint8_t)0x007F);
 					}
 					m_buf.put(data);
 				}
@@ -110,6 +114,91 @@ public:
 			m_huart.ErrorCode = HAL_UART_ERROR_NONE;
 		}
 	}
+#endif
+
+#if defined F4
+	void IRQHandler() {
+		// HAL_UART_IRQHandler(&m_huart);
+		uint32_t isrflags   = READ_REG(m_huart.Instance->SR);
+   		uint32_t cr1its     = READ_REG(m_huart.Instance->CR1);
+   		uint32_t cr3its     = READ_REG(m_huart.Instance->CR3);
+   		uint32_t errorflags = 0x00U;
+   		//uint32_t dmarequest = 0x00U;
+
+		/* If no error occurs */
+		errorflags = (isrflags & (uint32_t)(USART_SR_PE | USART_SR_FE |
+		                                    USART_SR_ORE | USART_SR_NE));
+		if (errorflags == RESET) {
+			/* UART in mode Receiver
+			 * -------------------------------------------------*/
+			if (((isrflags & USART_SR_RXNE) != RESET) &&
+			    ((cr1its & USART_CR1_RXNEIE) != RESET)) {
+				uint8_t data;
+				if (m_huart.Init.Parity == UART_PARITY_NONE) {
+					data =
+					    (uint8_t)(m_huart.Instance->DR & (uint8_t)0x00FF);
+				} else {
+					data =
+					    (uint8_t)(m_huart.Instance->DR & (uint8_t)0x007F);
+				}
+
+				m_buf.put(data);
+				return;
+			}
+		}
+
+		/* If some errors occur */
+		if ((errorflags != RESET) &&
+		    (((cr3its & USART_CR3_EIE) != RESET) ||
+		     ((cr1its & (USART_CR1_RXNEIE | USART_CR1_PEIE)) != RESET))) {
+			/* UART parity error interrupt occurred
+			 * ----------------------------------*/
+			if (((isrflags & USART_SR_PE) != RESET) &&
+			    ((cr1its & USART_CR1_PEIE) != RESET)) {
+				m_huart.ErrorCode |= HAL_UART_ERROR_PE;
+			}
+
+			/* UART noise error interrupt occurred
+			 * -----------------------------------*/
+			if (((isrflags & USART_SR_NE) != RESET) &&
+			    ((cr3its & USART_CR3_EIE) != RESET)) {
+				m_huart.ErrorCode |= HAL_UART_ERROR_NE;
+			}
+
+			/* UART frame error interrupt occurred
+			 * -----------------------------------*/
+			if (((isrflags & USART_SR_FE) != RESET) &&
+			    ((cr3its & USART_CR3_EIE) != RESET)) {
+				m_huart.ErrorCode |= HAL_UART_ERROR_FE;
+			}
+
+			/* UART Over-Run interrupt occurred
+			 * --------------------------------------*/
+			if (((isrflags & USART_SR_ORE) != RESET) &&
+			    ((cr3its & USART_CR3_EIE) != RESET)) {
+				m_huart.ErrorCode |= HAL_UART_ERROR_ORE;
+			}
+
+			/* UART in mode Receiver
+			 * -----------------------------------------------*/
+			if (((isrflags & USART_SR_RXNE) != RESET) &&
+			    ((cr1its & USART_CR1_RXNEIE) != RESET)) {
+				uint8_t data;
+				if (m_huart.Init.Parity == UART_PARITY_NONE) {
+					data =
+					    (uint8_t)(m_huart.Instance->DR & (uint8_t)0x00FF);
+				} else {
+					data =
+					    (uint8_t)(m_huart.Instance->DR & (uint8_t)0x007F);
+				}
+
+				m_buf.put(data);
+			}
+
+			m_huart.ErrorCode = HAL_UART_ERROR_NONE;
+		}
+	}
+#endif
 
 private:
 

@@ -6,6 +6,10 @@
     #include <stm32f1xx_hal.h>
 #endif
 
+#if defined F4
+	#include <stm32f4xx_hal.h>
+#endif
+
 using CSP_GPIO_MSK = uint32_t;
 using CSP_DEV_NBR = uint16_t;
 
