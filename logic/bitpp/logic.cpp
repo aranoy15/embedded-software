@@ -34,6 +34,6 @@ void applogic::startLogic()
 		if (not readMessage.empty())
 			log.send(utils::stringFormat("Result read: %s\r", readMessage.c_str()));
 
-		log.send(std::string("Test message1\r"));
+		log.send(std::string("Test message\r"));
 	}
 }

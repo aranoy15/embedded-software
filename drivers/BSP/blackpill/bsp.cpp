@@ -10,6 +10,7 @@ void bsp::cpuInit()
 	__HAL_RCC_PWR_CLK_ENABLE();
 	__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE2);
 
+
 	/**Initializes the CPU, AHB and APB busses clocks
 	 */
 	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
@@ -32,6 +33,9 @@ void bsp::cpuInit()
 
 	O_ASSERT(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) ==
 	         HAL_OK);
+
+
+	__HAL_RCC_GPIOA_CLK_ENABLE();
 }
 
 void bsp::uart::usartInitGpio(bsp::UartPort port)
