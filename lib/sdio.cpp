@@ -194,9 +194,12 @@ bool Sdio::readSingleBlock(uint32_t blockNum, uint8_t* buff)
 
 		/* CMD17 (SEND_SINGLE_BLOCK) command */
 		uint8_t cmd[] = {
-		    0x40 | 0x11 /* CMD17 */, (blockNum >> 24) & 0xFF, /* ARG */
-		    (blockNum >> 16) & 0xFF, (blockNum >> 8) & 0xFF,
-		    blockNum & 0xFF,         (0x7F << 1) | 1 /* CRC7 + end bit */
+		    0x40 | 0x11 /* CMD17 */,
+		    static_cast<uint8_t>((blockNum >> 24) & 0xFF), /* ARG */
+		    static_cast<uint8_t>((blockNum >> 16) & 0xFF),
+		    static_cast<uint8_t>((blockNum >> 8) & 0xFF),
+		    static_cast<uint8_t>(blockNum & 0xFF),
+		    (0x7F << 1) | 1 /* CRC7 + end bit */
 		};
 		spi().send(cmd, sizeof(cmd));
 
@@ -219,9 +222,12 @@ bool Sdio::writeSingleBlock(uint32_t blockNum, const uint8_t* buff)
 
 		/* CMD24 (WRITE_BLOCK) command */
 		uint8_t cmd[] = {
-		    0x40 | 0x18 /* CMD24 */, (blockNum >> 24) & 0xFF, /* ARG */
-		    (blockNum >> 16) & 0xFF, (blockNum >> 8) & 0xFF,
-		    blockNum & 0xFF,         (0x7F << 1) | 1 /* CRC7 + end bit */
+		    0x40 | 0x18 /* CMD24 */,
+		    static_cast<uint8_t>((blockNum >> 24) & 0xFF), /* ARG */
+		    static_cast<uint8_t>((blockNum >> 16) & 0xFF),
+		    static_cast<uint8_t>((blockNum >> 8) & 0xFF),
+		    static_cast<uint8_t>(blockNum & 0xFF),
+		    (0x7F << 1) | 1 /* CRC7 + end bit */
 		};
 
 		spi().send(cmd, sizeof(cmd));
@@ -261,9 +267,12 @@ bool Sdio::readBegin(uint32_t blockNum)
 
 		/* CMD18 (READ_MULTIPLE_BLOCK) command */
 		uint8_t cmd[] = {
-		    0x40 | 0x12 /* CMD18 */, (blockNum >> 24) & 0xFF, /* ARG */
-		    (blockNum >> 16) & 0xFF, (blockNum >> 8) & 0xFF,
-		    blockNum & 0xFF,         (0x7F << 1) | 1 /* CRC7 + end bit */
+		    0x40 | 0x12 /* CMD18 */,
+		    static_cast<uint8_t>((blockNum >> 24) & 0xFF), /* ARG */
+		    static_cast<uint8_t>((blockNum >> 16) & 0xFF),
+		    static_cast<uint8_t>((blockNum >> 8) & 0xFF),
+		    static_cast<uint8_t>(blockNum & 0xFF),
+		    (0x7F << 1) | 1 /* CRC7 + end bit */
 		};
 		spi().send(cmd, sizeof(cmd));
 
@@ -320,9 +329,12 @@ bool Sdio::writeBegin(uint32_t blockNum)
 
 		/* CMD25 (WRITE_MULTIPLE_BLOCK) command */
 		uint8_t cmd[] = {
-		    0x40 | 0x19 /* CMD25 */, (blockNum >> 24) & 0xFF, /* ARG */
-		    (blockNum >> 16) & 0xFF, (blockNum >> 8) & 0xFF,
-		    blockNum & 0xFF,         (0x7F << 1) | 1 /* CRC7 + end bit */
+		    0x40 | 0x19 /* CMD25 */,
+		    static_cast<uint8_t>((blockNum >> 24) & 0xFF), /* ARG */
+		    static_cast<uint8_t>((blockNum >> 16) & 0xFF),
+		    static_cast<uint8_t>((blockNum >> 8) & 0xFF),
+		    static_cast<uint8_t>(blockNum & 0xFF),
+		    (0x7F << 1) | 1 /* CRC7 + end bit */
 		};
 		spi().send(cmd, sizeof(cmd));
 

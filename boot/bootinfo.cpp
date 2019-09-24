@@ -452,3 +452,21 @@ uint16_t BootInfo::crc16(const uint8_t* data, uint32_t size)
 
 	return crc;
 }
+
+void BootInfo::risetAllPeripherial()
+{
+	__HAL_RCC_APB1_FORCE_RESET();
+	__HAL_RCC_APB1_RELEASE_RESET();
+
+	__HAL_RCC_APB2_FORCE_RESET();
+	__HAL_RCC_APB2_RELEASE_RESET();
+
+	//__HAL_RCC_AHB1_FORCE_RESET();
+	//__HAL_RCC_AHB1_RELEASE_RESET();
+
+	//__HAL_RCC_AHB2_FORCE_RESET();
+	//__HAL_RCC_AHB2_RELEASE_RESET();
+
+	//__HAL_RCC_AHB3_FORCE_RESET();
+	//__HAL_RCC_AHB3_RELEASE_RESET();
+}

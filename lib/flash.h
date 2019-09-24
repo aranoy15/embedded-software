@@ -40,7 +40,6 @@ public:
 	uint8_t readStatus();
 	void waitForReady();
 	void erase4k(uint32_t addr);
-	//void fullErasing();
 
 private:
 	void sendByte(uint8_t b);

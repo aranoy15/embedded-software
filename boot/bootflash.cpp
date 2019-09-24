@@ -3,21 +3,21 @@
 
 #include <bootflash.h>
 
-Flash::Flash() : m_cfg()
+BootFlash::BootFlash() : m_cfg()
 {
 }
 
-void Flash::chipSelect()
+void BootFlash::chipSelect()
 {
     bsp::flash::flashCs::on();
 }
 
-void Flash::chipUnselect()
+void BootFlash::chipUnselect()
 {
     bsp::flash::flashCs::off();
 }
 
-void Flash::init()
+void BootFlash::init()
 {
     bsp::spi::init(bsp::spiP1);
     bsp::flash::init();
@@ -39,31 +39,31 @@ void Flash::init()
     HAL_SPI_Init(&m_cfg);
 }
 
-void Flash::sendByte(uint8_t b)
+void BootFlash::sendByte(uint8_t b)
 {
 	sendData(&b, 1);
 }
 
-void Flash::sendData(const uint8_t* data, uint32_t size)
+void BootFlash::sendData(const uint8_t* data, uint32_t size)
 {
 	HAL_SPI_Transmit(&m_cfg, (uint8_t*)data, size, 1000);
 }
 
-uint8_t Flash::recvByte()
+uint8_t BootFlash::recvByte()
 {
 	uint8_t b = 0;
 	HAL_SPI_Receive(&m_cfg, &b, 1, 1000);
 	return b;
 }
 
-void Flash::sendAddr(int32_t addr)
+void BootFlash::sendAddr(int32_t addr)
 {
 	sendByte(uint8_t(addr >> 16));
 	sendByte(uint8_t(addr >> 8));
 	sendByte(uint8_t(addr));
 }
 
-void Flash::read(uint32_t addr, uint8_t* data, uint32_t size)
+void BootFlash::read(uint32_t addr, uint8_t* data, uint32_t size)
 {
 	chipSelect();
 	sendByte(READ_CMD);
@@ -75,14 +75,14 @@ void Flash::read(uint32_t addr, uint8_t* data, uint32_t size)
 	chipUnselect();
 }
 
-void Flash::writeEnable(bool enable)
+void BootFlash::writeEnable(bool enable)
 {
 	chipSelect();
 	sendByte(enable ? WRITE_ENABLE_CMD : WRITE_DISABLE_CMD);
 	chipUnselect();
 }
 
-void Flash::write(uint32_t addr, const uint8_t* aData, uint32_t size)
+void BootFlash::write(uint32_t addr, const uint8_t* aData, uint32_t size)
 {
 	const uint8_t* data = (const uint8_t*)aData;
 
@@ -100,7 +100,7 @@ void Flash::write(uint32_t addr, const uint8_t* aData, uint32_t size)
 		;
 }
 
-void Flash::writeData(uint32_t addr, const uint8_t* aData, uint32_t size)
+void BootFlash::writeData(uint32_t addr, const uint8_t* aData, uint32_t size)
 {
 	if (size == 0) return;
 
@@ -126,7 +126,7 @@ void Flash::writeData(uint32_t addr, const uint8_t* aData, uint32_t size)
 	}
 }
 
-void Flash::erase4k(uint32_t addr)
+void BootFlash::erase4k(uint32_t addr)
 {
 	writeEnable(true);
 	setSectorProtection(addr, false);
@@ -142,7 +142,7 @@ void Flash::erase4k(uint32_t addr)
 		;
 }
 
-void Flash::setSectorProtection(uint32_t addr, bool enable)
+void BootFlash::setSectorProtection(uint32_t addr, bool enable)
 {
 	chipSelect();
 	sendByte(enable ? PROTECT_SECTOR_CMD : UNPROTECT_SECTOR_CMD);
@@ -150,7 +150,7 @@ void Flash::setSectorProtection(uint32_t addr, bool enable)
 	chipUnselect();
 }
 
-bool Flash::getSectorProtection(uint32_t addr)
+bool BootFlash::getSectorProtection(uint32_t addr)
 {
 	chipSelect();
 	sendByte(READ_SECTOR_PROTECT_CMD);
@@ -161,13 +161,13 @@ bool Flash::getSectorProtection(uint32_t addr)
 	return status;
 }
 
-void Flash::waitForReady()
+void BootFlash::waitForReady()
 {
 	while (readStatus() & 1)
 		;
 }
 
-uint8_t Flash::readStatus()
+uint8_t BootFlash::readStatus()
 {
 	chipSelect();
 	sendByte(READ_STATUS_CMD);
@@ -176,7 +176,7 @@ uint8_t Flash::readStatus()
 	return status;
 }
 
-void Flash::eraseChip()
+void BootFlash::eraseChip()
 {
 	chipSelect();
 	sendByte(ERASE_CHIP_CMD);
@@ -184,7 +184,7 @@ void Flash::eraseChip()
 }
 
 
-void Flash::fullErasing()
+void BootFlash::fullErasing()
 {
 	waitForReady();
 	writeEnable(true);
@@ -196,7 +196,7 @@ void Flash::fullErasing()
 }
 
 
-void Flash::setProtection(bool enable)
+void BootFlash::setProtection(bool enable)
 {
 	chipSelect();
 	sendByte(WRITE_STATUS_CMD);

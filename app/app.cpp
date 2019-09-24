@@ -36,6 +36,8 @@ void operator delete(void* block, size_t size)
 
 __attribute__((constructor)) void initAll()
 {
+	__enable_irq();
+
 	bsp::init();
 
 #if (USE_FREERTOS)
@@ -53,7 +55,7 @@ void start(void*)
 int main()
 {
 #if (USE_FREERTOS)
-	xTaskCreate(start, "main", (2 * 1024)/ sizeof(size_t), NULL, 10, NULL);
+	xTaskCreate(start, "main", (2 * 1024)/ sizeof(size_t), NULL, 0xFF, NULL);
 	vTaskStartScheduler();
 #else
 	applogic::startLogic();

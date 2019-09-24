@@ -97,7 +97,7 @@ public:
     void home();
     void sendChar(char);
     void sendString(std::string);
-    void setCursor(uint8_t, uint8_t);
+    void setCursor(uint8_t col, uint8_t row);
 
     void command(uint8_t);
     void display();

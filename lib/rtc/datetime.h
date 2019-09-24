@@ -2,6 +2,7 @@
 
 #include <timespan.h>
 #include <string>
+#include <utils.h>
 
 class DateTime
 {
@@ -39,8 +40,10 @@ public:
 	         uint8_t min = 0, uint8_t sec = 0);
 	DateTime(const DateTime& copy);
 	DateTime(const char *date, const char *time);
+	DateTime(const char *dateTime);
 
 	uint16_t year() const { return 2000 + m_year; }
+	uint8_t numberYear() const { return m_year; }
 	uint8_t month() const { return m_month; }
 	uint8_t day() const { return m_day; }
 	uint8_t hour() const { return m_hour; }
@@ -49,10 +52,19 @@ public:
 	uint8_t dayOfTheWeek() const;
 
 	std::string toString() const {
-		return (std::string("Date and time: ") + std::to_string(year()) + " " +
-		        std::to_string(month()) + " " + std::to_string(day()) + " " +
-		        std::to_string(hour()) + " " + std::to_string(minute()) + " " +
-		        std::to_string(second()));
+		//return (std::string("Date and time: ") + std::to_string(year()) + " " +
+		//        std::to_string(month()) + " " + std::to_string(day()) + " " +
+		//        std::to_string(hour()) + " " + std::to_string(minute()) + " " +
+		//        std::to_string(second()));
+		return utils::stringFormat("%02u.%02u.%04u %02u:%02u:%02u", day(),
+		                           month(), year(), hour(), minute(), second());
+	}
+
+	std::string timeString(std::string format = "") {
+		if (format.empty()) 
+			format = "%02u:%02u:%02u";
+		
+		return utils::stringFormat(format, hour(), minute(), second());
 	}
 
 	// 32-bit times as seconds since 1/1/2000

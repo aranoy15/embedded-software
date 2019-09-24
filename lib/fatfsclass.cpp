@@ -119,7 +119,7 @@ bool FatFsClass::rename(char* oldName, char* newName)
     return ffsResult == FR_OK;
 }
 
-bool FatFsClass::exists(char* path)
+bool FatFsClass::dirExists(char* path)
 {
     std::string strPath = path;
 
@@ -127,7 +127,14 @@ bool FatFsClass::exists(char* path)
         return true;
 
     FILINFO finfo;
+
 	return (f_stat(path, &finfo) == FR_OK) && (finfo.fattrib & AM_DIR);
+}
+
+bool FatFsClass::fileExists(char* path)
+{
+    FILINFO finfo;
+    return (f_stat(path, &finfo) == FR_OK) and (finfo.fattrib & AM_ARC);
 }
 
 bool FatFsClass::timeStamp(char* path, uint16_t year, uint8_t month, uint8_t day, uint8_t hour, uint8_t minute, uint8_t second)
@@ -236,7 +243,7 @@ uint32_t FileFs::write(void* buf, uint32_t size)
 		nwrt0 = 0;
 		lb = size - nwrt;
 		if (lb > FF_MIN_SS) lb = FF_MIN_SS;
-		fatFs().ffsResult = f_write(&ffile, (buf + nwrt), lb, (UINT*)&nwrt0);
+		fatFs().ffsResult = f_write(&ffile, (((BYTE*)buf) + nwrt), lb, (UINT*)&nwrt0);
 		nwrt += nwrt0;
 	}
 	return nwrt;
@@ -261,7 +268,7 @@ uint32_t FileFs::read(void *buf, uint32_t size)
 		nrd0 = 0;
 		lb = size - nrd;
 		if (lb > FF_MIN_SS) lb = FF_MIN_SS;
-		fatFs().ffsResult = f_read(&ffile, (buf + nrd), lb, (UINT*)&nrd0);
+		fatFs().ffsResult = f_read(&ffile, (((BYTE*)buf) + nrd), lb, (UINT*)&nrd0);
 		nrd += nrd0;
 	} while (nrd0 > 0 && nrd < size && fatFs().ffsResult == FR_OK);
 	return nrd;

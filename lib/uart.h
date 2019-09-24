@@ -207,7 +207,7 @@ private:
 
 	UART_HandleTypeDef m_huart;
 	CyclicBuffer<uint8_t> m_buf;
-	Timer m_timer;
+	//Timer m_timer;
 
 	Mutex mMutex;
 
@@ -216,7 +216,7 @@ public:
 	Uart()
 	    : m_huart(),
 		  m_buf(),
-		  m_timer(),
+		  //m_timer(),
 		  mMutex()
 	{
 	}
@@ -277,11 +277,13 @@ public:
 
 		std::string message;
 
-		m_timer.start(timeout);
+		Timer timer;
+		timer.start(timeout);
+
 		bool resultRead = false;
 
-		while (not m_timer.elapsed()) {
-			if (not m_buf.isEmpty()) {
+		if (not m_buf.isEmpty()) {
+			while (m_buf.getUsedSize() != 0 and not timer.elapsed()) {
 				uint8_t data = m_buf.get();
 
 				if (data == '\n') {
@@ -291,8 +293,6 @@ public:
 
 				message.push_back(data);
 			}
-
-			Time::sleep(Time(10));
 		}
 
 		if (not resultRead)
@@ -305,9 +305,10 @@ public:
 	{
 		Lock lock(mMutex);
 
-		m_timer.start(timeout);
+		Timer timer;
+		timer.start(timeout);
 
-		while (not m_timer.elapsed()) {
+		while (not timer.elapsed()) {
 			if (m_buf.getUsedSize() == size) {
 				memcpy(data, m_buf.buffer(), size);
 				m_buf.clear();

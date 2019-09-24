@@ -8,7 +8,8 @@ import sys
 def main(argv):
     # gdb.execute("set logging on")
     gdb.execute("target remote localhost:3333")
-    gdb.execute("break main")
+    gdb.execute("break Reset_Handler")
+    #gdb.execute("break startLogic")
     #gdb.execute("break uartbuffer.cpp:13")
     #gdb.execute("break app.cpp:initAll")
     gdb.execute("monitor reset halt")

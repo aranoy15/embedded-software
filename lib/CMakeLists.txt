@@ -3,7 +3,6 @@ set(LIB_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/time.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/uartbuffer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/spi.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/uart.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/taskscheduler.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/os.cpp
@@ -11,6 +10,12 @@ set(LIB_SOURCES
 )
 
 add_library(lib ${LIB_SOURCES})
+
+if (USE_UART)
+    target_sources(lib PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/uart.cpp
+    )
+endif()
 
 if (USE_FREERTOS)
     target_sources(lib PRIVATE
@@ -62,8 +67,12 @@ if (USE_FATFS)
     )
 endif()
 
-if (USE_I2CRTC)
+if (USE_RTC)
     add_subdirectory(rtc)
+endif()
+
+if (USE_USB)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/usb)
 endif()
 
 target_include_directories(lib PUBLIC

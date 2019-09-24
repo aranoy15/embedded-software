@@ -1,6 +1,6 @@
 function (add_trace NAME)
 	add_custom_target(${NAME}.trace
-		arm-none-eabi-gdb-py --batch --command=${CMAKE_SOURCE_DIR}/debug/trace_gdb.py --args ${CMAKE_CURRENT_BINARY_DIR}/logic/${LOGIC}/${NAME}
+		arm-none-eabi-gdb-py --batch --command=${CMAKE_SOURCE_DIR}/debug/trace_gdb.py --args ${CMAKE_CURRENT_BINARY_DIR}/${NAME}/${NAME}
 		WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 		USES_TERMINAL
 		)

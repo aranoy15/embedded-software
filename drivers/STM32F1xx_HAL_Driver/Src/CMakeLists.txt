@@ -9,6 +9,7 @@ target_sources(drivers PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_pwr.c
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_pcd.c
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_pcd_ex.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_ll_usb.c
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_tim.c
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_tim_ex.c
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_dma.c
@@ -19,4 +20,6 @@ target_sources(drivers PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_uart.c
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_spi.c
     ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_spi_ex.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_rtc.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/stm32f1xx_hal_rtc_ex.c
 )

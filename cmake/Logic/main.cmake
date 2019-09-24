@@ -1,4 +1,4 @@
-set(USE_FREERTOS 0)
+set(USE_FREERTOS 1)
 set(USE_I2CRTC 1)
 set(USE_BME280 1)
 set(USE_MHZ19 1)
@@ -7,5 +7,11 @@ set(USE_FLASH 0)
 set(USE_I2CONEWIRE 0)
 set(USE_ADS7844 0) 
 set(USE_FATFS 0)
+set(USE_RTC 1)
+set(RTC_TYPE i2c)
+
+set(BOOT_TYPE uart)
+set(APP_START_ADDR 0x8002000)
 
 add_definitions(-DUSE_FREERTOS=${USE_FREERTOS})
+add_definitions(-DAPP_START_ADDR=${APP_START_ADDR})

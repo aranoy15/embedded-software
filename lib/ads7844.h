@@ -33,7 +33,7 @@ private:
 public:
 	Ads7844();
 
-	uint16_t getValue(uint8_t);
+	uint16_t getValue(uint8_t channel);
 
-	static float calcValue(uint16_t);
+	static float calcValue(uint16_t value);
 };

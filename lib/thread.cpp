@@ -23,3 +23,15 @@ bool Thread::start()
 
 	return true;
 }
+
+
+bool Thread::start(void (*func)(void*), const char* threadName, uint32_t stackSize, uint8_t priority)
+{
+	if (stackSize % sizeof(size_t) != 0)
+		stackSize = (stackSize / sizeof(size_t) + 1) * sizeof(size_t);	
+
+	BaseType_t status =
+	    xTaskCreate(func, threadName, stackSize / sizeof(size_t), NULL, priority, NULL);
+
+	return (status == pdPASS);
+}

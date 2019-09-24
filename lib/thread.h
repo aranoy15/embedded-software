@@ -1,7 +1,7 @@
-#ifndef THREAD_H
-#define THREAD_H
+#pragma once
 
 #include <bsp.h>
+#include <functional>
 
 class Thread
 {
@@ -23,8 +23,10 @@ public:
 	uint8_t prio() const { return mPrio; }
 
 	bool start();
+	static bool start(void (*func)(void*),
+	                  const char* threadName, uint32_t stackSize,
+	                  uint8_t priority);
+
 protected:
 	virtual void threadFunc() = 0;
 };
-
-#endif /* THREAD_H */

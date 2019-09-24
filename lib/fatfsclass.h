@@ -5,15 +5,18 @@
 
 #include <singleton.h>
 #include <string>
+#include <bsp.h>
 #include <memory>
 
 extern "C" void EXTI15_10_IRQHandler(void);
+extern "C" void EXTI9_5_IRQHandler(void);
 
 class FatFsClass : public Singleton<FatFsClass> 
 {
     friend class DirFs;
     friend class FileFs;
     friend void EXTI15_10_IRQHandler(void);
+    friend void EXTI9_5_IRQHandler(void);
 
 private:
     uint8_t ffsResult;
@@ -35,11 +38,14 @@ public:
     bool rmdir(char*);
     bool remove(char*);
     bool rename(char*, char*);
-    bool exists(char*);
+    bool dirExists(char*);
+    bool fileExists(char*);
     bool isDir(char*);
 	bool timeStamp(char*, uint16_t, uint8_t, uint8_t, uint8_t, uint8_t,
 	               uint8_t);
     bool getFileModTime(char*, uint16_t*, uint16_t*);
+
+	bool cardDetected() { return not bsp::sdio::sdioCd::state(); }
 };
 
 class DirFs

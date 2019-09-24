@@ -17,13 +17,13 @@
 #define ERASE_4K_CMD            0x20
 #define ERASE_CHIP_CMD          0xC7
 
-class Flash
+class BootFlash
 {
 private:
 	SPI_HandleTypeDef m_cfg;
 
 public:
-	Flash();
+	BootFlash();
 
 	void init();
 	void chipSelect();

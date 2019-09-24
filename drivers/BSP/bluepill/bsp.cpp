@@ -5,7 +5,10 @@ void bsp::cpuInit()
 	RCC_OscInitTypeDef RCC_OscInitStruct;
 	RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
-	__enable_irq();
+	__HAL_RCC_AFIO_CLK_ENABLE();
+  	__HAL_RCC_PWR_CLK_ENABLE();
+
+	__HAL_AFIO_REMAP_SWJ_NOJTAG();
 
 	/**Initializes the CPU, AHB and APB busses clocks
 	 */
@@ -27,8 +30,6 @@ void bsp::cpuInit()
 	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
 	O_ASSERT(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) == HAL_OK);
-
-	__HAL_AFIO_REMAP_SWJ_NOJTAG();
 }
 
 void bsp::uart::usartInitGpio(bsp::UartPort port)

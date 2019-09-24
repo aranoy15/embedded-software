@@ -4,6 +4,8 @@
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 #include <QCoreApplication>
+#include <QDateTime>
+#include <QByteArray>
 
 #ifdef Q_WS_WIN
 //#include <termiwin.h>
@@ -141,7 +143,16 @@ void CharCatcher::doEnter()
 
     if (mMessage == "!dtr")
         emit reloadDevice();
-    else
+    else if (mMessage == "!sdt") {
+        QLocale::setDefault(QLocale::English);
+		auto dateTimeString = QLocale().toString(QDateTime::currentDateTime(),
+		                                         "MMM dd yyyy hh:mm::ss");
+		QByteArray dateTimeMessage; 
+        dateTimeMessage.append("AT+SETDATETIME ");
+        dateTimeMessage.append(dateTimeString);
+
+        emit writeLine(dateTimeMessage);
+    } else
         emit writeLine(mMessage);
 
     mMessage.clear();

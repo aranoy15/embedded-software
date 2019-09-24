@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.6)
 
-set(DEBUG 1)
+set(DEBUG 0)
+
+add_definitions(-DDEBUG=${DEBUG})
 
 project(test C CXX ASM)
 
@@ -31,19 +33,10 @@ add_subdirectory(lib)
 size(${TARGET})
 generate_bin(${TARGET})
 
-if (${FAMILY} MATCHES F1)
-    flash(${TARGET} 0x8002000)
-endif()
-
-if (${FAMILY} MATCHES F4)
-    flash(${TARGET} 0x8000000)
-endif()
+flash(${TARGET} ${APP_START_ADDR})
 
 add_trace(${TARGET})
 read()
 upload()
 
-
-if (${FAMILY} MATCHES F1)
 add_subdirectory(boot)
-endif()

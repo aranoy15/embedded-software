@@ -58,7 +58,7 @@ void Flash::write(uint32_t addr, const uint8_t* aData, uint32_t size)
     		sendByte(data[i]);
     }
 
-    Time::sleep(Time(3));
+    //Time::sleep(Time(3));
 }
 
 void Flash::writeData(uint32_t addr, const uint8_t* aData, uint32_t size)
@@ -100,7 +100,7 @@ void Flash::erase4k(uint32_t addr)
 	}
 	waitForReady();
 
-    Time::sleep(Time(3));
+    //Time::sleep(Time(3));
 }
 
 void Flash::waitForReady()

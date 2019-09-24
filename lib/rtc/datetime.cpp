@@ -78,6 +78,29 @@ DateTime::DateTime(const char *date, const char *time)
     m_second = utils::conv2d(time + 6);
 }
 
+DateTime::DateTime(const char* dateTime)
+    : m_year(0), m_month(0), m_day(0), m_hour(0), m_minute(0), m_second(0)
+{
+	// sample input: date = "Dec 26 2009", time = "12:34:56"
+	m_year = utils::conv2d(dateTime + 9);
+    // Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
+    switch (dateTime[0]) {
+        case 'J': m_month = dateTime[1] == 'a' ? 1 : m_month = dateTime[2] == 'n' ? 6 : 7; break;
+        case 'F': m_month = 2; break;
+        case 'A': m_month = dateTime[2] == 'r' ? 4 : 8; break;
+        case 'M': m_month = dateTime[2] == 'r' ? 3 : 5; break;
+        case 'S': m_month = 9; break;
+        case 'O': m_month = 10; break;
+        case 'N': m_month = 11; break;
+        case 'D': m_month = 12; break;
+    }
+
+    m_day = utils::conv2d(dateTime + 4);
+    m_hour = utils::conv2d(dateTime + 12);
+    m_minute = utils::conv2d(dateTime + 15);
+    m_second = utils::conv2d(dateTime + 18);
+}
+
 uint8_t DateTime::dayOfTheWeek() const {    
     uint16_t day = date2days(m_year, m_month, m_day);
     return (day + 6) % 7; // Jan 1, 2000 is a Saturday, i.e. returns 6

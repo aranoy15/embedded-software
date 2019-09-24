@@ -14,7 +14,7 @@ Lcd::Lcd(uint16_t address, uint8_t lcdCols, uint8_t lcdRows,
       m_charSize(charSize),
       m_backLightVal(BACKLIGHT)
 {
-	init();
+	//init();
 }
 
 Lcd::~Lcd() {}

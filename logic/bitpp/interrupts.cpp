@@ -1,11 +1,22 @@
-#include <uart.h>
 #include <bsp.h>
+#include <usb.h>
+#include <fatfsclass.h>
 
 extern "C" {
-void USART1_IRQHandler(void)
+
+//extern PCD_HandleTypeDef hpcd_USB_FS;
+
+void USB_LP_CAN1_RX0_IRQHandler(void) 
 {
-  Uart<bsp::uartP1>::instance()->IRQHandler();
-  NVIC_ClearPendingIRQ(USART1_IRQn);
+    //HAL_PCD_IRQHandler(&hpcd_USB_FS);
+    UsbDevice::instance()->irqHandler();
 }
 
+void EXTI9_5_IRQHandler(void)
+{
+    bool state = FatFsClass::instance()->cardDetected();
+    if (state)
+	    FatFsClass::instance()->mHaveNewCard = true;
+	HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_8);
+}
 }

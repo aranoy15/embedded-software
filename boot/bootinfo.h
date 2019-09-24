@@ -140,9 +140,10 @@ private:
 
 public:
 	static const uint32_t pageSize = 1024;
-    static const uint32_t baseAddr = 0x08000000;
-    static const uint32_t appStartOffset = 0x2000;
-    static const uint32_t appStartAddress = baseAddr + appStartOffset;
+    //static const uint32_t baseAddr = 0x08000000;
+    //static const uint32_t appStartOffset = 0x4000;
+    //static const uint32_t appStartAddress = baseAddr + appStartOffset;
+    static const uint32_t appStartAddress = APP_START_ADDR;//baseAddr + appStartOffset;
 
 
     static uint32_t getPage(uint32_t address);	
@@ -154,4 +155,5 @@ public:
     static void unlock();
 
     static uint16_t crc16(const uint8_t* data, uint32_t size);
+    static void risetAllPeripherial();
 };

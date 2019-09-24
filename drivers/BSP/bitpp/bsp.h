@@ -10,21 +10,27 @@ namespace bsp
 	void initMem();
 #endif
 
-namespace uart
+//namespace uart
+//{
+//	using usart1TxPin =
+//	    GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9>, mAfPP, sHi, pUp>;
+//	using usart1RxPin =
+//	    GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_10>, mInput, sHi, pUp>;
+//
+//	void usartInitGpio(UartPort port);
+//	USART_TypeDef* port2CSP(UartPort port);
+//
+//}  // namespace uart
+
+//namespace log
+//{
+//	static const UartPort logPort = uartP1;
+//}
+
+namespace usb
 {
-	using usart1TxPin =
-	    GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_9>, mAfPP, sHi, pUp>;
-	using usart1RxPin =
-	    GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_10>, mInput, sHi, pUp>;
-
-	void usartInitGpio(UartPort port);
-	USART_TypeDef* port2CSP(UartPort port);
-
-}  // namespace uart
-
-namespace log
-{
-	static const UartPort logPort = uartP1;
+	void init();
+	void deinit();
 }
 
 namespace i2c
@@ -103,11 +109,17 @@ namespace sdio
 {
 	const SpiPort port = spiP2;
 
-	using sdioCd = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_8>, mInput>;
+	using sdioCd = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_8>, mITFalling, sHi, pUp>;
 
 	using sdioCsPin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_12>, mOutputPP>;
 	using sdioCs = Relay<sdioCsPin, PinManageLogic::Inverse>;
 
 	void init();
+}
+
+namespace rtc
+{
+	void init();
+	void deinit();
 }
 }  // namespace bsp

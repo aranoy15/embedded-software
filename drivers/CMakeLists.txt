@@ -18,3 +18,9 @@ endif ()
 if (USE_FATFS)
     add_subdirectory(FatFS)
 endif()
+
+if (USE_USB)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/STM32_USB_Device_Library)
+endif()
+
+target_link_libraries(drivers lib)
