@@ -1,30 +1,36 @@
 #include <taskscheduler.h>
+#include <algorithm>
 
 void TaskScheduler::reg(TaskBase* task)
 {
-    m_pool.push_back(task);
+    mPool.push_back(task);
 }
 
 void TaskScheduler::start()
 {
-    for(auto item : m_pool)
+	std::sort(mPool.begin(), mPool.end(),
+	          [](const TaskBase* a, const TaskBase* b) {
+		          return a->prio() > b->prio();
+	          });
+
+	for(auto item : mPool)
         item->setup();
 
     for(;;) {
-		for (auto item : m_pool) {
-            if (item->m_timer.elapsed()) {
+		for (auto item : mPool) {
+            if (item->mTimer.elapsed()) {
                 uint32_t start = Time::getTicks();
                 item->func();
                 uint32_t end = Time::getTicks();
 
                 uint32_t offset = end - start;
 
-                uint32_t period = item->m_period;
+                uint32_t period = item->mPeriod;
 
-                if (offset < item->m_period) period -= offset;
+                if (offset < item->mPeriod) period -= offset;
                 else period = 0;
 
-                item->m_timer.start(period);
+                item->mTimer.start(period);
             }
         }
 	}

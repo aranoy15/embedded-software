@@ -12,7 +12,7 @@ __attribute__((constructor)) void reg()
 }  // namespace
 
 LcdTask::LcdTask()
-    : TaskBase(Time::second()),
+    : TaskBase(Time::second(), TaskPriority::Low),
       lcd1(lcd1Address, 20, 4, 1),
       lcd2(lcd2Address, 20, 4, 1),
       tempSource(),
@@ -30,25 +30,10 @@ void LcdTask::setup()
     //loadDate();
 }
 
-//void LcdTask::loadDate()
-//{
-//    uint8_t dateData[3];
-//    Flash::instance()->read(dateFlashAddress, dateData, sizeof(dateData));
-//    DateTime dt(dateData[2], dateData[1], dateData[0], 0, 0 ,0);
-//
-//    DateTimeManager::instance()->setDate(dt);
-//}
-
-//void LcdTask::saveDate(const DateTime& date)
-//{
-//    uint8_t dateData[3] = {date.day(), date.month(), date.numberYear()};
-//
-//    Flash::instance()->erase4k(dateFlashAddress);
-//    Flash::instance()->writeData(dateFlashAddress, dateData, sizeof(dateData));
-//}
-
 void LcdTask::func()
 {
+    static uint32_t count = 0;
+
     lcd2.setCursor(0, 0);
 	lcd2.sendString("Pressure data:");
 
@@ -102,7 +87,7 @@ void LcdTask::func()
         if (fatFs.init()) {
 
             FileFs file;
-            std::string fileName = "/TEST.txt";
+            std::string fileName = utils::stringFormat("/TEST_%u.txt", count);
 
             uint8_t mode = FA_WRITE | FA_READ;
 
@@ -115,4 +100,5 @@ void LcdTask::func()
             }
 		}
     }
+    count++;
 }

@@ -23,7 +23,7 @@ private:
 	bool checkPacket(uint32_t address, uint8_t* data, uint32_t size);
 
 public:
-	CommandHandler() : TaskBase(10) {}
+	CommandHandler() : TaskBase(10, TaskPriority::Normal) {}
     virtual ~CommandHandler() {}
 
 	void setup() override;
