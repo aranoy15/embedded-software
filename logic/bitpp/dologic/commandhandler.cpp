@@ -1,6 +1,6 @@
 #include <commandhandler.h>
-#include <datetimemanager.h>
-#include <datetime.h>
+//#include <datetimemanager.h>
+//#include <datetime.h>
 
 namespace
 {
@@ -31,8 +31,8 @@ void CommandHandler::func()
 
 void CommandHandler::doDateTime(std::string& data)
 {
-    DateTime dt(data.c_str());
-    DateTimeManager::instance()->set(dt);
+    //DateTime dt(data.c_str());
+    //DateTimeManager::instance()->set(dt);
 }
 
 void CommandHandler::doUpload()

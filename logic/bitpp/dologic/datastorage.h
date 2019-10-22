@@ -11,8 +11,8 @@ class DataStorage : public Singleton<DataStorage>
     float mEvaporatorTemperature;
     float mCondensatorTemperature;
 
-    float mEightPressure;
-    float mThirtyPressure;
+    float mBoilingPressure;
+    float mCondansatingPressure;
 
 	float mBoilingTemperature;
 	float mCondansatingTemperature;
@@ -31,19 +31,25 @@ public:
 	DataStorage()
 	    : mEvaporatorTemperature(0),
 	      mCondensatorTemperature(0),
-	      mEightPressure(0),
-	      mThirtyPressure(0)
+	      mBoilingPressure(0),
+	      mCondansatingPressure(0),
+		  mBoilingTemperature(0),
+		  mCondansatingTemperature(0),
+		  mMinBoiling(5),
+		  mMaxCondansating(5),
+		  mOverHeatingTemperature(0),
+		  mOverCoolingTemperature(0)
 	{
 	}
 
 	float evaporatorTemp() const { return mEvaporatorTemperature; }
 	float condensatorTemp() const { return mCondensatorTemperature; }
 
-	float eightPressure() const { return mEightPressure; }
-	float thirtyPressure() const { return mThirtyPressure; }
+	float boilingPressure() const { return mBoilingPressure; }
+	float condansatingPressure() const { return mCondansatingPressure; }
 
 	float boilingTemp() const { return mBoilingTemperature; }
-	float condansationTemp() const { return mCondensatorTemperature; }
+	float condansationTemp() const { return mCondansatingTemperature; }
 
 	float minBoiling() const { return mMinBoiling; }
 	float maxCondansating() const { return mMaxCondansating; }

@@ -2,6 +2,7 @@
 #include <datastorage.h>
 #include <cmath>
 #include <algorithm>
+#include <usb.h>
 
 namespace
 {
@@ -26,43 +27,45 @@ void SensorTask::func()
 {
     DataStorage& dataStorage = *DataStorage::instance();
 
-    float input0 = Ads7844::calcValue(mAnalogInput.getValue(0));
-    float input1 = Ads7844::calcValue(mAnalogInput.getValue(0));
+    float boilingVoltage = Ads7844::calcValue(mAnalogInput.getValue(0));
+    float condansatingVoltage = Ads7844::calcValue(mAnalogInput.getValue(1));
 
-    dataStorage.mEightPressure = input0 * 0.09191 - 2.375 + 0.1;
-    dataStorage.mThirtyPressure = input1 * 0.36764 - 7.5 + 0.4;
+	//UsbDevice::instance()->send(utils::stringFormat("AI 1: %.2f", boilingVoltage));
+	//UsbDevice::instance()->send(utils::stringFormat("AI 2: %.2f", condansatingVoltage));
 
-    float lep = log(dataStorage.mEightPressure + 1);
-    float ltp = log(dataStorage.mThirtyPressure + 1);
+    //dataStorage.mBoilingPressure = boilingVoltage * 0.09191 - 2.375 + 0.1;
+    //dataStorage.mCondansatingPressure = condansatingVoltage * 0.36764 - 7.5 + 0.4;
 
-	dataStorage.mBoilingTemperature =
-	    0.3451 * pow(lep, 3) + 2.1642 * pow(lep, 2) + 21.727 * lep + 26.307;
+    dataStorage.mBoilingPressure = utils::map(boilingVoltage, 0.4f, 2.0f, 0.0f, 10.0f);
+    dataStorage.mCondansatingPressure = utils::map(condansatingVoltage, 0.4f, 2.0f, 0.0f, 30.0f);
 
-	dataStorage.mCondansatingTemperature =
-	    0.3451 * pow(ltp, 3) +
-	    2.1642 * pow(ltp, 2) +
-	    21.727 * ltp - 26.307;
+    float lbp = std::log(dataStorage.mBoilingPressure + 1);
+    float lcp = std::log(dataStorage.mCondansatingPressure + 1);
 
-	dataStorage.mMinBoiling =
-	    std::min(dataStorage.mMinBoiling, dataStorage.mEightPressure);
+	dataStorage.mBoilingTemperature = ((0.3026 * lbp + 1.9907) * lbp + 20.4) * lbp - 36.891;
+	dataStorage.mCondansatingTemperature = ((0.4183 * lcp + 1.666) * lcp + 21.165) * lcp - 43.994;
 
-	dataStorage.mMaxCondansating =
-	    std::max(dataStorage.mMaxCondansating, dataStorage.mThirtyPressure);
+	dataStorage.mMinBoiling = std::min(dataStorage.mMinBoiling, dataStorage.mBoilingPressure);
 
-    auto [result, temp] = mTempSource.update(0);
+	dataStorage.mMaxCondansating = std::max(dataStorage.mMaxCondansating, dataStorage.mCondansatingPressure);
 
-    if (result) dataStorage.mEvaporatorTemperature = temp;
-    else dataStorage.mEvaporatorTemperature = -99.0f;
+    auto [resultEv, tempEv] = mTempSource.update(0);
 
-    auto [result, temp] = mTempSource.update(1);
+	if (resultEv) {
+		dataStorage.mEvaporatorTemperature = Ds18b20::calcValue(tempEv);
+		dataStorage.mOverHeatingTemperature =
+		    dataStorage.mEvaporatorTemperature -
+		    dataStorage.mBoilingTemperature;
+	} else
+		dataStorage.mEvaporatorTemperature = -99.0f;
 
-    if (result) dataStorage.mCondensatorTemperature = temp;
-    else dataStorage.mCondensatorTemperature = -99.0f;
+	auto [resultCon, tempCon] = mTempSource.update(1);
 
-	dataStorage.overHeatingTemp =
-	    dataStorage.mEvaporatorTemperature - dataStorage.mBoilingTemperature;
-
-	dataStorage.overCoolingTemp = dataStorage.mCondansatingTemperature -
-	                              dataStorage.mCondensatorTemperature;
-
+	if (resultCon) {
+		dataStorage.mCondensatorTemperature = Ds18b20::calcValue(tempCon);
+		dataStorage.mOverCoolingTemperature =
+		    dataStorage.mCondansatingTemperature -
+		    dataStorage.mCondensatorTemperature;
+	} else
+		dataStorage.mCondensatorTemperature = -99.0f;
 }

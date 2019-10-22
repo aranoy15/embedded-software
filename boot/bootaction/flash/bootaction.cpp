@@ -29,7 +29,7 @@ void bootAction()
 
 		uint32_t firmwareAddress = 1024;
 
-		sprintf(message, "Finded new firmware");
+		sprintf(message, "Found new firmware");
 		lcd1.sendString(message, strlen(message));
 
 		BootInfo::unlock();

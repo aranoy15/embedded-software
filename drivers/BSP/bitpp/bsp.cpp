@@ -43,6 +43,38 @@ void bsp::cpuInit()
 	PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_PLL_DIV1_5;
 	O_ASSERT(HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) == HAL_OK);
 
+	pa0Pin::setup();
+	pa1Pin::setup();
+	pa11Pin::setup();
+	pa12Pin::setup();
+	pa15Pin::setup();
+
+	pb0Pin::setup();
+	pb1Pin::setup();
+	pb3Pin::setup();
+	pb4Pin::setup();
+	pb5Pin::setup();
+	pb8Pin::setup();
+	pb9Pin::setup();
+	pb10Pin::setup();
+	pb11Pin::setup();
+
+
+	pa0Pin::on();
+	pa1Pin::on();
+	pa11Pin::on();
+	pa12Pin::on();
+	pa15Pin::on();
+
+	pb0Pin::on();
+	pb1Pin::on();
+	pb3Pin::on();
+	pb4Pin::on();
+	pb5Pin::on();
+	pb8Pin::on();
+	pb9Pin::on();
+	pb10Pin::on();
+	pb11Pin::on();
 }
 
 //void bsp::uart::usartInitGpio(bsp::UartPort port)

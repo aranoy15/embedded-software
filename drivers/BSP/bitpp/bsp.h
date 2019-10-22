@@ -27,6 +27,23 @@ namespace bsp
 //	static const UartPort logPort = uartP1;
 //}
 
+using pa0Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_0>, mOutputPP, sHi, pUp>; //PA0
+using pa1Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_1>, mOutputPP, sHi, pUp>; //PA1
+using pa11Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_11>, mOutputPP, sHi, pUp>; //PA11
+using pa12Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_12>, mOutputPP, sHi, pUp>; //PA12
+using pa15Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_A, GPIO_PIN_15>, mOutputPP, sHi, pUp>; //PA15
+
+using pb0Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_0>, mOutputPP, sHi, pUp>; //PB0
+using pb1Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_1>, mOutputPP, sHi, pUp>; //PB1
+using pb3Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_3>, mOutputPP, sHi, pUp>; //PB3
+using pb4Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_4>, mOutputPP, sHi, pUp>; //PB4
+using pb5Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_5>, mOutputPP, sHi, pUp>; //PB5
+using pb8Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_8>, mOutputPP, sHi, pUp>; //PB8
+using pb9Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_9>, mOutputPP, sHi, pUp>; //PB9
+using pb10Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_10>, mOutputPP, sHi, pUp>; //PB10
+using pb11Pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_B, GPIO_PIN_11>, mOutputPP, sHi, pUp>; //PB11
+
+
 namespace usb
 {
 	void init();

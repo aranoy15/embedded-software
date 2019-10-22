@@ -53,5 +53,5 @@ uint16_t Ads7844::getValue(uint8_t channel)
 
 float Ads7844::calcValue(uint16_t value) 
 {
-    return utils::map(value, 0, 0xFFF, 0, 12.0f);
+    return utils::map(value, 0, 0xFFF, 0, 3.0f);
 }
