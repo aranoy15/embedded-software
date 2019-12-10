@@ -9,8 +9,7 @@ class Ds18b20 : public I2COnewireBase
 public:
 	Ds18b20();
 
-    //virtual std::tuple<bool, float> getTemp(int count) override;
-    std::tuple<bool, uint16_t> update(uint8_t, int = 1) override;
+    std::tuple<bool, int16_t> update(uint8_t, int = 1);
 
-    static float calcValue(uint16_t);
+    static float calcValue(int16_t);
 };

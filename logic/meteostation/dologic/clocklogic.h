@@ -20,4 +20,6 @@ public:
     void processClock();
 
 	const DateTime& getDateTime() const { return mCurrentDateTime; }
+
+	void setDateTime(const DateTime& dateTime) { ds->adjust(dateTime); }
 };

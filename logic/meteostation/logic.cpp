@@ -36,5 +36,16 @@ void applogic::startLogic()
         LcdLogic::instance()->processLcd();
         LedLogic::instance()->processLed();
         DataStorage::instance()->processDataStorage();
+
+        std::string line = log.readln(10);
+
+        if (not line.empty()) {
+            if (line.rfind("AT+SETDATETIME ", 0) == 0) {
+                line.erase(0, 15);
+                DateTime dt(line.c_str());
+                ClockLogic::instance()->setDateTime(dt);
+                log.send("AT+SETDATETIME:OK");
+            }
+        }
     }
 }

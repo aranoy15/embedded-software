@@ -3,10 +3,10 @@
 
 Ds18b20::Ds18b20() : I2COnewireBase() {}
 
-std::tuple<bool, uint16_t> Ds18b20::update(uint8_t channel, int count)
+std::tuple<bool, int16_t> Ds18b20::update(uint8_t channel, int count)
 {
 	bool result = false;
-	uint16_t resultData = 0;
+	int16_t resultData = 0;
 
 	channelSelect(channel);
 
@@ -45,9 +45,11 @@ std::tuple<bool, uint16_t> Ds18b20::update(uint8_t channel, int count)
 	return std::make_tuple(result, resultData);
 }
 
-float Ds18b20::calcValue(uint16_t value)
+float Ds18b20::calcValue(int16_t value)
 {
 	//return static_cast<float>(value) / 16.0f;
+
+	/*
 	float result = 0.0f;;
 
     if (value & 0x800)
@@ -56,4 +58,6 @@ float Ds18b20::calcValue(uint16_t value)
         result = value / 16.0f;
 
     return result;
+	*/
+	return (float)value / 16.0f;
 }

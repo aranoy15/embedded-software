@@ -65,4 +65,11 @@ public:
 			}
 		}
 	}
+
+	T average()
+	{
+		T result = std::accumulate(mData.begin(), mData.end(), T());
+
+		return (result / mData.size());
+	}
 };

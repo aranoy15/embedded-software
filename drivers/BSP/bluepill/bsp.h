@@ -10,6 +10,11 @@ namespace bsp
 	void initMem();
 #endif
 
+namespace led
+{
+	using signal = GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>, mOutputPP, sHi, pNo>;
+}
+
 namespace uart
 {
 	using usart1TxPin =

@@ -40,35 +40,53 @@ void LcdTask::func()
 		timer.start();
 	}
 
+	/*
     lcd1.setCursor(0, 0);
 	lcd1.sendString(utils::stringFormat(
-	    "Davl isp: %-10.1f", DataStorage::instance()->boilingPressure()));
+	    "\340a\263\273 \270c\276: %-10.1f", DataStorage::instance()->boilingPressure())); //Давл исп
 
 	lcd1.setCursor(0, 1);
 	lcd1.sendString(utils::stringFormat(
-	    "Davl kon: %-10.1f", DataStorage::instance()->condansatingPressure()));
+	    "\340a\263\273 \272o\275: %-10.1f", DataStorage::instance()->condansatingPressure())); // Давл кон
+	*/
+
+	lcd1.setCursor(0, 0);
+	lcd1.sendString(utils::stringFormat(
+	    "\340 \270c\276: %-4.1f", DataStorage::instance()->boilingPressure())); //Д исп
+
+	lcd1.setCursor(12, 0);
+	lcd1.sendString(
+	    utils::stringFormat("%8.1f", DataStorage::instance()->minBoiling()));
+
+	lcd1.setCursor(0, 1);
+	lcd1.sendString(utils::stringFormat(
+	    "\340 \272o\275: %-4.1f", DataStorage::instance()->condansatingPressure())); //Д кон
+
+	lcd1.setCursor(12, 1);
+	lcd1.sendString(
+	    utils::stringFormat("%8.1f", DataStorage::instance()->maxCondansating()));
 
 	lcd1.setCursor(0, 2);
 	lcd1.sendString(utils::stringFormat(
-	    "Temp isp: %-10.1f", DataStorage::instance()->boilingTemp()));
+	    "Te\274\276 \270c\276: %-10.1f", DataStorage::instance()->boilingTemp())); // Темп исп
 
 	lcd1.setCursor(0, 3);
 	lcd1.sendString(utils::stringFormat(
-	    "Temp kon: %-10.1f", DataStorage::instance()->condansationTemp()));
+	    "Te\274\276 \272o\275: %-10.1f", DataStorage::instance()->condansationTemp())); // Темп кон
 
 	lcd2.setCursor(0, 0);
 	lcd2.sendString(utils::stringFormat(
-	    "Tkon: %-10.1f", DataStorage::instance()->condensatorTemp()));
+	    "\340a\277 \277e\274\276 \270c\276: %-6.1f", DataStorage::instance()->evaporatorTemp())); //Дат темп исп
 
 	lcd2.setCursor(0, 1);
 	lcd2.sendString(utils::stringFormat(
-	    "Tisp: %-10.1f", DataStorage::instance()->evaporatorTemp()));
+	    "\340a\277 \277e\274\276 \272o\275: %-6.1f", DataStorage::instance()->condensatorTemp())); //Дат темп кон
 
 	lcd2.setCursor(0, 2);
 	lcd2.sendString(utils::stringFormat(
-	    "Temp pg: %-10.1f", DataStorage::instance()->overHeatingTemp()));
+	    "Te\274\276 \276\264: %-10.1f", DataStorage::instance()->overHeatingTemp())); //Темп пг
 
 	lcd2.setCursor(0, 3);
 	lcd2.sendString(utils::stringFormat(
-	    "Temp po: %-7.1f", DataStorage::instance()->overCoolingTemp()));
+	    "Te\274\276 \276o: %-7.1f", DataStorage::instance()->overCoolingTemp())); //Темп по
 }

@@ -22,7 +22,7 @@ Ds3231 ds(0x68);
 
 void lcdThread(void*)
 {
-	Lcd lcd(0x27, 16, 2, 1);
+	Lcd lcd(0x27, 20, 4, 1);
 	lcd.init();
 
 	uint32_t count = 0;

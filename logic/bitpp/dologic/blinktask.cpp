@@ -5,7 +5,7 @@ class BlinkTask : public TaskBase
 {
 private:
 	using blink_pin = GPIO<PinDef<CSP_GPIO_PORT_NBR_C, GPIO_PIN_13>,
-	                       bsp::mOutputPP, bsp::sHi, bsp::pUp>;
+	                       bsp::mOutputPP, bsp::sHi, bsp::pNo>;
 	bool m_state;
 
 public:

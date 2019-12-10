@@ -20,7 +20,7 @@ void SensorLogic::co2Init()
 {
     mhz->init();
     mhz->setAutoCalibration(false);
-    mhz->setRange(Mhz19Range::Range2000);
+    //mhz->setRange(Mhz19Range::Range5000);
 }
 
 void SensorLogic::tempInit()

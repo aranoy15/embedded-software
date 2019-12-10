@@ -51,6 +51,7 @@ if (USE_I2CONEWIRE)
     target_sources(lib PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/i2conewirebase.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/i2cds18b20.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/i2cds18b20async.cpp
     )
 endif()
 

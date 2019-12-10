@@ -65,5 +65,5 @@ public:
     I2COnewireBase();
     virtual ~I2COnewireBase();
 
-    virtual std::tuple<bool, uint16_t> update(uint8_t, int = 1) = 0;
+    //virtual std::tuple<bool, int16_t> update(uint8_t, int = 1) = 0;
 };

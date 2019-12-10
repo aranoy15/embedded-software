@@ -27,7 +27,7 @@ public:
 	void init()
 	{
 		m_hndl.Instance = bsp::i2c::port2CSP(port);
-		m_hndl.Init.ClockSpeed = 25000;
+		m_hndl.Init.ClockSpeed = 100000;
 		m_hndl.Init.DutyCycle = I2C_DUTYCYCLE_2;
 		m_hndl.Init.OwnAddress1 = 0;
 		m_hndl.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;

@@ -35,8 +35,8 @@ public:
 	      mCondansatingPressure(0),
 		  mBoilingTemperature(0),
 		  mCondansatingTemperature(0),
-		  mMinBoiling(5),
-		  mMaxCondansating(5),
+		  mMinBoiling(10.0f),
+		  mMaxCondansating(0.0f),
 		  mOverHeatingTemperature(0),
 		  mOverCoolingTemperature(0)
 	{
