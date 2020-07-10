@@ -33,8 +33,11 @@ void SensorTask::func()
 {
     DataStorage& dataStorage = *DataStorage::instance();
 
-    float boilingVoltage = Ads7844::calcValue(mAnalogInput.getValue(0));
-    float condansatingVoltage = Ads7844::calcValue(mAnalogInput.getValue(1));
+	uint8_t boilingAddress = 0;
+	uint8_t condansatingAddress = 1;
+
+    float boilingVoltage = Ads7844::calcValue(mAnalogInput.getValue(boilingAddress));
+    float condansatingVoltage = Ads7844::calcValue(mAnalogInput.getValue(condansatingAddress));
 
     dataStorage.mBoilingPressure = utils::map(boilingVoltage, 0.4f, 2.0f, 0.0f, 10.0f);
     dataStorage.mCondansatingPressure = utils::map(condansatingVoltage, 0.4f, 2.0f, 0.0f, 30.0f);
