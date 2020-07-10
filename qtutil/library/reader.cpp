@@ -84,7 +84,10 @@ void Reader::readyRead()
 		if (not tempLine.isEmpty()) mTempSerial = tempLine;
 	} else if (mType == ReaderType::Raw) {
 		auto res = mSerial.readAll();
-        mTempSerial.append(res);
+
+		if (not res.isEmpty()) {
+        	mTempSerial.append(res);
+		}
     }
 }
 
@@ -97,12 +100,19 @@ void Reader::writeLine(const QByteArray& data)
 {
     mSerial.write(data);
 
-    if (not data.contains("\n"))
-        mSerial.write("\n");
+    //if (not data.contains("\n"))
+	mSerial.write("\n");
+	mSerial.flush();
 }
 
 void Reader::reload()
 {
+	//QByteArray data = "AT+REBOOT";
+	//data.push_back(0xD8);
+	//data.push_back(0x6C);
+
+	//writeLine(data);
+
     mSerial.setDataTerminalReady(true);
     QThread::msleep(2);
     mSerial.setDataTerminalReady(false);

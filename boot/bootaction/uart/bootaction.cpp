@@ -42,6 +42,19 @@ static bool loadPackets(BootUart& uart)
 	}
 }
 
+static bool wait_start(BootUart& uart)
+{
+	for(uint8_t i = 0; i < 1; i++) {
+		uart.putChar('>');
+
+		if (uart.getChar() == '<') return true;
+
+		sleep(10);
+	}
+
+	return false;
+}
+
 void bootAction()
 {
 	sleep(10);
@@ -49,9 +62,7 @@ void bootAction()
 	BootUart uart;
 	uart.init();
 
-	uart.putChar('>');
-
-	if (uart.getChar() == '<') {
+	if (wait_start(uart)) {
 		BootInfo::unlock();
 		bool result = loadPackets(uart);
 
