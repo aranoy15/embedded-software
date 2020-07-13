@@ -64,6 +64,15 @@ void SensorTask::func()
 	dataStorage.mMinBoiling = std::min(dataStorage.mMinBoiling, dataStorage.mBoilingPressure);
 	dataStorage.mMaxCondansating = std::max(dataStorage.mMaxCondansating, dataStorage.mCondansatingPressure);
 
+	_evaporator_sensor.update();
+	dataStorage.mEvaporatorTemperature = _evaporator_sensor.value();
+	dataStorage.mOverHeatingTemperature = dataStorage.mEvaporatorTemperature - dataStorage.mBoilingTemperature;
+
+	_condensator_sensor.update();
+	dataStorage.mCondensatorTemperature = _condensator_sensor.value();
+	dataStorage.mOverCoolingTemperature = dataStorage.mCondansatingTemperature - dataStorage.mCondensatorTemperature;
+
+	/*
 	switch (_current_sensor) {
 		case 0:
 			if (not _switch_timer.is_started()) _switch_timer.start();
@@ -95,6 +104,7 @@ void SensorTask::func()
 			}
 			break;
 	}
+	*/
 
 	/*
     auto [resultEv, tempEv] = mTempSource.update(0);
