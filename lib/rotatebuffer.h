@@ -3,6 +3,7 @@
 #include <vector>
 #include <stdint.h>
 #include <algorithm>
+#include <numeric>
 
 template <class T>
 class RotateBuffer

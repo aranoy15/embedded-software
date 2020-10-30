@@ -11,7 +11,7 @@ set(USE_RTC 0)
 set(FRION_TYPE 1) # 0 = 407c, 1 = 134a
 
 set(BOOT_TYPE flash)
-set(APP_START_ADDR 0x8004000)
+set(APP_START_ADDR 0x8000000) #0x8004000
 
 add_definitions(-DUSE_FREERTOS=${USE_FREERTOS})
 add_definitions(-DAPP_START_ADDR=${APP_START_ADDR})
