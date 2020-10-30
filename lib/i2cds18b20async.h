@@ -10,20 +10,20 @@ class Ds18b20Async : public I2COnewireBase
 {
 private:
     int16_t _value;
-    uint8_t _channel;
+    uint16_t _channel;
     Timer _timer;
 
+    const uint16_t _timeout = 750;
+
+    void init_channel();
+
 public:
-	Ds18b20Async(uint8_t channel);
+	Ds18b20Async(uint16_t channel);
 
-    bool update();
+    void update();
 
-	template <typename T>
-	auto value() -> T
+	float value()
 	{
-        if (std::is_same<T, float>::value)
-            return static_cast<float>(_value) / 16.0f;
-
-        return _value;
+        return _value / 16.0f;
 	}
 };
