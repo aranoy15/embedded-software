@@ -1,12 +1,12 @@
 #include <logic/test/logic.hpp>
 #include <bsp.hpp>
 
-#define loop for(;;)
+#define loop while(true)
 
 void applogic::start()
 {
     bsp::gpio::init();
-    uint32_t timeout = 100;
+    uint32_t timeout = 200;
 
     loop {
         bsp::gpio::status_on();

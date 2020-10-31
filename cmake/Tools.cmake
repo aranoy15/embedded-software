@@ -35,7 +35,7 @@ endfunction(read)
 function(upload)
 	if (NOT ${PORT} STREQUAL "")
 		add_custom_target(upload
-			${CMAKE_SOURCE_DIR}/qtutil/release/uploader -c ${PORT} -b 115200 -f ${CMAKE_BINARY_DIR}/app.bin && ${CMAKE_SOURCE_DIR}/qtutil/release/reader -c ${PORT} -b 115200
+			${CMAKE_SOURCE_DIR}/qtutil/release/uploader -c ${PORT} -b 115200 -f ${CMAKE_BINARY_DIR}/app.bin #&& ${CMAKE_SOURCE_DIR}/qtutil/release/reader -c ${PORT} -b 115200
 		)	
 		message("Port is defined. Port is ${PORT}")
 	else ()
