@@ -10,4 +10,4 @@ add_executable(${TARGET} ${TARGET_SOURCES})
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/logic/${LOGIC} build)
 
-target_link_libraries(${TARGET} drivers lib c_nano ) #FatFS
+target_link_libraries(${TARGET} c_nano)

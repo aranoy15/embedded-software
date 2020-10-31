@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.6)
 
-set(DEBUG 0)
+#set(DEBUG 0)
 
-add_definitions(-DDEBUG=${DEBUG})
+#add_definitions(-DDEBUG=${DEBUG})
 
 project(test C CXX ASM)
 
@@ -28,14 +28,18 @@ include(Tools)
 add_subdirectory(app)
 add_subdirectory(chip)
 add_subdirectory(drivers)
-add_subdirectory(lib)
+#add_subdirectory(lib)
+
+target_include_directories(${TARGET} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 size(${TARGET})
 generate_bin(${TARGET})
 
 flash(${TARGET} ${APP_START_ADDR})
 
-add_trace(${TARGET})
+#add_trace(${TARGET})
 read()
 upload()
 
