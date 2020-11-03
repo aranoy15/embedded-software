@@ -1,11 +1,17 @@
-#ifndef LIB_BME280
-#define LIB_BME280
+#pragma once
 
 #include <lib/i2c/i2c.hpp>
-#include <timer.h>
+#include <lib/time/timer.hpp>
+#include <bsp.hpp>
+
+namespace lib::i2c::sensors
+{
 
 class Bme280
 {
+public:
+    using i2c_t = lib::i2c::I2C<bsp::i2c::bme280_port>;
+
 private:
     enum
     {
@@ -151,19 +157,14 @@ private:
          };
 
 private:
-    CalibrateData m_data;
-    Config m_config;
-    CtrlMeas m_measreg;
-    CtrlHum m_humreg;
-    Timer m_timer;
-    uint16_t m_address;
-    int32_t t_fine;
+    CalibrateData _data;
+    Config _config;
+    CtrlMeas _measreg;
+    CtrlHum _humreg;
+    lib::time::Timer _timer;
+    int32_t _t_fine;
 
-    //using I2CType = I2C<i2c::i2cPort1>;
-	I2C<bsp::i2ctemp::bmeI2CPort>& getI2C()
-	{
-		return *I2C<bsp::i2ctemp::bmeI2CPort>::instance();
-	}
+    uint16_t _address = bsp::i2c::bme280_address;
 
 public:
         enum SensorSampling {
@@ -201,27 +202,27 @@ public:
         };
 
 public:
-    Bme280(uint16_t address);
+    Bme280();
 
     bool init();
 
-    uint8_t chipId();
-	void setSampling(SensorMode mode = MODE_NORMAL,
-	                 SensorSampling tempSampling = SAMPLING_X16,
-	                 SensorSampling pressSampling = SAMPLING_X16,
-	                 SensorSampling humSampling = SAMPLING_X16,
-	                 SensorFilter filter = FILTER_OFF,
-	                 StandbyDuration duration = STANDBY_MS_0_5);
+    uint8_t chip_id();
+	void set_sampling(SensorMode mode = MODE_NORMAL,
+	                  SensorSampling tempSampling = SAMPLING_X16,
+	                  SensorSampling pressSampling = SAMPLING_X16,
+	                  SensorSampling humSampling = SAMPLING_X16,
+	                  SensorFilter filter = FILTER_OFF,
+	                  StandbyDuration duration = STANDBY_MS_0_5);
 
-    void takeForcedMeasurement();
-    float readPressure();
-    float readHumidity();
-    float readTemperature();
+	void take_forced_measurement();
+	float read_pressure();
+    float read_humidity();
+    float read_temperature();
 
 private:
 
-    void readCoefficients();
-    bool isReadingCalibration();
+    void read_coefficients();
+    bool is_reading_calibration();
 
 	void write8(uint8_t reg, uint8_t value);
 	uint8_t read8(uint8_t reg);
@@ -232,4 +233,4 @@ private:
 	int16_t readS16_LE(uint8_t reg);  // little endian
 };
 
-#endif /* LIB_BME280 */
+}

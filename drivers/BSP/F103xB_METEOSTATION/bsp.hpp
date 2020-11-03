@@ -2,25 +2,15 @@
 #define DRIVERS_BSP_F103XB_METEOSTATION_BSP
 
 #include <drivers/bsp/ST/bsp_template.hpp>
-#include <stdint.h>
+#include <drivers/bsp/F103xB_METEOSTATION/tick.hpp>
+#include <drivers/bsp/F103xB_METEOSTATION/gpio.hpp>
+#include <drivers/bsp/F103xB_METEOSTATION/usart.hpp>
+#include <drivers/bsp/F103xB_METEOSTATION/i2c.hpp>
 
 namespace bsp
 {
 void init();
-
-namespace gpio
-{
-void init();
-
-void status_on();
-void status_off();
-}
-
-namespace tick
-{
-uint32_t current();
-void delay(uint32_t ms);
-}
+void reset();
 }
 
 #endif /* DRIVERS_BSP_F103XB_METEOSTATION_BSP */

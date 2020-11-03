@@ -47,7 +47,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+static void HAL_UART_CheckIdle(UART_HandleTypeDef* huart);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -208,7 +208,7 @@ void USART1_IRQHandler(void)
   /* USER CODE END USART1_IRQn 0 */
   HAL_UART_IRQHandler(&huart1);
   /* USER CODE BEGIN USART1_IRQn 1 */
-
+  HAL_UART_CheckIdle(&huart1);
   /* USER CODE END USART1_IRQn 1 */
 }
 
@@ -222,11 +222,23 @@ void USART2_IRQHandler(void)
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-
+  HAL_UART_CheckIdle(&huart2);
   /* USER CODE END USART2_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */
+void HAL_UART_CheckIdle(UART_HandleTypeDef* huart)
+{
+  uint32_t isrflags = READ_REG(huart->Instance->SR);
+  if ((isrflags & UART_FLAG_IDLE) != RESET) {
+    HAL_UART_IdleCallback(huart);
+    __HAL_UART_CLEAR_IDLEFLAG(huart);
+  }
+}
 
+__weak void HAL_UART_IdleCallback(UART_HandleTypeDef* huart)
+{
+  UNUSED(huart);
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -16,7 +16,8 @@ namespace i2c
 {
 enum class port
 {
-	_1
+	_1,
+	_2
 };
 }
 }
