@@ -6,10 +6,10 @@
 
 namespace bsp::usart
 {
-
 using port_t = bsp::usart::port;
 
 constexpr port_t log_port = port_t::_1;
+constexpr port_t mhz_port = port_t::_2;
 
 void init(port_t port);
 

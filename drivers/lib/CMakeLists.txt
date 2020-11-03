@@ -1,5 +1,6 @@
 add_subdirectory(stream)
 
+add_subdirectory(uart)
 add_subdirectory(log)
 
 add_subdirectory(time)
