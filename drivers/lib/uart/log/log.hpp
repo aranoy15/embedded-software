@@ -4,7 +4,7 @@
 #include <lib/stream/stringhandler.hpp>
 #include <lib/stream/stream.hpp>
 
-namespace lib::log
+namespace lib::uart::log
 {
 
 class LogHandler : public stream::StringHandler

@@ -33,6 +33,9 @@ public:
 	static Time secs(int n) { return Time(n * 1000); }
 	static Time current();
 
+	Time& operator+=(const Time& rhs);
+	Time& operator-=(const Time& rhs);
+
 private:
 	time_t _time;
 };

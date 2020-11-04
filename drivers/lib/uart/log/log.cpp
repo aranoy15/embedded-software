@@ -1,8 +1,8 @@
-#include <lib/log/log.hpp>
+#include <lib/uart/log/log.hpp>
 #include <lib/uart/uart.hpp>
 #include <bsp.hpp>
 
-using namespace lib::log;
+using namespace lib::uart::log;
 using namespace lib::uart;
 using namespace lib::stream;
 
