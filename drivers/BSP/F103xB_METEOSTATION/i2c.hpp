@@ -16,6 +16,9 @@ constexpr port_t ds3231_port = port_t::_1;
 constexpr std::uint16_t bme280_address = 0x76;
 constexpr port_t bme280_port = port_t::_1;
 
+constexpr std::uint16_t lcd_address = 0x27;
+constexpr port_t lcd_port = port_t::_1;
+
 void init(port_t port);
 bool send(port_t port, std::uint16_t address, uint8_t data[], std::size_t size);
 bool receive(port_t port, std::uint16_t address, uint8_t data[], std::size_t size);
