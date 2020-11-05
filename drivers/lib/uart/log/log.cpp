@@ -1,6 +1,4 @@
 #include <lib/uart/log/log.hpp>
-#include <lib/uart/uart.hpp>
-#include <bsp.hpp>
 
 using namespace lib::uart::log;
 using namespace lib::uart;
@@ -11,18 +9,18 @@ LogHandler::~LogHandler() {}
 
 void LogHandler::do_flush()
 {
-    Uart<bsp::usart::log_port>::send(_data);
+    uart_t::send(_data);
     _data.clear();
 }
 
 bool LogHandler::do_read_message(std::string& data)
 {
-    return Uart<bsp::usart::log_port>::read(data);
+    return uart_t::read(data);
 }
 
 bool LogHandler::do_read_message(std::vector<uint8_t>& data)
 {
-    return Uart<bsp::usart::log_port>::read(data);
+    return uart_t::read(data);
 }
 
 Log::Log(uint32_t log_mode)

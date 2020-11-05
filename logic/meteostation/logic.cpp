@@ -1,4 +1,4 @@
-#include <logic.h>
+#include <logic/meteostation/logic.hpp>
 #include <time.h>
 #include <uart.h>
 #include <i2c.h>
