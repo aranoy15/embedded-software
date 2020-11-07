@@ -18,7 +18,7 @@ struct Uart
 {
     Uart() = delete;
 
-    static void init() noexcept;
+    static void init(bool need_irq = true) noexcept;
 
     static void send(uint8_t data[], std::size_t size) noexcept;
     static void send(const std::string& data) noexcept;
@@ -29,19 +29,25 @@ struct Uart
     static bool read(std::string& data) noexcept;
     static bool read(std::vector<uint8_t>& data) noexcept;
     static bool read(uint8_t data[], std::size_t size) noexcept;
+    static bool read(uint8_t data[], std::size_t size, std::uint32_t timeout) noexcept;
+
+    static void clear() { _data.reset(); }
 
 private:
     static const uint32_t _timeout = 1000;
     inline static uint8_t _temp[temp_size];
+    inline static bool _is_irq_mode = false;
     inline static circular_buffer<uint8_t, buffer_size> _data;
 };
 
 template<port_t port>
-void Uart<port>::init() noexcept
+void Uart<port>::init(bool need_irq) noexcept
 {
     bsp::usart::init(port);
 
-    bsp::usart::receive_irq(port, _temp, temp_size);
+    _is_irq_mode = need_irq;
+
+    if (_is_irq_mode) bsp::usart::receive_irq(port, _temp, temp_size);
 }
 
 template<port_t port>
@@ -75,6 +81,7 @@ bool Uart<port>::read(std::string& data) noexcept
 template<port_t port>
 bool Uart<port>::read(uint8_t data[], std::size_t size) noexcept
 {
+    [[maybe_unused]] std::size_t s = _data.size();
     if (_data.size() < size) return false;
 
     for (std::size_t i = 0; i < size; ++i) {
@@ -98,20 +105,28 @@ bool Uart<port>::read(std::vector<uint8_t>& data) noexcept
 }
 
 template<port_t port>
+bool Uart<port>::read(uint8_t data[], std::size_t size, std::uint32_t timeout) noexcept
+{
+    return bsp::usart::receive(port, data, size, timeout);
+}
+
+template<port_t port>
 void Uart<port>::receive_complete() noexcept
 {
-    bsp::usart::receive_irq(port, _temp, temp_size);
+    if (_is_irq_mode) bsp::usart::receive_irq(port, _temp, temp_size);
 }
 
 template<port_t port>
 void Uart<port>::idle() noexcept
 {
-    for (std::size_t i = 0; i < bsp::usart::count_receive(port); i++) {
-        _data.put(_temp[i]);
-    }
+    if (_is_irq_mode) {
+        for (std::size_t i = 0; i < bsp::usart::count_receive(port); i++) {
+            _data.put(_temp[i]);
+        }
 
-    bsp::usart::stop_receive_irq(port);
-    bsp::usart::receive_irq(port, _temp, temp_size);
+        bsp::usart::stop_receive_irq(port);
+        bsp::usart::receive_irq(port, _temp, temp_size);
+    }
 }
 
 }

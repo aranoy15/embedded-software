@@ -31,6 +31,7 @@ public:
 
 	static Time msecs(int n) { return Time(n); }
 	static Time secs(int n) { return Time(n * 1000); }
+	static Time mins(int n) { return Time(n * 60 * 1000); }
 	static Time current();
 
 	Time& operator+=(const Time& rhs);

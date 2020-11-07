@@ -413,12 +413,12 @@ uint32_t AppArea::get_page(uint32_t address)
 	} else if ((address < ADDR_FLASH_PAGE_126) and
 	           (address >= ADDR_FLASH_PAGE_125)) {
 		sector = ADDR_FLASH_PAGE_125;
-	} else if ((address < ADDR_FLASH_PAGE_127) and
-	           (address >= ADDR_FLASH_PAGE_126)) {
+	} else /*if ((address < ADDR_FLASH_PAGE_127) and
+	           (address >= ADDR_FLASH_PAGE_126))*/ {
 		sector = ADDR_FLASH_PAGE_126;
-	} else {
+	} /*else {
 		sector = ADDR_FLASH_PAGE_127;
-	}
+	}*/
 
 
 	return sector;
@@ -426,7 +426,7 @@ uint32_t AppArea::get_page(uint32_t address)
 
 uint32_t AppArea::get_end_address()
 {
-    return ADDR_FLASH_PAGE_127 + page_size - 1;
+    return ADDR_FLASH_PAGE_126 + page_size - 1;
 }
 
 void AppArea::lock()

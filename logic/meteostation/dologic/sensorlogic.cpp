@@ -1,47 +1,91 @@
-#include <sensorlogic.h>
+#include <bsp.hpp>
+#include <logic/meteostation/dologic/sensorlogic.hpp>
+#include <drivers/lib/time/timer.hpp>
+#include <drivers/lib/uart/uart.hpp>
+#include <drivers/lib/uart/log/log.hpp>
+#include <drivers/lib/i2c/i2c.hpp>
+#include <logic/meteostation/dologic/datastore.hpp>
+
+using namespace applogic;
+using namespace lib::time;
 
 SensorLogic::SensorLogic()
-    : mhz(new Mhz19()),
-      bme(new Bme280(0x76)),
-      mhzTimer(new Timer(5000)),
-      bmeTimer(new Timer(1000)),
-      pressureRainTimer(10 * Time::minute()),
-      mCo2(0),
-      mTemp(0),
-      mHumidity(0),
-      mPressure(0),
-      mPressureArray(),
-      mRainPercent(0)
+    : lib::task::TaskBase(Time::secs(1), lib::task::Priority::High),
+      mhz(),
+      bme(),
+      dt()
 {
-    mPressureArray.alloc(5);
-}
-
-void SensorLogic::co2Init()
-{
-    mhz->init();
-    mhz->setAutoCalibration(false);
-    //mhz->setRange(Mhz19Range::Range5000);
-}
-
-void SensorLogic::tempInit()
-{
-    bme->init();
-
-	bme->setSampling(Bme280::MODE_FORCED,
-	                 Bme280::SAMPLING_X1,  // temperature
-	                 Bme280::SAMPLING_X1,  // pressure
-	                 Bme280::SAMPLING_X1,  // humidity
-	                 Bme280::FILTER_OFF);
-
-    bme->takeForcedMeasurement();
-    float data = bme->readPressure();
-
-    for (uint8_t i = 0; i < 5; i++)
-        mPressureArray.put(data);
 }
 
 SensorLogic::~SensorLogic() {}
 
+void SensorLogic::setup()
+{
+    lib::i2c::I2C<bsp::i2c::bme280_port>::init();
+    lib::uart::Uart<bsp::usart::mhz_port>::init(false);
+
+    bool result_init = bme.init();
+
+    if (not result_init) bsp::reset();
+
+	bme.set_sampling(bme_t::MODE_FORCED,
+	                 bme_t::SAMPLING_X1,  // temperature
+	                 bme_t::SAMPLING_X1,  // pressure
+	                 bme_t::SAMPLING_X1,  // humidity
+	                 bme_t::FILTER_OFF);
+
+    mhz.init();
+    mhz.set_auto_calibration(false);
+
+    DataStore::init();
+}
+
+void SensorLogic::func()
+{
+    using namespace lib::uart::log;
+    using namespace lib::datetime;
+
+    DateTime current = dt.now();
+    std::uint16_t co2 = mhz.get_co2();
+
+    bme.take_forced_measurement();
+    float temp = bme.read_temperature();
+    float pressure = bme.read_pressure() / 133.3f;
+    float humidity = bme.read_humidity();
+
+    DataStore::co2 = co2;
+    DataStore::temperature = temp;
+    DataStore::pressure = pressure;
+    DataStore::humidity = humidity;
+    DataStore::datetime = current;
+
+    Log() << "[" << current << "] ";
+    Log() << co2 << "ppm ";
+    Log() << temp << "*C ";
+    Log() << pressure << "bar ";
+    Log() << humidity << "%" << lib::stream::Endl();
+
+    Log() << "Input state: " << bsp::gpio::input_button::state();
+
+    std::string data;
+    lib::stream::Stream::ResultRead result;
+
+    Log() >> data >> result;
+
+	if (result == lib::stream::Stream::ResultRead::OK) {
+		if (data.rfind("AT+SETDATETIME ", 0) == 0) {
+			data.erase(0, 15);
+			DateTime receive_dt(data.c_str());
+			dt.adjust(receive_dt);
+			Log() << "AT+SETDATETIME:OK" << lib::stream::Endl();
+		}
+	}
+
+    DataStore::update();
+}
+
+
+/*
 void SensorLogic::updateBme()
 {
 	bme->takeForcedMeasurement();
@@ -100,3 +144,4 @@ void SensorLogic::processSensor()
 		pressureRainTimer.start();
     }
 }
+*/

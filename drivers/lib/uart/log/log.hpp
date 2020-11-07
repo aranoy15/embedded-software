@@ -3,6 +3,7 @@
 #include <string>
 #include <lib/stream/stringhandler.hpp>
 #include <lib/stream/stream.hpp>
+#include <lib/stream/actions.hpp>
 #include <lib/uart/uart.hpp>
 #include <bsp.hpp>
 

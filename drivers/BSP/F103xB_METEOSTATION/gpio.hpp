@@ -9,6 +9,33 @@ namespace status
 {
 void on();
 void off();
+void toggle();
+}
+
+namespace input_button
+{
+bool state();
+}
+
+namespace red
+{
+void on();
+void off();
+void toggle();
+}
+
+namespace blue
+{
+void on();
+void off();
+void toggle();
+}
+
+namespace green
+{
+void on();
+void off();
+void toggle();
 }
 }
 

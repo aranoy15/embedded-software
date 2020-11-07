@@ -1,4 +1,5 @@
 #include <lib/uart/sensors/mhz19.hpp>
+#include <lib/time/time.hpp>
 
 using namespace lib::uart::sensors;
 
@@ -15,7 +16,11 @@ void Mhz19::init()
 uint16_t Mhz19::get_co2()
 {
     uint16_t result = 0;
+    uart_t::clear();
+
     command(0x86, static_cast<uint8_t>(0));
+
+    //lib::time::Time::sleep(lib::time::Time());
 
     if (read_response()) {
         result = (_buffer[2] << 8) | _buffer[3];
@@ -42,7 +47,7 @@ void Mhz19::command(uint8_t command, uint8_t b3, uint8_t b4, uint8_t b5, uint8_t
 
 bool Mhz19::read_response()
 {
-    bool result = uart_t::read(_buffer, _buffer_size);
+    bool result = uart_t::read(_buffer, _buffer_size, 200);
 
     if (result)
         result = (_buffer[8] == calc_crc());

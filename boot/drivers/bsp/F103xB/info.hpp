@@ -156,7 +156,7 @@ private:
         ADDR_FLASH_PAGE_124 = 0x0801F000, /* Base @ of Page 124, 1 Kbytes */
         ADDR_FLASH_PAGE_125 = 0x0801F400, /* Base @ of Page 125, 1 Kbytes */
         ADDR_FLASH_PAGE_126 = 0x0801F800, /* Base @ of Page 126, 1 Kbytes */
-        ADDR_FLASH_PAGE_127 = 0x0801FC00, /* Base @ of Page 127, 1 Kbytes */
+        //ADDR_FLASH_PAGE_127 = 0x0801FC00, /* Base @ of Page 127, 1 Kbytes */
     };
 };
 

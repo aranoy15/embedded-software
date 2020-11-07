@@ -16,7 +16,7 @@ void init(port_t port);
 void send(port_t port, const uint8_t data[], std::size_t size, std::uint32_t timeout);
 void send_irq(port_t port, const uint8_t data[], std::size_t size);
 
-void receive(port_t port, uint8_t data[], std::size_t size, std::uint32_t timeout);
+bool receive(port_t port, uint8_t data[], std::size_t size, std::uint32_t timeout);
 void receive_irq(port_t port, uint8_t data[], std::size_t size);
 
 void stop_receive_irq(port_t port) noexcept;

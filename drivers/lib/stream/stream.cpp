@@ -28,7 +28,7 @@ Stream::~Stream()
 
 void Stream::flush()
 {
-	if (is_text()) operator<<(Endl());
+	//if (is_text()) operator<<(Endl());
 	_handler.flush();
 }
 

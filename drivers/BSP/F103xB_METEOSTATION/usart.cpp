@@ -67,13 +67,15 @@ void bsp::usart::send_irq(port_t port, const uint8_t data[], std::size_t size)
     HAL_UART_Transmit_IT(huart, const_cast<uint8_t*>(data), size);
 }
 
-void bsp::usart::receive(port_t port, uint8_t data[], std::size_t size, std::uint32_t timeout)
+bool bsp::usart::receive(port_t port, uint8_t data[], std::size_t size, std::uint32_t timeout)
 {
     usart_handle_t* huart = get_huart(port);
 
-    if (huart == nullptr) return;
+    if (huart == nullptr) return false;
 
-    HAL_UART_Receive(huart, data, size, timeout);
+    auto result = HAL_UART_Receive(huart, data, size, timeout);
+
+    return result == HAL_OK;
 }
 
 void bsp::usart::receive_irq(port_t port, uint8_t data[], std::size_t size)

@@ -20,6 +20,7 @@ public:
     void home();
     void send_char(char ch);
     void send_string(std::string data);
+    void send_string(std::string_view data);
     void set_cursor(uint8_t col, uint8_t row);
 
     void command(uint8_t data);

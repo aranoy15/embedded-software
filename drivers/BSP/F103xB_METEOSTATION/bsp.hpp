@@ -7,6 +7,7 @@
 #include <drivers/bsp/F103xB_METEOSTATION/usart.hpp>
 #include <drivers/bsp/F103xB_METEOSTATION/i2c.hpp>
 #include <drivers/bsp/F103xB_METEOSTATION/iwdg.hpp>
+#include <drivers/bsp/F103xB_METEOSTATION/flash.hpp>
 
 namespace bsp
 {

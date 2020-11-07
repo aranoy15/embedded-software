@@ -131,6 +131,13 @@ void Lcd::send_string(std::string data)
     }
 }
 
+void Lcd::send_string(std::string_view data)
+{
+    for (size_t i = 0; i < data.length(); i++) {
+        send_char(data[i]);
+    }
+}
+
 void Lcd::set_cursor(uint8_t col, uint8_t row)
 {
 	int row_offsets[] = {0x00, 0x40, 0x14, 0x54};

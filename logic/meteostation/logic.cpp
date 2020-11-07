@@ -1,17 +1,31 @@
+#include <bsp.hpp>
 #include <logic/meteostation/logic.hpp>
-#include <time.h>
-#include <uart.h>
-#include <i2c.h>
-#include <watchdog.h>
-#include <lcdlogic.h>
-#include <clocklogic.h>
-#include <sensorlogic.h>
-#include <datastorage.h>
-#include <ledlogic.h>
-#include <logicstate.h>
+#include <drivers/lib/uart/log/log.hpp>
+#include <drivers/lib/time/timer.hpp>
+#include <drivers/lib/task/scheduler.hpp>
+#include <logic/meteostation/dologic/sensorlogic.hpp>
+#include <logic/meteostation/dologic/lcdlogic.hpp>
 
-void applogic::startLogic()
+#define loop while(true)
+
+void applogic::start()
 {
+    using namespace lib::time;
+    using namespace lib::uart::log;
+    using namespace lib::task;
+
+    LogHandler::uart_t::init();
+    bsp::gpio::init();
+    //bsp::iwdg::init();
+
+    Scheduler::reg<applogic::SensorLogic>();
+    Scheduler::reg<applogic::LcdLogic>();
+
+    Log() << "Start application" << lib::stream::Endl();
+
+    Scheduler::start();
+
+    /*
     Watchdog::init(3);
     Watchdog::start();
 
@@ -48,4 +62,5 @@ void applogic::startLogic()
             }
         }
     }
+    */
 }

@@ -1,285 +1,283 @@
-#include <lcdlogic.h>
-#include <clocklogic.h>
-#include <sensorlogic.h>
-#include <logicstate.h>
+#include <logic/meteostation/dologic/lcdlogic.hpp>
+#include <logic/meteostation/dologic/datastore.hpp>
+#include <drivers/lib/stream/stringhandler.hpp>
+#include <drivers/lib/stream/actions.hpp>
 
-uint8_t LcdLogic::LT[8] = {0b00111, 0b01111, 0b11111, 0b11111,
-                           0b11111, 0b11111, 0b11111, 0b11111};
-uint8_t LcdLogic::UB[8] = {0b11111, 0b11111, 0b11111, 0b00000,
-                           0b00000, 0b00000, 0b00000, 0b00000};
-uint8_t LcdLogic::RT[8] = {0b11100, 0b11110, 0b11111, 0b11111,
-                           0b11111, 0b11111, 0b11111, 0b11111};
-uint8_t LcdLogic::LL[8] = {0b11111, 0b11111, 0b11111, 0b11111,
-                           0b11111, 0b11111, 0b01111, 0b00111};
-uint8_t LcdLogic::LB[8] = {0b00000, 0b00000, 0b00000, 0b00000,
-                           0b00000, 0b11111, 0b11111, 0b11111};
-uint8_t LcdLogic::LR[8] = {0b11111, 0b11111, 0b11111, 0b11111,
-                           0b11111, 0b11111, 0b11110, 0b11100};
-uint8_t LcdLogic::UMB[8] = {0b11111, 0b11111, 0b11111, 0b00000,
-                            0b00000, 0b00000, 0b11111, 0b11111};
-uint8_t LcdLogic::LMB[8] = {0b11111, 0b00000, 0b00000, 0b00000,
-                            0b00000, 0b11111, 0b11111, 0b11111};
-
-
-std::vector<std::string> LcdLogic::weekDay = {
-	"Sun",
-	"Mon",
-	"Tue",
-	"Wed",
-	"Thu",
-	"Fri",
-	"Sat"
-};
+using namespace applogic;
+using namespace lib::stream;
 
 LcdLogic::LcdLogic()
-    : lcd(new Lcd(0x27, 20, 4, 1)),
-      mTimer(new Timer(1000)),
-      mChartTimer(new Timer(10 * Time::second())),
-      mDotState(false)
+    : lib::task::TaskBase(lib::time::Time::secs(1),
+                          lib::task::Priority::Normal),
+      lcd(20, 4, 1)
 {
-    lcd->init();
 }
 
 LcdLogic::~LcdLogic()
 {
 }
 
-void LcdLogic::drawDig(uint8_t dig, uint8_t x, uint8_t y)
+void LcdLogic::draw_dig(uint8_t dig, uint8_t x, uint8_t y)
 {
 	switch (dig) {
 		case 0:
-			lcd->setCursor(x, y);
-			lcd->write(0); 
-			lcd->write(1);
-			lcd->write(2);
-			lcd->setCursor(x, y + 1);
-			lcd->write(3);
-			lcd->write(4);
-			lcd->write(5);
+			lcd.set_cursor(x, y);
+			lcd.write(0); 
+			lcd.write(1);
+			lcd.write(2);
+			lcd.set_cursor(x, y + 1);
+			lcd.write(3);
+			lcd.write(4);
+			lcd.write(5);
 			break;
 		case 1:
-			lcd->setCursor(x, y);
-			lcd->sendChar(' ');
-			lcd->write(1);
-			lcd->write(2);
-			lcd->setCursor(x, y + 1);
-			lcd->sendChar(' ');
-			lcd->sendChar(' ');
-			lcd->write(5);
+			lcd.set_cursor(x, y);
+			lcd.send_char(' ');
+			lcd.write(1);
+			lcd.write(2);
+			lcd.set_cursor(x, y + 1);
+			lcd.send_char(' ');
+			lcd.send_char(' ');
+			lcd.write(5);
 			break;
 		case 2:
-			lcd->setCursor(x, y);
-			lcd->write(6);
-			lcd->write(6);
-			lcd->write(2);
-			lcd->setCursor(x, y + 1);
-			lcd->write(3);
-			lcd->write(7);
-			lcd->write(7);
+			lcd.set_cursor(x, y);
+			lcd.write(6);
+			lcd.write(6);
+			lcd.write(2);
+			lcd.set_cursor(x, y + 1);
+			lcd.write(3);
+			lcd.write(7);
+			lcd.write(7);
 			break;
 		case 3:
-			lcd->setCursor(x, y);
-			lcd->write(6);
-			lcd->write(6);
-			lcd->write(2);
-			lcd->setCursor(x, y + 1);
-			lcd->write(7);
-			lcd->write(7);
-			lcd->write(5);
+			lcd.set_cursor(x, y);
+			lcd.write(6);
+			lcd.write(6);
+			lcd.write(2);
+			lcd.set_cursor(x, y + 1);
+			lcd.write(7);
+			lcd.write(7);
+			lcd.write(5);
 			break;
 		case 4:
-			lcd->setCursor(x, y);
-			lcd->write(3);
-			lcd->write(4);
-			lcd->write(2);
-			lcd->setCursor(x, y + 1);
-			lcd->sendChar(' ');
-			lcd->sendChar(' ');
-			lcd->write(5);
+			lcd.set_cursor(x, y);
+			lcd.write(3);
+			lcd.write(4);
+			lcd.write(2);
+			lcd.set_cursor(x, y + 1);
+			lcd.send_char(' ');
+			lcd.send_char(' ');
+			lcd.write(5);
 			break;
 		case 5:
-			lcd->setCursor(x, y);
-			lcd->write(0);
-			lcd->write(6);
-			lcd->write(6);
-			lcd->setCursor(x, y + 1);
-			lcd->write(7);
-			lcd->write(7);
-			lcd->write(5);
+			lcd.set_cursor(x, y);
+			lcd.write(0);
+			lcd.write(6);
+			lcd.write(6);
+			lcd.set_cursor(x, y + 1);
+			lcd.write(7);
+			lcd.write(7);
+			lcd.write(5);
 			break;
 		case 6:
-			lcd->setCursor(x, y);
-			lcd->write(0);
-			lcd->write(6);
-			lcd->write(6);
-			lcd->setCursor(x, y + 1);
-			lcd->write(3);
-			lcd->write(7);
-			lcd->write(5);
+			lcd.set_cursor(x, y);
+			lcd.write(0);
+			lcd.write(6);
+			lcd.write(6);
+			lcd.set_cursor(x, y + 1);
+			lcd.write(3);
+			lcd.write(7);
+			lcd.write(5);
 			break;
 		case 7:
-			lcd->setCursor(x, y);
-			lcd->write(1);
-			lcd->write(1);
-			lcd->write(2);
-			lcd->setCursor(x, y + 1);
-			lcd->sendChar(' ');
-			lcd->write(0);
-			lcd->sendChar(' ');
+			lcd.set_cursor(x, y);
+			lcd.write(1);
+			lcd.write(1);
+			lcd.write(2);
+			lcd.set_cursor(x, y + 1);
+			lcd.send_char(' ');
+			lcd.write(0);
+			lcd.send_char(' ');
 			break;
 		case 8:
-			lcd->setCursor(x, y);
-			lcd->write(0);
-			lcd->write(6);
-			lcd->write(2);
-			lcd->setCursor(x, y + 1);
-			lcd->write(3);
-			lcd->write(7);
-			lcd->write(5);
+			lcd.set_cursor(x, y);
+			lcd.write(0);
+			lcd.write(6);
+			lcd.write(2);
+			lcd.set_cursor(x, y + 1);
+			lcd.write(3);
+			lcd.write(7);
+			lcd.write(5);
 			break;
 		case 9:
-			lcd->setCursor(x, y);
-			lcd->write(0);
-			lcd->write(6);
-			lcd->write(2);
-			lcd->setCursor(x, y + 1);
-			lcd->sendChar(' ');
-			lcd->write(4);
-			lcd->write(5);
+			lcd.set_cursor(x, y);
+			lcd.write(0);
+			lcd.write(6);
+			lcd.write(2);
+			lcd.set_cursor(x, y + 1);
+			lcd.send_char(' ');
+			lcd.write(4);
+			lcd.write(5);
 			break;
 		case 10:
-			lcd->setCursor(x, y);
-			lcd->write(32);
-			lcd->write(32);
-			lcd->write(32);
-			lcd->setCursor(x, y + 1);
-			lcd->write(32);
-			lcd->write(32);
-			lcd->write(32);
+			lcd.set_cursor(x, y);
+			lcd.write(32);
+			lcd.write(32);
+			lcd.write(32);
+			lcd.set_cursor(x, y + 1);
+			lcd.write(32);
+			lcd.write(32);
+			lcd.write(32);
 			break;
 	}
 }
 
-void LcdLogic::loadClock()
+void LcdLogic::load_clock()
 {
-    lcd->createChar(0, LT);
-	lcd->createChar(1, UB);
-	lcd->createChar(2, RT);
-	lcd->createChar(3, LL);
-	lcd->createChar(4, LB);
-	lcd->createChar(5, LR);
-	lcd->createChar(6, UMB);
-	lcd->createChar(7, LMB);
+    lcd.create_char(0, LT);
+	lcd.create_char(1, UB);
+	lcd.create_char(2, RT);
+	lcd.create_char(3, LL);
+	lcd.create_char(4, LB);
+	lcd.create_char(5, LR);
+	lcd.create_char(6, UMB);
+	lcd.create_char(7, LMB);
 }
 
-void LcdLogic::drawDots(bool dotState, uint8_t x, uint8_t y)
+void LcdLogic::draw_dots(bool dot_state, uint8_t x, uint8_t y)
 {
-	uint8_t dot = dotState ? 0xA5 : 0x20;
-    lcd->setCursor(x + 7, y);
-    lcd->sendChar(dot);
-    lcd->setCursor(x + 7, y + 1);
-    lcd->sendChar(dot);
+	uint8_t dot = dot_state ? 0xA5 : 0x20;
+    lcd.set_cursor(x + 7, y);
+    lcd.send_char(dot);
+    lcd.set_cursor(x + 7, y + 1);
+    lcd.send_char(dot);
 }
 
-void LcdLogic::drawClock(uint8_t hours, uint8_t minutes, uint8_t x, uint8_t y)
+void LcdLogic::draw_clock(uint8_t hours, uint8_t minutes, uint8_t x, uint8_t y)
 {
 	if (hours / 10 == 0)
-		drawDig(10, x, y);
+		draw_dig(10, x, y);
 	else
-		drawDig(hours / 10, x, y);
-	drawDig(hours % 10, x + 4, y);
+		draw_dig(hours / 10, x, y);
 
-    drawDig(minutes / 10, x + 8, y);
-    drawDig(minutes % 10, x + 12, y);
+	lcd.set_cursor(x + 3, y);
+	lcd.send_char(' ');
+	lcd.set_cursor(x + 3, y + 1);
+	lcd.send_char(' ');
 
-    lcd->home();
+	draw_dig(hours % 10, x + 4, y);
 
-    mDotState = not mDotState;
-    drawDots(mDotState, 0, 0);
+    draw_dig(minutes / 10, x + 8, y);
+
+	lcd.set_cursor(x + 7, y);
+	lcd.send_char(' ');
+	lcd.set_cursor(x + 7, y + 1);
+	lcd.send_char(' ');
+
+    draw_dig(minutes % 10, x + 12, y);
+
+    lcd.home();
+
+	static bool dot_state = false;
+    dot_state = not dot_state;
+    draw_dots(dot_state, 0, 0);
 }
 
-void LcdLogic::drawDate(const DateTime& dateTime, uint8_t x, uint8_t y)
+void LcdLogic::draw_date(const datetime_t& datetime, uint8_t x, uint8_t y)
 {
-	lcd->setCursor(x, y);
-	lcd->sendString(
-	    utils::stringFormat("%02u.%02u", dateTime.day(), dateTime.month()));
+	StringStream ss;
+
+	ss << IntWidthAction(2) << JustifyAction(Stream::Justify::Right);
+	ss << datetime.day() << "." << datetime.month();
+	lcd.set_cursor(x, y);
+	lcd.send_string(ss.data());
+	ss.clear();
 	
-	lcd->setCursor(x + 1, y + 1);
-	lcd->sendString(
-	    utils::stringFormat("%4s", weekDay[dateTime.dayOfTheWeek()].c_str()));
+	uint8_t int_day_of_the_week = datetime.day_of_the_week();
+	auto str_week_day = week_day[int_day_of_the_week];
+	ss << str_week_day;
+	lcd.set_cursor(x + 1, y + 1);
+	lcd.send_string(ss.data());
 }
 
-void LcdLogic::drawCO2(uint16_t co2, uint8_t x, uint8_t y)
+void LcdLogic::draw_co2(uint16_t co2, uint8_t x, uint8_t y)
 {
-	lcd->setCursor(x, y);
-	lcd->sendString(utils::stringFormat("%4u ppm", co2));
+	StringStream ss;
+	ss << IntWidthAction(4, ' ') << JustifyAction(Stream::Justify::Right);
+	ss << co2 << " ppm";
+
+	lcd.set_cursor(x, y);
+	lcd.send_string(ss.data());
 }
 
-void LcdLogic::drawTemp(float temp, uint8_t x, uint8_t y)
+void LcdLogic::draw_temp(float temp, uint8_t x, uint8_t y)
 {
-	lcd->setCursor(x, y);
-	lcd->sendString(utils::stringFormat("%s", utils::ftostring(temp).c_str()));
-	lcd->sendChar(0xDF);
-	lcd->sendChar('C');
+	StringStream ss;
+	DoubleFormatAction df(temp);
+	df.set_digits_after_dot(1);
+
+	ss << df;
+
+	lcd.set_cursor(x, y);
+	lcd.send_string(ss.data());
+	lcd.send_char(0xDF);
+	lcd.send_char('C');
 }
 
-void LcdLogic::drawHumidity(uint8_t hum, uint8_t x, uint8_t y)
+void LcdLogic::draw_humidity(uint8_t hum, uint8_t x, uint8_t y)
 {
-	lcd->setCursor(x, y);
-	lcd->sendString(utils::stringFormat("%u", hum) + "%");
+	StringStream ss;
+
+	ss << hum << "%";
+
+	lcd.set_cursor(x, y);
+	lcd.send_string(ss.data());
 }
 
 
-void LcdLogic::drawPressure(uint16_t press, uint8_t x, uint8_t y)
+void LcdLogic::draw_pressure(uint16_t press, uint8_t x, uint8_t y)
 {
-	lcd->setCursor(x, y);
-	lcd->sendString(utils::stringFormat("%4u mm", press));
+	StringStream ss;
+
+	ss << IntWidthAction(4, ' ') << JustifyAction(Stream::Justify::Right);
+	ss << press << " mm";
+
+	lcd.set_cursor(x, y);
+	lcd.send_string(ss.data());
 }
 
-void LcdLogic::drawRainPercent(int8_t percent, uint8_t x, uint8_t y)
+void LcdLogic::draw_rain_percent(int8_t percent, uint8_t x, uint8_t y)
 {
-	lcd->setCursor(x, y);
-	lcd->sendString(utils::stringFormat("rain %3i%%", percent));
+	StringStream ss;
+	ss << IntWidthAction(3, ' ') << JustifyAction(Stream::Justify::Right);
+	ss << percent << "%      ";
+
+	lcd.set_cursor(x, y);
+	lcd.send_string(ss.data());
+	//lcd->sendString(utils::stringFormat("rain %3i%%", percent));
 }
 
-void LcdLogic::mainShow()
+void LcdLogic::main_show()
 {
-	if (mTimer->elapsed()) {
-		loadClock();
-		const DateTime& dateTime = ClockLogic::instance()->getDateTime();
+	load_clock();
+	const datetime_t& datetime = DataStore::datetime;
 
-		drawClock(dateTime.hour(), dateTime.minute(), 0, 0);
-		drawDate(dateTime, 15, 0);
-		drawCO2(SensorLogic::instance()->getCO2(), 12, 2);
-		drawTemp(SensorLogic::instance()->getTemp(), 0, 2);
-		drawHumidity(SensorLogic::instance()->getHumidity(), 8, 2);
-		drawPressure(SensorLogic::instance()->getPressure(), 0, 3);
-		drawRainPercent(SensorLogic::instance()->getRainPercent(), 10, 3);
-		mTimer->start();
-	}
+	draw_clock(datetime.hour(), datetime.minute(), 0, 0);
+	draw_date(datetime, 15, 0);
+	draw_co2(DataStore::co2, 12, 2);
+	draw_temp(DataStore::temperature, 0, 2);
+	draw_humidity(DataStore::humidity, 8, 2);
+	draw_pressure(DataStore::pressure, 0, 3);
+	draw_rain_percent(0, 10, 3);
 }
 
-void drawCo2DayChart()
+void LcdLogic::setup()
 {
-	
+	lcd.init();
 }
-void drawCo2HourChart();
 
-void LcdLogic::processLcd()
+void LcdLogic::func()
 {
-
-		LogicStateType logicState = LogicState::instance()->currentState();
-
-		switch (logicState) {
-			default:
-			case LogicStateType::MainInfo:
-				mainShow();
-				break;
-			case LogicStateType::Co2DayChart:
-				lcd->clear();
-				lcd->setCursor(0, 0);
-				lcd->sendString("Hello day chart");
-				break;
-		}
-
+	main_show();
 }

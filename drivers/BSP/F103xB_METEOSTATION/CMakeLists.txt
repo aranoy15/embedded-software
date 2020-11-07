@@ -3,6 +3,7 @@ target_sources(${TARGET} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/tick.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gpio.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/iwdg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/flash.cpp
     
 )
 

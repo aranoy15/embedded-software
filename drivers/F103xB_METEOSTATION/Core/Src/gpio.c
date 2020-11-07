@@ -52,7 +52,10 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIO_STATUS_GPIO_Port, GPIO_STATUS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, GPIIO_BLUE_Pin|GPIO_GREEN_Pin|GPIO_RED_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIO_BLUE_GPIO_Port, GPIO_BLUE_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_GREEN_Pin|GPIO_RED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = GPIO_STATUS_Pin;
@@ -62,11 +65,17 @@ void MX_GPIO_Init(void)
   HAL_GPIO_Init(GPIO_STATUS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = GPIIO_BLUE_Pin|GPIO_GREEN_Pin|GPIO_RED_Pin;
+  GPIO_InitStruct.Pin = GPIO_BLUE_Pin|GPIO_GREEN_Pin|GPIO_RED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = GPIO_BUTTON_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIO_BUTTON_GPIO_Port, &GPIO_InitStruct);
 
 }
 
