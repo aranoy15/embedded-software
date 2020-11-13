@@ -269,7 +269,7 @@ void LcdLogic::main_show()
 	draw_temp(DataStore::temperature, 0, 2);
 	draw_humidity(DataStore::humidity, 8, 2);
 	draw_pressure(DataStore::pressure, 0, 3);
-	draw_rain_percent(0, 10, 3);
+	draw_rain_percent(DataStore::disp_rain, 10, 3);
 }
 
 void LcdLogic::setup()

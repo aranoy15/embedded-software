@@ -21,11 +21,6 @@ void bsp::gpio::status::toggle()
     HAL_GPIO_TogglePin(GPIO_STATUS_GPIO_Port, GPIO_STATUS_Pin);
 }
 
-bool bsp::gpio::input_button::state()
-{
-    return HAL_GPIO_ReadPin(GPIO_BUTTON_GPIO_Port, GPIO_BUTTON_Pin) == GPIO_PIN_SET;
-}
-
 void bsp::gpio::red::on()
 {
     HAL_GPIO_WritePin(GPIO_RED_GPIO_Port, GPIO_RED_Pin, GPIO_PIN_SET);

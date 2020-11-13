@@ -16,7 +16,8 @@ struct DataStore final
     inline static std::uint16_t co2 = 0;
     inline static float temperature;
     inline static float humidity = 0;
-    inline static float pressure;
+    inline static float pressure = 0;
+    inline static int disp_rain = 0;
     inline static lib::datetime::DateTime datetime;
 
     /*
@@ -32,6 +33,9 @@ struct DataStore final
     static void update() noexcept;
 
 private:
+    inline static lib::RotateBuffer<uint32_t> _pressure;
+    inline static const lib::time::Time _pressure_time = lib::time::Time::mins(10);
+    inline static lib::time::Timer _pressure_timer;
     /*
     static constexpr std::size_t temp_hour_count = 15;
     static constexpr std::size_t pressure_hour_count = 15;

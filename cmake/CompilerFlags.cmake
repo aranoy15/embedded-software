@@ -29,7 +29,7 @@ endif()
 
 SET(SPECS "-specs=nosys.specs -specs=nano.specs") 
 SET(SECTIONS "-ffunction-sections -fdata-sections")
-SET(SHARE_SETTINGS "-fno-builtin -fomit-frame-pointer -fno-unroll-loops -ffast-math -ftree-vectorize")
+SET(SHARE_SETTINGS "-fno-builtin -fomit-frame-pointer -fno-unroll-loops -ffast-math -ftree-vectorize -flto")
 
 SET(CMAKE_C_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Wall -std=gnu99")
 SET(CMAKE_CXX_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Weffc++ -std=c++2a -fno-exceptions")

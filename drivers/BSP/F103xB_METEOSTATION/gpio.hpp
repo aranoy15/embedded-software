@@ -12,11 +12,6 @@ void off();
 void toggle();
 }
 
-namespace input_button
-{
-bool state();
-}
-
 namespace red
 {
 void on();

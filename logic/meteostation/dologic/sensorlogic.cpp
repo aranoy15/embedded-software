@@ -65,8 +65,6 @@ void SensorLogic::func()
     Log() << pressure << "bar ";
     Log() << humidity << "%" << lib::stream::Endl();
 
-    Log() << "Input state: " << bsp::gpio::input_button::state();
-
     std::string data;
     lib::stream::Stream::ResultRead result;
 

@@ -3,8 +3,19 @@
 
 using namespace applogic;
 
+namespace 
+{
+float map(float x, float in_min, float in_max, float out_min, float out_max)
+{
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+}
+
 void DataStore::init() noexcept
 {
+    _pressure.alloc(6);
+    _pressure_timer.start(_pressure_time);
+
     /*
     temp_hour.alloc(temp_hour_count);
     temp_day.alloc(temp_day_count);
@@ -52,10 +63,48 @@ void DataStore::init() noexcept
     _hour_timer.start(_hour_time);
     _day_timer.start(_day_time);
     */
+
 }
 
 void DataStore::update() noexcept
 {
+    if (not _pressure.is_full()) {
+        while (not _pressure.is_full()) 
+            _pressure.put(pressure);
+    }
+
+    if (_pressure_timer.elapsed()) {
+        _pressure.put(pressure);
+
+        int ind = 0;
+
+        uint32_t sum_x = 0;
+        uint32_t sum_y = 0;
+        uint32_t sum_x2 = 0;
+        uint32_t sum_xy = 0;
+
+        for (auto& item : _pressure.vector()) {
+            sum_x += ind;
+            sum_y += item;
+            sum_x2 += ind * ind;
+            sum_xy += ind * item;
+
+            ind++;
+        }
+
+        float result = 0;
+
+        result = (uint32_t)6 * sum_xy;             // расчёт коэффициента наклона приямой
+        result -= (uint32_t)sum_x * sum_y;
+        result /= (6.0f * sum_x2 - (float)sum_x * sum_x);
+
+        int delta = result * 6;
+
+        disp_rain = map(delta, -250, 250, 100, -100);
+
+        _pressure_timer.start();
+    }
+
     /*
     static bool need_save = false;
 
