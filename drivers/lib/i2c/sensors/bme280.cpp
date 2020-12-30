@@ -184,7 +184,7 @@ float Bme280::read_humidity(void) {
 
     int32_t adc_H = read16(BME280_REGISTER_HUMIDDATA);
     if (adc_H == 0x8000) // value in case humidity measurement was disabled
-        return -99.0f;
+        return error_value;
         
     int32_t v_x1_u32r;
 
@@ -211,7 +211,7 @@ float Bme280::read_temperature()
 
     int32_t adc_T = read24(BME280_REGISTER_TEMPDATA);
 	if (adc_T == 0x800000) // value in case temp measurement was disabled
-        return -99.0f;
+        return error_value;
     adc_T >>= 4;
 
     var1 = ((((adc_T>>3) - ((int32_t)_data.dig_T1 <<1))) *

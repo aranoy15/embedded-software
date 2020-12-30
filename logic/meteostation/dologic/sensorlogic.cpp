@@ -54,10 +54,14 @@ void SensorLogic::func()
     float humidity = bme.read_humidity();
 
     DataStore::co2 = co2;
-    DataStore::temperature = temp;
     DataStore::pressure = pressure;
-    DataStore::humidity = humidity;
     DataStore::datetime = current;
+
+    if (humidity != bme_t::error_value)
+        DataStore::humidity = humidity;
+
+    if (temp != bme_t::error_value)
+        DataStore::temperature = temp;
 
     Log() << "[" << current << "] ";
     Log() << co2 << "ppm ";

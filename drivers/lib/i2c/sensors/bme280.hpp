@@ -12,6 +12,8 @@ class Bme280
 public:
     using i2c_t = lib::i2c::I2C<bsp::i2c::bme280_port>;
 
+    inline static const float error_value = -99.0f;
+
 private:
     enum
     {
