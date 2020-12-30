@@ -29,8 +29,8 @@ public:
 class Log : public stream::Stream
 {
 private:
-    inline static volatile uint32_t _log_mode_mask = 0;
-    inline static volatile uint32_t _request_mask = 0;
+    inline static uint32_t _log_mode_mask = 0;
+    inline static uint32_t _request_mask = 0;
 
 private:
     uint32_t _log_mode;

@@ -204,8 +204,8 @@ void LcdLogic::draw_date(const datetime_t& datetime, uint8_t x, uint8_t y)
 void LcdLogic::draw_co2(uint16_t co2, uint8_t x, uint8_t y)
 {
 	StringStream ss;
-	ss << IntWidthAction(4, ' ') << JustifyAction(Stream::Justify::Right);
-	ss << co2 << " ppm";
+	ss << IntWidthAction(4, ' ') << JustifyAction(Stream::Justify::Left);
+	ss << "C: " << co2 << "ppm";
 
 	lcd.set_cursor(x, y);
 	lcd.send_string(ss.data());
@@ -217,19 +217,24 @@ void LcdLogic::draw_temp(float temp, uint8_t x, uint8_t y)
 	DoubleFormatAction df(temp);
 	df.set_digits_after_dot(1);
 
-	ss << df;
+	ss << "T: " << df;
 
 	lcd.set_cursor(x, y);
 	lcd.send_string(ss.data());
 	lcd.send_char(0xDF);
 	lcd.send_char('C');
+	lcd.send_char(' ');
 }
 
 void LcdLogic::draw_humidity(uint8_t hum, uint8_t x, uint8_t y)
 {
 	StringStream ss;
 
-	ss << hum << "%";
+	ss << "H: " << hum << "%";
+
+	if (ss.data().size() < 9)
+		for (int i = 0; i < (10 - ss.data().size()); i++)
+			ss << " ";
 
 	lcd.set_cursor(x, y);
 	lcd.send_string(ss.data());
@@ -240,8 +245,8 @@ void LcdLogic::draw_pressure(uint16_t press, uint8_t x, uint8_t y)
 {
 	StringStream ss;
 
-	ss << IntWidthAction(4, ' ') << JustifyAction(Stream::Justify::Right);
-	ss << press << " mm";
+	ss << IntWidthAction(3, ' ') << JustifyAction(Stream::Justify::Left);
+	ss << "P: " << press << " mm";
 
 	lcd.set_cursor(x, y);
 	lcd.send_string(ss.data());
@@ -265,11 +270,11 @@ void LcdLogic::main_show()
 
 	draw_clock(datetime.hour(), datetime.minute(), 0, 0);
 	draw_date(datetime, 15, 0);
-	draw_co2(DataStore::co2, 12, 2);
 	draw_temp(DataStore::temperature, 0, 2);
-	draw_humidity(DataStore::humidity, 8, 2);
-	draw_pressure(DataStore::pressure, 0, 3);
-	draw_rain_percent(DataStore::disp_rain, 10, 3);
+	draw_humidity(DataStore::humidity, 11, 2);
+	draw_co2(DataStore::co2, 0, 3);
+	draw_pressure(DataStore::pressure, 11, 3);
+	//draw_rain_percent(DataStore::disp_rain, 10, 3);
 }
 
 void LcdLogic::setup()
