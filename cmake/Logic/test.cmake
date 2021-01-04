@@ -1,7 +1,7 @@
 
 set(USE_STREAM 0)
-set(USE_UART 1)
-set(USE_LOG 1)
+set(USE_UART 0)
+set(USE_LOG 0)
 set(USE_MHZ19 0)
 set(USE_DATETIME 0)
 set(USE_I2C 0)
