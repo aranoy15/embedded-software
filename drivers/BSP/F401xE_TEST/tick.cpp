@@ -1,6 +1,6 @@
 #include <drivers/bsp/F401xE_TEST/tick.hpp>
-#include <drivers/F401xE_TEST/Core/Inc/main.h>
-#include <drivers/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h>
+#include <drivers/csp/F401xE_TEST/Core/Inc/main.h>
+#include <drivers/csp/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h>
 
 std::uint32_t bsp::tick::current()
 {

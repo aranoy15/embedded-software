@@ -1,8 +1,8 @@
 #include <drivers/bsp/F401xE_TEST/os.hpp>
-#include <drivers/F401xE_TEST/Core/Inc/main.h>
+#include <drivers/csp/F401xE_TEST/Core/Inc/main.h>
 
-#include <drivers/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h>
-#include <drivers/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/include/task.h>
+#include <drivers/csp/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h>
+#include <drivers/csp/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/include/task.h>
 
 void bsp::os::init()
 {

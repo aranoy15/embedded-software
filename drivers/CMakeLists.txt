@@ -1,4 +1,4 @@
-add_subdirectory(${BOARD})
+add_subdirectory(csp/${BOARD})
 add_subdirectory(bsp)
 
 target_include_directories(${TARGET} PUBLIC
