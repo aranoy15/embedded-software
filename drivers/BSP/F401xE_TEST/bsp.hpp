@@ -5,6 +5,7 @@
 #include <drivers/bsp/F401xE_TEST/tick.hpp>
 #include <drivers/bsp/F401xE_TEST/gpio.hpp>
 #include <drivers/bsp/F401xE_TEST/os.hpp>
+#include <drivers/bsp/F401xE_TEST/usart.hpp>
 
 namespace bsp
 {

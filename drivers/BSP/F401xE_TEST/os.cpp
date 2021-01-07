@@ -14,7 +14,13 @@ void bsp::os::start()
     osKernelStart();
 }
 
-auto bsp::os::reg(func_t func, void* args, std::string_view name, std::size_t stack, Priority prio) -> handle_t
+bool bsp::os::is_running()
+{
+	return osKernelGetState() == osKernelRunning;
+}
+
+auto bsp::os::thread(func_t func, void* args, std::string_view name,
+                     std::size_t stack, Priority prio) -> thread_id_t
 {
     using attr_t = osThreadAttr_t;
 
@@ -26,6 +32,38 @@ auto bsp::os::reg(func_t func, void* args, std::string_view name, std::size_t st
 
     return osThreadNew(func, args, &attributes);
 }
+
+void bsp::os::remove_thread(thread_id_t)
+{
+	osThreadExit();
+}
+
+namespace bsp::os::mutex
+{
+auto create(std::string_view name) -> mutex_id_t
+{
+	using attr_t = osMutexAttr_t;
+
+	attr_t attributes = {0};
+
+	return osMutexNew(&attributes);
+}
+
+bool take(mutex_id_t handle, std::uint32_t timeout)
+{
+	return osMutexAcquire(handle, timeout) == osOK;
+}
+
+void give(mutex_id_t handle)
+{
+	osMutexRelease(handle);
+}
+
+void remove(mutex_id_t handle)
+{
+	osMutexDelete(handle);
+}
+}  // namespace bsp::os::mutex
 
 extern "C" void* malloc(size_t size)
 {

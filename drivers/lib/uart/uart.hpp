@@ -6,6 +6,11 @@
 #include <vector>
 #include <drivers/lib/circular_buffer.h>
 
+#if (USE_OS)
+#include <drivers/lib/lock.hpp>
+#include <drivers/lib/os/mutex.hpp>
+#endif
+
 namespace lib::uart
 {
 using port_t = bsp::usart::port;
@@ -38,6 +43,11 @@ private:
     inline static uint8_t _temp[temp_size];
     inline static bool _is_irq_mode = false;
     inline static circular_buffer<uint8_t, buffer_size> _data;
+
+#if (USE_OS)
+    inline static lib::os::Mutex _send_mutex;
+    inline static lib::os::Mutex _receive_mutex;
+#endif
 };
 
 template<port_t port>
@@ -53,18 +63,30 @@ void Uart<port>::init(bool need_irq) noexcept
 template<port_t port>
 void Uart<port>::send(uint8_t data[], std::size_t size) noexcept
 {
+#if (USE_OS)
+    lib::Lock lock(_send_mutex);
+#endif
+
     bsp::usart::send(port, data, size, _timeout);
 }
 
 template<port_t port>
 void Uart<port>::send(const std::string& data) noexcept
 {
+#if (USE_OS)
+    lib::Lock lock(_send_mutex);
+#endif
+
     bsp::usart::send(port, reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), _timeout);
 }
 
 template<port_t port>
 bool Uart<port>::read(std::string& data) noexcept
 {
+#if (USE_OS)
+    lib::Lock lock(_receive_mutex);
+#endif
+
     if (_data.empty()) return false;
 
     while (not _data.empty()) {
@@ -81,7 +103,10 @@ bool Uart<port>::read(std::string& data) noexcept
 template<port_t port>
 bool Uart<port>::read(uint8_t data[], std::size_t size) noexcept
 {
-    [[maybe_unused]] std::size_t s = _data.size();
+#if (USE_OS)
+    lib::Lock lock(_receive_mutex);
+#endif
+
     if (_data.size() < size) return false;
 
     for (std::size_t i = 0; i < size; ++i) {
@@ -94,6 +119,10 @@ bool Uart<port>::read(uint8_t data[], std::size_t size) noexcept
 template<port_t port>
 bool Uart<port>::read(std::vector<uint8_t>& data) noexcept
 {
+#if (USE_OS)
+    lib::Lock lock(_receive_mutex);
+#endif
+
     std::size_t size = data.capacity();
 	if (_data.size() < size or data.capacity() == 0) return false;
 
@@ -107,6 +136,10 @@ bool Uart<port>::read(std::vector<uint8_t>& data) noexcept
 template<port_t port>
 bool Uart<port>::read(uint8_t data[], std::size_t size, std::uint32_t timeout) noexcept
 {
+#if (USE_OS)
+    lib::Lock lock(_receive_mutex);
+#endif
+
     return bsp::usart::receive(port, data, size, timeout);
 }
 

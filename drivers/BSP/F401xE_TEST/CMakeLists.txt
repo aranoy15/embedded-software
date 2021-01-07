@@ -6,9 +6,9 @@ target_sources(${TARGET} PRIVATE
 )
 
 if (USE_UART)
-    #target_sources(${TARGET} PRIVATE
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/usart.cpp
-    #)
+    target_sources(${TARGET} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/usart.cpp
+    )
 endif()
 
 target_include_directories(${TARGET} PUBLIC

@@ -9,6 +9,8 @@ set(USE_BME280 1)
 set(USE_TASK 1)
 set(USE_I2C_LCD 1)
 
+set(USE_OS 0)
+
 if (USE_LOG)
     set(USE_UART 1)
     set(USE_STREAM 1)

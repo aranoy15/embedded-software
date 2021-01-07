@@ -19,3 +19,7 @@ endif()
 if (USE_TASK)
     add_subdirectory(task)
 endif()
+
+if (USE_OS)
+    add_subdirectory(os)
+endif()
