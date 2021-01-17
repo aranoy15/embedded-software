@@ -49,51 +49,43 @@ void bsp::usart::init(port_t port)
     }
 }
 
-void bsp::usart::send(port_t port, const uint8_t data[], std::size_t size, std::uint32_t timeout)
+void bsp::usart::send(port_t port, const uint8_t data[], std::size_t size)
 {
     usart_handle_t* huart = get_huart(port);
 
     if (huart == nullptr) return;
 
-    HAL_UART_Transmit(huart, const_cast<uint8_t*>(data), size, timeout);
+    HAL_UART_Transmit(huart, const_cast<uint8_t*>(data), size, size * 10);
 }
 
-void bsp::usart::send_irq(port_t port, const uint8_t data[], std::size_t size)
-{
-    usart_handle_t* huart = get_huart(port);
-
-    if (huart == nullptr) return;
-
-    HAL_UART_Transmit_IT(huart, const_cast<uint8_t*>(data), size);
-}
-
-bool bsp::usart::receive(port_t port, uint8_t data[], std::size_t size, std::uint32_t timeout)
+bool bsp::usart::start_receive(port_t port, uint8_t data[], std::size_t size)
 {
     usart_handle_t* huart = get_huart(port);
 
     if (huart == nullptr) return false;
 
-    auto result = HAL_UART_Receive(huart, data, size, timeout);
+    auto result = HAL_UART_Receive_IT(huart, data, size);
 
     return result == HAL_OK;
 }
 
-void bsp::usart::receive_irq(port_t port, uint8_t data[], std::size_t size)
+bool bsp::usart::stop_receive(port_t port) noexcept
 {
     usart_handle_t* huart = get_huart(port);
 
-    if (huart == nullptr) return;
+    if (huart == nullptr) return false;
 
-    HAL_UART_Receive_IT(huart, data, size);
+    auto result = HAL_UART_AbortReceive_IT(huart);
+
+    return result == HAL_OK;
 }
 
-void bsp::usart::stop_receive_irq(port_t port) noexcept
+bool bsp::usart::restart_receive(port_t port, uint8_t data[], std::size_t size)
 {
-    usart_handle_t* huart = get_huart(port);
+    bool res_stop = stop_receive(port);
+    bool res_start = start_receive(port, data, size);
 
-    if (huart == nullptr) return;
-
-    HAL_UART_AbortReceive_IT(huart);
+    return res_stop and res_start;
 }
 
 std::size_t bsp::usart::count_receive(port_t port)

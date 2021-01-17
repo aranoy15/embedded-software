@@ -1,5 +1,5 @@
+#include <usart.h>
 #include <drivers/bsp/F401xE_TEST/usart.hpp>
-#include <drivers/csp/F401xE_TEST/Core/Inc/usart.h>
 #include <drivers/lib/uart/uart.hpp>
 #include <drivers/csp/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h>
 

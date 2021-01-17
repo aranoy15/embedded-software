@@ -47,7 +47,7 @@ void Mhz19::command(uint8_t command, uint8_t b3, uint8_t b4, uint8_t b5, uint8_t
 
 bool Mhz19::read_response()
 {
-    bool result = uart_t::read(_buffer, _buffer_size, 200);
+    bool result = uart_t::read(_buffer, _buffer_size);
 
     if (result)
         result = (_buffer[8] == calc_crc());

@@ -13,13 +13,12 @@ constexpr port_t mhz_port = port_t::_2;
 
 void init(port_t port);
 
-void send(port_t port, const uint8_t data[], std::size_t size, std::uint32_t timeout);
-void send_irq(port_t port, const uint8_t data[], std::size_t size);
+void send(port_t port, const uint8_t data[], std::size_t size);
 
-bool receive(port_t port, uint8_t data[], std::size_t size, std::uint32_t timeout);
-void receive_irq(port_t port, uint8_t data[], std::size_t size);
+bool start_receive(port_t port, uint8_t data[], std::size_t size) noexcept;
+bool stop_receive(port_t port) noexcept;
+bool restart_receive(port_t port, uint8_t data[], std::size_t size) noexcept;
 
-void stop_receive_irq(port_t port) noexcept;
 
 std::size_t count_receive(port_t port);
 }

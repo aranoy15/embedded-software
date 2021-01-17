@@ -22,7 +22,7 @@ SensorLogic::~SensorLogic() {}
 void SensorLogic::setup()
 {
     lib::i2c::I2C<bsp::i2c::bme280_port>::init();
-    lib::uart::Uart<bsp::usart::mhz_port>::init(false);
+    lib::uart::Uart<bsp::usart::mhz_port>::init();
 
     bool result_init = bme.init();
 
