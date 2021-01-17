@@ -6,8 +6,15 @@
 
 namespace bsp::os
 {
+void init();
+void start();
+bool is_running();
+}
+
+namespace bsp::os::thread
+{
 using func_t = osThreadFunc_t;
-using thread_id_t = osThreadId_t;
+using id_t = osThreadId_t;
 
 enum class Priority
 {
@@ -20,12 +27,9 @@ enum class Priority
 
 using priority_t = Priority;
 
-void init();
-void start();
-bool is_running();
-thread_id_t thread(func_t func, void* args, std::string_view name,
-                   std::size_t stack, Priority prio);
-void remove_thread(thread_id_t id);
+id_t create(func_t func, void* args, std::string_view name, std::size_t stack,
+            Priority prio);
+void remove(id_t id);
 }  // namespace bsp::os
 
 namespace bsp::os::mutex

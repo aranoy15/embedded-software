@@ -19,21 +19,21 @@ bool bsp::os::is_running()
 	return osKernelGetState() == osKernelRunning;
 }
 
-auto bsp::os::thread(func_t func, void* args, std::string_view name,
-                     std::size_t stack, Priority prio) -> thread_id_t
+auto bsp::os::thread::create(func_t func, void* args, std::string_view name,
+                             std::size_t stack, Priority prio) -> id_t
 {
-    using attr_t = osThreadAttr_t;
+	using attr_t = osThreadAttr_t;
 
-    attr_t attributes = {0};
+	attr_t attributes = {0};
 
-    attributes.name = name.data();
-    attributes.stack_size = stack * sizeof(std::size_t);
-    attributes.priority = static_cast<osPriority_t>(prio);
+	attributes.name = name.data();
+	attributes.stack_size = stack * sizeof(std::size_t);
+	attributes.priority = static_cast<osPriority_t>(prio);
 
-    return osThreadNew(func, args, &attributes);
+	return osThreadNew(func, args, &attributes);
 }
 
-void bsp::os::remove_thread(thread_id_t)
+void bsp::os::thread::remove(id_t)
 {
 	osThreadExit();
 }

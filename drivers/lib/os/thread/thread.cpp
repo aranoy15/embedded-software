@@ -7,27 +7,27 @@ void Thread::func_static(void* argument)
 	Thread *this_thread = (Thread*)(argument);
 	this_thread->func();
 
-	bsp::os::remove_thread(this_thread->_id);
+	bsp::os::thread::remove(this_thread->_id);
 }
 
-Thread::Thread(bsp::os::priority_t prio, std::size_t stack)
+Thread::Thread(bsp::os::thread::priority_t prio, std::size_t stack)
     : _prio(prio), _stack(stack), _id()
 {
 }
 
 bool Thread::start()
 {
-	_id = bsp::os::thread(func_static, this, name(), _stack, _prio);
+	_id = bsp::os::thread::create(func_static, this, name(), _stack, _prio);
 	if (not _id) return false;
 
 	return true;
 }
 
 
-bool Thread::start(bsp::os::func_t f, std::string_view name, std::size_t stack,
-                   bsp::os::priority_t prio)
+bool Thread::start(bsp::os::thread::func_t f, std::string_view name,
+                   std::size_t stack, bsp::os::thread::priority_t prio)
 {
-	bsp::os::thread_id_t id = bsp::os::thread(f, nullptr, name, stack, prio);
+	bsp::os::thread::id_t id = bsp::os::thread::create(f, nullptr, name, stack, prio);
 
 	return id;
 }

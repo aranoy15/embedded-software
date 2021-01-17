@@ -3,9 +3,11 @@
 
 #include <cinttypes>
 
+#define loop while(true)
+
 namespace lib::utils
 {
-uint8_t convert_to_date(const char* p)
+inline uint8_t convert_to_date(const char* p) noexcept
 {
 	uint8_t v = 0;
 	if ('0' <= *p && *p <= '9') v = *p - '0';

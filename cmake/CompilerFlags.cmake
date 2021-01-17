@@ -22,20 +22,22 @@ SET(CMAKE_SYSTEM_NAME Generic)
 SET(CMAKE_SYSTEM_PROCESSOR arm)
 
 if (DEBUG)
-    SET(OPT_FLAGS "-g")
+    SET(OPT_FLAGS "-g -O0")
 else()
     SET(OPT_FLAGS "-Os")
 endif()
 
+add_definitions(-DIS_DEBUG=${DEBUG})
+
 SET(SPECS "-specs=nosys.specs -specs=nano.specs") 
 SET(SECTIONS "-ffunction-sections -fdata-sections")
-SET(SHARE_SETTINGS "-fno-builtin -fomit-frame-pointer -fno-unroll-loops -ffast-math -ftree-vectorize -flto")
+SET(SHARE_SETTINGS "-fno-builtin -fomit-frame-pointer -fno-unroll-loops -ffast-math -ftree-vectorize -flto ")
 
 SET(CMAKE_C_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Wall -std=gnu99")
 SET(CMAKE_CXX_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Weffc++ -std=c++2a -fno-exceptions")
 SET(CMAKE_ASM_FLAGS "${PLATFORM_FLAGS} ${OPT_FLAGS} -x assembler-with-cpp")
 
-SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections ${PLATFORM_FLAGS} ${SPECS} -lc -lm -flto -u _printf_float -T ${CMAKE_CURRENT_SOURCE_DIR}/chip/${CHIP}/${APP_START_ADDR}/link.ld")
+SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections  ${PLATFORM_FLAGS} ${SPECS} -lc -lm -flto -u _printf_float -T ${CMAKE_CURRENT_SOURCE_DIR}/chip/${CHIP}/${APP_START_ADDR}/link.ld")
 SET(CMAKE_MODULE_LINKER_FLAGS "${PLATFORM_FLAGS}")
 SET(CMAKE_SHARED_LINKER_FLAGS "${PLATFORM_FLAGS}")
 

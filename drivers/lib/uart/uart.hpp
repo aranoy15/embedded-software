@@ -23,25 +23,23 @@ struct Uart
 {
     Uart() = delete;
 
-    static void init(bool need_irq = true) noexcept;
+    static void init() noexcept;
 
     static void send(uint8_t data[], std::size_t size) noexcept;
     static void send(const std::string& data) noexcept;
 
     static void receive_complete() noexcept;
+    static void transmit_complete() noexcept;
     static void idle() noexcept;
 
     static bool read(std::string& data) noexcept;
     static bool read(std::vector<uint8_t>& data) noexcept;
     static bool read(uint8_t data[], std::size_t size) noexcept;
-    static bool read(uint8_t data[], std::size_t size, std::uint32_t timeout) noexcept;
 
     static void clear() { _data.reset(); }
 
 private:
-    static const uint32_t _timeout = 1000;
     inline static uint8_t _temp[temp_size];
-    inline static bool _is_irq_mode = false;
     inline static circular_buffer<uint8_t, buffer_size> _data;
 
 #if (USE_OS)
@@ -51,13 +49,11 @@ private:
 };
 
 template<port_t port>
-void Uart<port>::init(bool need_irq) noexcept
+void Uart<port>::init() noexcept
 {
     bsp::usart::init(port);
 
-    _is_irq_mode = need_irq;
-
-    if (_is_irq_mode) bsp::usart::receive_irq(port, _temp, temp_size);
+    bsp::usart::start_receive(port, _temp, temp_size);
 }
 
 template<port_t port>
@@ -67,7 +63,7 @@ void Uart<port>::send(uint8_t data[], std::size_t size) noexcept
     lib::Lock lock(_send_mutex);
 #endif
 
-    bsp::usart::send(port, data, size, _timeout);
+    bsp::usart::send(port, data, size);
 }
 
 template<port_t port>
@@ -77,7 +73,7 @@ void Uart<port>::send(const std::string& data) noexcept
     lib::Lock lock(_send_mutex);
 #endif
 
-    bsp::usart::send(port, reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), _timeout);
+    bsp::usart::send(port, reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size());
 }
 
 template<port_t port>
@@ -134,32 +130,24 @@ bool Uart<port>::read(std::vector<uint8_t>& data) noexcept
 }
 
 template<port_t port>
-bool Uart<port>::read(uint8_t data[], std::size_t size, std::uint32_t timeout) noexcept
+void Uart<port>::receive_complete() noexcept
 {
-#if (USE_OS)
-    lib::Lock lock(_receive_mutex);
-#endif
-
-    return bsp::usart::receive(port, data, size, timeout);
+    bsp::usart::restart_receive(port, _temp, temp_size);
 }
 
 template<port_t port>
-void Uart<port>::receive_complete() noexcept
+void Uart<port>::transmit_complete() noexcept
 {
-    if (_is_irq_mode) bsp::usart::receive_irq(port, _temp, temp_size);
 }
 
 template<port_t port>
 void Uart<port>::idle() noexcept
 {
-    if (_is_irq_mode) {
-        for (std::size_t i = 0; i < bsp::usart::count_receive(port); i++) {
-            _data.put(_temp[i]);
-        }
-
-        bsp::usart::stop_receive_irq(port);
-        bsp::usart::receive_irq(port, _temp, temp_size);
+    for (std::size_t i = 0; i < bsp::usart::count_receive(port); i++) {
+        _data.put(_temp[i]);
     }
+
+    bsp::usart::restart_receive(port, _temp, temp_size);
 }
 
 }
