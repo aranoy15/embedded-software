@@ -1,5 +1,9 @@
 add_subdirectory(sensors)
 
 if (USE_LOG)
-        add_subdirectory(log)
+    add_subdirectory(log)
+endif()
+
+if (USE_GPRS)
+    add_subdirectory(gprs)    
 endif()

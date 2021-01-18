@@ -19,7 +19,7 @@ usart_handle_t* get_huart(bsp::usart::port_t port)
         case port_t::_1:
             return &huart1;
         case port_t::_2:
-            return &huart2;
+            return &huart6;
         default:
             return nullptr;
     }
@@ -70,7 +70,7 @@ void bsp::usart::init(port_t port)
             transmit_events_id_1 = osEventFlagsNew(NULL);
         }
     } else if (port == port_t::_2) {
-        MX_USART2_UART_Init();
+        MX_USART6_UART_Init();
 
         if (transmit_events_id_2 == NULL) {
             transmit_events_id_2 = osEventFlagsNew(NULL);
@@ -152,7 +152,7 @@ extern "C" {
 
         if (huart->Instance == USART1) {
             port = bsp::usart::port_t::_1;
-        } else if (huart->Instance == USART2) {
+        } else if (huart->Instance == USART6) {
             port = bsp::usart::port_t::_2;
         }
 
@@ -166,9 +166,9 @@ extern "C" {
         if (huart->Instance == USART1) {
             port = bsp::usart::port_t::_1;
             osEventFlagsSet(transmit_events_id_1, 1);
-        } else if (huart->Instance == USART2) {
+        } else if (huart->Instance == USART6) {
             port = bsp::usart::port_t::_2;
-            osEventFlagsSet(transmit_events_id_1, 1);
+            osEventFlagsSet(transmit_events_id_2, 1);
         }
 
         transmit_complete_callback(port);
@@ -180,7 +180,7 @@ extern "C" {
 
         if (huart->Instance == USART1) {
             port = bsp::usart::port_t::_1;
-        } else if (huart->Instance == USART2) {
+        } else if (huart->Instance == USART6) {
             port = bsp::usart::port_t::_2;
         }
 

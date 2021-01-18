@@ -9,6 +9,7 @@ namespace bsp::usart
 using port_t = bsp::usart::port;
 
 constexpr port_t log_port = port_t::_1;
+constexpr port_t sim900_p = port_t::_2;
 
 void init(port_t port);
 void send(port_t port, const uint8_t data[], std::size_t size);

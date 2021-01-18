@@ -27,6 +27,7 @@ struct Uart
 
     static void send(uint8_t data[], std::size_t size) noexcept;
     static void send(const std::string& data) noexcept;
+    static void send(std::string_view data) noexcept;
 
     static void receive_complete() noexcept;
     static void transmit_complete() noexcept;
@@ -77,6 +78,16 @@ void Uart<port>::send(const std::string& data) noexcept
 }
 
 template<port_t port>
+void Uart<port>::send(std::string_view data) noexcept
+{
+#if (USE_OS)
+    lib::Lock lock(_send_mutex);
+#endif
+
+    bsp::usart::send(port, reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size());
+}
+
+template<port_t port>
 bool Uart<port>::read(std::string& data) noexcept
 {
 #if (USE_OS)
@@ -88,12 +99,12 @@ bool Uart<port>::read(std::string& data) noexcept
     while (not _data.empty()) {
         uint8_t b = _data.get();
 
-        if (b == '\n') break;
+        if (b == '\n') return true;
 
-        data.push_back(b);
+        if (b != '\r') data.push_back(b);
     }
 
-    return true;
+    return false;
 }
 
 template<port_t port>

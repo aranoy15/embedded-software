@@ -2,7 +2,6 @@
 #include <drivers/lib/os/thread/thread_pool.hpp>
 #include <drivers/lib/stream/stream.hpp>
 #include <drivers/lib/time/time.hpp>
-#include <drivers/lib/uart/log/log.hpp>
 #include <drivers/lib/utils.hpp>
 
 namespace logic::thread
@@ -31,7 +30,6 @@ __attribute__((constructor)) void reg()
 
 void logic::thread::BlinkThread::func()
 {
-	using namespace lib::uart::log;
 	using namespace lib::stream;
 
 	using time_t = lib::time::Time;
@@ -39,7 +37,6 @@ void logic::thread::BlinkThread::func()
 	loop
 	{
 		bsp::gpio::status::toggle();
-		//Log() << "Status gpio toggle" << Endl();
 		time_t::sleep(time_t(500));
 	}
 }
