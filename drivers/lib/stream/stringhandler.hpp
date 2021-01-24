@@ -2,8 +2,8 @@
 #define DRIVERS_LIB_STREAM_STRINGHANDLER
 
 #include <string>
-#include <drivers/lib/stream/handler.hpp>
-#include <drivers/lib/stream/stream.hpp>
+#include <lib/stream/handler.hpp>
+#include <lib/stream/stream.hpp>
 
 namespace lib::stream
 {

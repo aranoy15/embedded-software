@@ -1,4 +1,4 @@
-#include <drivers/bsp/F401xE_TEST/wdt.hpp>
+#include <wdt.hpp>
 #include <iwdg.h>
 
 void bsp::wdt::init()

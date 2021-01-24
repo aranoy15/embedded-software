@@ -1,8 +1,8 @@
-#include <drivers/lib/os/thread/thread.hpp>
-#include <drivers/lib/os/thread/thread_pool.hpp>
-#include <drivers/lib/stream/stream.hpp>
-#include <drivers/lib/time/time.hpp>
-#include <drivers/lib/utils.hpp>
+#include <lib/os/thread/thread.hpp>
+#include <lib/os/thread/thread_pool.hpp>
+#include <lib/stream/stream.hpp>
+#include <lib/time/time.hpp>
+#include <lib/utils.hpp>
 
 namespace logic::thread
 {

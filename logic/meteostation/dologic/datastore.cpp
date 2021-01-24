@@ -1,5 +1,5 @@
 #include <logic/meteostation/dologic/datastore.hpp>
-#include <drivers/lib/uart/log/log.hpp>
+#include <lib/uart/log/log.hpp>
 
 using namespace applogic;
 

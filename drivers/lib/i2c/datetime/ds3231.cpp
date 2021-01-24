@@ -1,4 +1,4 @@
-#include <drivers/lib/i2c/datetime/ds3231.hpp>
+#include <lib/i2c/datetime/ds3231.hpp>
 
 using namespace lib::i2c::datetime;
 

@@ -1,20 +1,20 @@
 #ifndef DRIVERS_LIB_UART_GPRS_SIM900
 #define DRIVERS_LIB_UART_GPRS_SIM900
 
-#include <drivers/lib/uart/uart.hpp>
-#include <drivers/lib/time/timer.hpp>
+#include <lib/uart/uart.hpp>
+#include <lib/time/timer.hpp>
 #include <bsp.hpp>
 
 #if (USE_OS)
-#include <drivers/lib/os/mutex.hpp>
+#include <lib/os/mutex.hpp>
 #endif
 
-namespace lib::uart::gprs
+namespace lib::uart::gsm
 {
-class Sim900 final
+class Gsm final
 {
 public:
-    using uart_t = Uart<bsp::usart::sim900_p>;
+    using uart_t = Uart<bsp::usart::gsm_port>;
     using time_t = lib::time::Time;
     using timer_t = lib::time::Timer;
 
@@ -51,9 +51,10 @@ public:
 	};
 
 public:
-    Sim900() = delete;
+    Gsm() = delete;
 
     static bool init();
+    static void power();
 
 private:
     static bool command(const CommandData& data);

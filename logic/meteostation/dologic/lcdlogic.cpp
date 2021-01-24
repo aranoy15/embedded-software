@@ -1,7 +1,7 @@
 #include <logic/meteostation/dologic/lcdlogic.hpp>
 #include <logic/meteostation/dologic/datastore.hpp>
-#include <drivers/lib/stream/stringhandler.hpp>
-#include <drivers/lib/stream/actions.hpp>
+#include <lib/stream/stringhandler.hpp>
+#include <lib/stream/actions.hpp>
 
 using namespace applogic;
 using namespace lib::stream;

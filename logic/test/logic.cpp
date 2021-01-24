@@ -1,15 +1,15 @@
 #include <bsp.hpp>
 
 #include <logic/test/logic.hpp>
-#include <drivers/lib/time/timer.hpp>
-#include <drivers/lib/uart/uart.hpp>
-#include <drivers/lib/uart/log/log.hpp>
-#include <drivers/lib/os/thread/thread.hpp>
-#include <drivers/lib/os/thread/thread_pool.hpp>
+#include <lib/time/timer.hpp>
+#include <lib/uart/uart.hpp>
+#include <lib/uart/log/log.hpp>
+#include <lib/os/thread/thread.hpp>
+#include <lib/os/thread/thread_pool.hpp>
 #include <string>
 #include <vector>
 #include <memory>
-#include <drivers/lib/utils.hpp>
+#include <lib/utils.hpp>
 
 void main_thread(void*)
 {

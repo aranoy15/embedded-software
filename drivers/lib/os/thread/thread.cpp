@@ -1,4 +1,4 @@
-#include <drivers/lib/os/thread/thread.hpp>
+#include <lib/os/thread/thread.hpp>
 
 using namespace lib::os::thread;
 

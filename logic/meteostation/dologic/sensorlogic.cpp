@@ -1,9 +1,9 @@
 #include <bsp.hpp>
 #include <logic/meteostation/dologic/sensorlogic.hpp>
-#include <drivers/lib/time/timer.hpp>
-#include <drivers/lib/uart/uart.hpp>
-#include <drivers/lib/uart/log/log.hpp>
-#include <drivers/lib/i2c/i2c.hpp>
+#include <lib/time/timer.hpp>
+#include <lib/uart/uart.hpp>
+#include <lib/uart/log/log.hpp>
+#include <lib/i2c/i2c.hpp>
 #include <logic/meteostation/dologic/datastore.hpp>
 
 using namespace applogic;

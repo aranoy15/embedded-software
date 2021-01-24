@@ -1,4 +1,4 @@
-#include <drivers/lib/stream/stringhandler.hpp>
+#include <lib/stream/stringhandler.hpp>
 
 using namespace lib::stream;
 

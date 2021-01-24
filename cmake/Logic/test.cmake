@@ -9,7 +9,7 @@ set(USE_I2C_DATETIME 0)
 set(USE_BME280 0)
 set(USE_TASK 0)
 set(USE_I2C_LCD 0)
-set(USE_GPRS 1)
+set(USE_GSM 1)
 
 set(USE_OS 1)
 
@@ -38,6 +38,6 @@ if (USE_OS)
     add_definitions(-DUSE_OS=${USE_OS})
 endif()
 
-if (USE_GPRS)
+if (USE_GSM)
     set(USE_SIM900 1)
 endif()

@@ -10,6 +10,10 @@ if (NOT DEFINED BOARD)
     message(FATAL_ERROR "-- Board is not defined")
 endif()
 
+if (NOT DEFINED DEBUG)
+    set(DEBUG 0)
+endif()
+
 set(COMPILER GCC)
 
 set(TARGET app)

@@ -7,8 +7,9 @@ namespace usart
 {
 enum class port
 {
-	_1,
-	_2
+	_1 = 1,
+	_2,
+    _3
 };
 }
 
@@ -16,7 +17,7 @@ namespace i2c
 {
 enum class port
 {
-	_1,
+	_1 = 1,
 	_2
 };
 }

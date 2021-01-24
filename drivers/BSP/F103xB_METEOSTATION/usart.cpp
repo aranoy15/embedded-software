@@ -1,6 +1,6 @@
 #include <drivers/bsp/F103xB_METEOSTATION/usart.hpp>
 #include <usart.h>
-#include <drivers/lib/uart/uart.hpp>
+#include <lib/uart/uart.hpp>
 
 namespace 
 {

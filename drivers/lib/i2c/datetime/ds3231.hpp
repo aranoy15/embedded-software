@@ -2,8 +2,8 @@
 #define DRIVERS_LIB_I2C_DATETIME_DS3231
 
 #include <cinttypes>
-#include <drivers/lib/datetime/datetime.hpp>
-#include <drivers/lib/i2c/i2c.hpp>
+#include <lib/datetime/datetime.hpp>
+#include <lib/i2c/i2c.hpp>
 #include <bsp.hpp>
 
 namespace lib::i2c::datetime

@@ -1,7 +1,7 @@
 #include <usart.h>
-#include <drivers/bsp/F401xE_TEST/usart.hpp>
-#include <drivers/lib/uart/uart.hpp>
-#include <drivers/csp/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h>
+#include <usart.hpp>
+#include <lib/uart/uart.hpp>
+#include <cmsis_os2.h>
 
 namespace 
 {
@@ -19,10 +19,21 @@ usart_handle_t* get_huart(bsp::usart::port_t port)
         case port_t::_1:
             return &huart1;
         case port_t::_2:
-            return &huart6;
+            return &huart2;
         default:
             return nullptr;
     }
+}
+
+bsp::usart::port_t get_port(usart_handle_t* huart)
+{
+    if (huart->Instance == USART1) {
+        return bsp::usart::port_t::_1;
+    } else if (huart->Instance == USART2) {
+        return bsp::usart::port_t::_2;
+    }
+
+    return bsp::usart::port_t::_1;
 }
 
 void receive_complete_callback(bsp::usart::port_t port)
@@ -70,12 +81,13 @@ void bsp::usart::init(port_t port)
             transmit_events_id_1 = osEventFlagsNew(NULL);
         }
     } else if (port == port_t::_2) {
-        MX_USART6_UART_Init();
+        MX_USART2_UART_Init();
 
         if (transmit_events_id_2 == NULL) {
             transmit_events_id_2 = osEventFlagsNew(NULL);
         }
     }
+
 
 }
 
@@ -100,11 +112,7 @@ bool bsp::usart::start_receive(port_t port, uint8_t data[], std::size_t size)
 
     if (huart == nullptr) return false;
 
-    if (port == port_t::_1) {
-        HAL_UART_Receive_IT(huart, data, size);
-    } else {
-        HAL_UART_Receive_IT(huart, data, size);
-    }
+    HAL_UART_Receive_IT(huart, data, size);
 
     return true;
 }
@@ -115,11 +123,7 @@ bool bsp::usart::stop_receive(port_t port)
 
     if (huart == nullptr) return false;
 
-    if (port == port_t::_1) {
-        HAL_UART_Abort_IT(huart);
-    } else {
-        HAL_UART_Abort_IT(huart);
-    }
+    HAL_UART_Abort_IT(huart);
 
     return true;
 }
@@ -148,41 +152,30 @@ std::size_t bsp::usart::count_receive(port_t port)
 extern "C" {
     void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
-        bsp::usart::port_t port = bsp::usart::port_t::_1;
-
-        if (huart->Instance == USART1) {
-            port = bsp::usart::port_t::_1;
-        } else if (huart->Instance == USART6) {
-            port = bsp::usart::port_t::_2;
-        }
+        bsp::usart::port_t port = get_port(huart);
 
         receive_complete_callback(port);
     }
 
     void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
     {
-        bsp::usart::port_t port = bsp::usart::port_t::_1;
+        bsp::usart::port_t port = get_port(huart);
 
-        if (huart->Instance == USART1) {
-            port = bsp::usart::port_t::_1;
-            osEventFlagsSet(transmit_events_id_1, 1);
-        } else if (huart->Instance == USART6) {
-            port = bsp::usart::port_t::_2;
-            osEventFlagsSet(transmit_events_id_2, 1);
-        }
+        switch (port) {
+            case bsp::usart::port_t::_1:
+                osEventFlagsSet(transmit_events_id_1, 1);
+                break;
+            case bsp::usart::port_t::_2:
+                osEventFlagsSet(transmit_events_id_2, 1);
+                break;
+        };
 
         transmit_complete_callback(port);
     }
 
     void HAL_UART_IdleCallback(UART_HandleTypeDef *huart)
     {
-        bsp::usart::port_t port = bsp::usart::port_t::_1;
-
-        if (huart->Instance == USART1) {
-            port = bsp::usart::port_t::_1;
-        } else if (huart->Instance == USART6) {
-            port = bsp::usart::port_t::_2;
-        }
+        bsp::usart::port_t port = get_port(huart);
 
         idle_callback(port);
     }

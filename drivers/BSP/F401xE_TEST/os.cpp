@@ -1,26 +1,34 @@
-#include <drivers/bsp/F401xE_TEST/os.hpp>
-#include <drivers/csp/F401xE_TEST/Core/Inc/main.h>
+#include <os.hpp>
+#include <main.h>
 
-#include <drivers/csp/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h>
-#include <drivers/csp/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/include/task.h>
+#include <FreeRTOS.h>
+#include <task.h>
 
-void bsp::os::init()
+namespace bsp::os
 {
-    osKernelInitialize();
+
+void init()
+{
+	osKernelInitialize();
 }
 
-void bsp::os::start()
+void start()
 {
-    osKernelStart();
+	osKernelStart();
 }
 
-bool bsp::os::is_running()
+bool is_running()
 {
 	return osKernelGetState() == osKernelRunning;
 }
 
-auto bsp::os::thread::create(func_t func, void* args, std::string_view name,
-                             std::size_t stack, Priority prio) -> id_t
+}  // namespace bsp::os
+
+namespace bsp::os::thread
+{
+
+auto create(func_t func, void* args, std::string_view name, std::size_t stack,
+            Priority prio) -> id_t
 {
 	using attr_t = osThreadAttr_t;
 
@@ -33,10 +41,12 @@ auto bsp::os::thread::create(func_t func, void* args, std::string_view name,
 	return osThreadNew(func, args, &attributes);
 }
 
-void bsp::os::thread::remove(id_t)
+void remove(id_t)
 {
 	osThreadExit();
 }
+
+}  // namespace bsp::os::thread
 
 namespace bsp::os::mutex
 {
@@ -79,7 +89,6 @@ extern "C" void free(void* block)
 void* operator new(std::size_t size)
 {
 	void* block = malloc(size);
-	//if (not block) throw std::bad_alloc();
 	return block;
 }
 
@@ -97,7 +106,6 @@ void operator delete(void* block, std::size_t)
 void *operator new[](std::size_t size)
 {
 	void* block = malloc(size);
-	//if (not block) throw std::bad_alloc();
 	return block;
 }
 

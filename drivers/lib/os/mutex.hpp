@@ -1,7 +1,7 @@
 #ifndef DRIVERS_LIB_OS_MUTEX
 #define DRIVERS_LIB_OS_MUTEX
 
-#include <drivers/lib/lock.hpp>
+#include <lib/lock.hpp>
 #include <bsp.hpp>
 
 namespace lib::os

@@ -1,3 +1,7 @@
+target_include_directories(${TARGET} PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 if (USE_STREAM)
     add_subdirectory(stream)
 endif()

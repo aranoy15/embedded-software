@@ -1,11 +1,11 @@
 #ifndef LOGIC_METEOSTATION_DOLOGIC_LCDLOGIC
 #define LOGIC_METEOSTATION_DOLOGIC_LCDLOGIC
 
-#include <drivers/lib/i2c/lcd/lcd.hpp>
-#include <drivers/lib/task/taskbase.hpp>
-#include <drivers/lib/datetime/datetime.hpp>
-#include <drivers/lib/rotatebuffer.h>
-#include <drivers/lib/stream/stringhandler.hpp>
+#include <lib/i2c/lcd/lcd.hpp>
+#include <lib/task/taskbase.hpp>
+#include <lib/datetime/datetime.hpp>
+#include <lib/rotatebuffer.h>
+#include <lib/stream/stringhandler.hpp>
 #include <vector>
 
 namespace applogic

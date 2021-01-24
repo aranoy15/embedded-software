@@ -1,7 +1,7 @@
 #ifndef DRIVERS_BSP_F401XE_TEST_OS
 #define DRIVERS_BSP_F401XE_TEST_OS
 
-#include <drivers/csp/F401xE_TEST/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h>
+#include <cmsis_os2.h>
 #include <string>
 
 namespace bsp::os

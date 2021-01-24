@@ -7,5 +7,6 @@ set(HAVE_BOOT FALSE)
 add_definitions(-D${CHIP})
 add_definitions(-D${FAMILY})
 add_definitions(-DAPP_START_ADDR=${APP_START_ADDR})
+add_definitions(-DUSE_HAL_DRIVER)
 
 set(PLATFORM_FLAGS "-mthumb -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mabi=aapcs ")

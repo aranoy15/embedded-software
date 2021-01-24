@@ -11,6 +11,12 @@ void on();
 void off();
 void toggle();
 }
+
+namespace gsm
+{
+void on();
+void off();
+}
 }
 
 #endif /* DRIVERS_BSP_F103XB_METEOSTATION_GPIO */

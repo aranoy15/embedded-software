@@ -1,4 +1,4 @@
-#include <drivers/lib/os/mutex.hpp>
+#include <lib/os/mutex.hpp>
 
 namespace lib::os
 {

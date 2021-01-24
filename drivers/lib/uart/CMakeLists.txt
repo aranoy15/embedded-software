@@ -4,6 +4,6 @@ if (USE_LOG)
     add_subdirectory(log)
 endif()
 
-if (USE_GPRS)
-    add_subdirectory(gprs)    
+if (USE_GSM)
+    add_subdirectory(GSM)    
 endif()

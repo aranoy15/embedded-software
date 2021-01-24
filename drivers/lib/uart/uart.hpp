@@ -4,11 +4,11 @@
 #include <bsp.hpp>
 #include <string>
 #include <vector>
-#include <drivers/lib/circular_buffer.h>
+#include <lib/circular_buffer.h>
 
 #if (USE_OS)
-#include <drivers/lib/lock.hpp>
-#include <drivers/lib/os/mutex.hpp>
+#include <lib/lock.hpp>
+#include <lib/os/mutex.hpp>
 #endif
 
 namespace lib::uart

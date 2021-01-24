@@ -2,9 +2,9 @@
 #define LOGIC_METEOSTATION_DOLOGIC_DATASTORE
 
 #include <cinttypes>
-#include <drivers/lib/datetime/datetime.hpp>
-#include <drivers/lib/rotatebuffer.h>
-#include <drivers/lib/time/timer.hpp>
+#include <lib/datetime/datetime.hpp>
+#include <lib/rotatebuffer.h>
+#include <lib/time/timer.hpp>
 #include <bsp.hpp>
 
 namespace applogic

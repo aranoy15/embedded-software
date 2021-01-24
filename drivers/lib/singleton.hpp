@@ -7,7 +7,7 @@
 #include <bsp.hpp>
 
 #if (USE_OS)
-#include <drivers/lib/os/mutex.hpp>
+#include <lib/os/mutex.hpp>
 #endif
 
 template <class T>

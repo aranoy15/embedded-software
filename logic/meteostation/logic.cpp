@@ -1,8 +1,8 @@
 #include <bsp.hpp>
 #include <logic/meteostation/logic.hpp>
-#include <drivers/lib/uart/log/log.hpp>
-#include <drivers/lib/time/timer.hpp>
-#include <drivers/lib/task/scheduler.hpp>
+#include <lib/uart/log/log.hpp>
+#include <lib/time/timer.hpp>
+#include <lib/task/scheduler.hpp>
 #include <logic/meteostation/dologic/sensorlogic.hpp>
 #include <logic/meteostation/dologic/lcdlogic.hpp>
 

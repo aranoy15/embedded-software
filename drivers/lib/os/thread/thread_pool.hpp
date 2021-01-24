@@ -1,9 +1,9 @@
 #ifndef DRIVERS_LIB_OS_THREAD_THREAD_POOL
 #define DRIVERS_LIB_OS_THREAD_THREAD_POOL
 
-#include <drivers/lib/pool_base.hpp>
-#include <drivers/lib/singleton.hpp>
-#include <drivers/lib/os/thread/thread.hpp>
+#include <lib/pool_base.hpp>
+#include <lib/singleton.hpp>
+#include <lib/os/thread/thread.hpp>
 
 namespace lib::os::thread
 {

@@ -1,20 +1,22 @@
-#include <drivers/bsp/F103xB_METEOSTATION/bsp.hpp>
-#include <drivers/csp/F401xE_TEST/Core/Inc/main.h>
-#include <drivers/csp/F401xE_TEST/Core/Inc/gpio.h>
+#include <bsp.hpp>
+#include <main.h>
+#include <gpio.h>
 
 extern "C" {
 void SystemClock_Config(void);
 }
 
-
-void bsp::init()
+namespace bsp
+{
+void init()
 {
     HAL_Init();
 
     SystemClock_Config();
 }
 
-void bsp::reset()
+void reset()
 {
     NVIC_SystemReset();
+}
 }

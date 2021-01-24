@@ -1,8 +1,9 @@
 #include <bsp.hpp>
-#include <drivers/lib/os/thread/thread_pool.hpp>
-#include <drivers/lib/uart/log/log.hpp>
-#include <drivers/lib/time/time.hpp>
-#include <drivers/lib/utils.hpp>
+#include <lib/os/thread/thread_pool.hpp>
+#include <lib/uart/log/log.hpp>
+#include <lib/time/time.hpp>
+#include <lib/utils.hpp>
+#include <lib/uart/uart.hpp>
 
 namespace logic::thread
 {
@@ -47,10 +48,11 @@ void logic::thread::MessageThread::func()
         Log() >> receive >> result;
 
         if (result == result_t::OK) {
+
             Log() << "Receive: " << receive << Endl();
         }
 
-		time_t::sleep(time_t(10));
+		time_t::sleep(time_t::msecs(10));
 	}
 }
 

@@ -60,6 +60,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define GPIO_STATUS_Pin GPIO_PIN_5
 #define GPIO_STATUS_GPIO_Port GPIOA
+#define GSM_RESET_Pin GPIO_PIN_7
+#define GSM_RESET_GPIO_Port GPIOC
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

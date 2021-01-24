@@ -1,10 +1,10 @@
 #ifndef LOGIC_METEOSTATION_DOLOGIC_SENSORLOGIC
 #define LOGIC_METEOSTATION_DOLOGIC_SENSORLOGIC
 
-#include <drivers/lib/uart/sensors/mhz19.hpp>
-#include <drivers/lib/i2c/sensors/bme280.hpp>
-#include <drivers/lib/task/taskbase.hpp>
-#include <drivers/lib/i2c/datetime/ds3231.hpp>
+#include <lib/uart/sensors/mhz19.hpp>
+#include <lib/i2c/sensors/bme280.hpp>
+#include <lib/task/taskbase.hpp>
+#include <lib/i2c/datetime/ds3231.hpp>
 
 namespace applogic
 {

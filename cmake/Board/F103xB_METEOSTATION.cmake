@@ -10,5 +10,6 @@ set(BOOT_TYPE uart)
 add_definitions(-D${CHIP})
 add_definitions(-D${FAMILY})
 add_definitions(-DAPP_START_ADDR=${APP_START_ADDR})
+add_definitions(-DUSE_HAL_DRIVER)
 
 set(PLATFORM_FLAGS "-mthumb -mcpu=cortex-m3 -mabi=aapcs ")
