@@ -19,7 +19,7 @@ bool Gsm::init()
     return true;
 }
 
-void Gsm::reset()
+void Gsm::power()
 {
     bsp::gpio::gsm::off();
     time_t::sleep(time_t::secs(1));
