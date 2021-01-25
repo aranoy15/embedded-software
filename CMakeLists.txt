@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.6)
 
+SET(CMAKE_SYSTEM_NAME Generic)
+SET(CMAKE_SYSTEM_PROCESSOR ARM)
+
 project(test C CXX ASM)
+
 
 if (NOT DEFINED LOGIC)
     message(FATAL_ERROR "-- Logic is not defined")
