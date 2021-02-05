@@ -75,6 +75,8 @@ static bool wait_start(lib::Uart& uart)
 
 void boot_action()
 {
+    bsp::usart::init();
+
 	bsp::tick::delay(10);
 
 	lib::Uart uart;

@@ -4,6 +4,7 @@
 #include <usart.hpp>
 #include <info.hpp>
 #include <tick.hpp>
+#include <usb.hpp>
 
 namespace bsp
 {
