@@ -47,7 +47,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+static void HAL_UART_CheckIdle(UART_HandleTypeDef* huart);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -57,6 +57,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern PCD_HandleTypeDef hpcd_USB_FS;
+extern UART_HandleTypeDef huart1;
 /* USER CODE BEGIN EV */
 
 /* USER CODE END EV */
@@ -211,7 +212,33 @@ void USB_LP_CAN1_RX0_IRQHandler(void)
   /* USER CODE END USB_LP_CAN1_RX0_IRQn 1 */
 }
 
-/* USER CODE BEGIN 1 */
+/**
+  * @brief This function handles USART1 global interrupt.
+  */
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
 
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+  HAL_UART_CheckIdle(&huart1);
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+/* USER CODE BEGIN 1 */
+static void HAL_UART_CheckIdle(UART_HandleTypeDef* huart)
+{
+  uint32_t isrflags = READ_REG(huart->Instance->SR);
+  if ((isrflags & UART_FLAG_IDLE) != RESET) {
+    HAL_UART_IdleCallback(huart);
+    __HAL_UART_CLEAR_IDLEFLAG(huart);
+  }
+}
+
+__weak void HAL_UART_IdleCallback(UART_HandleTypeDef* huart)
+{
+  UNUSED(huart);
+}
 /* USER CODE END 1 */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
