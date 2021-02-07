@@ -19,7 +19,7 @@ SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 if (DEBUG)
-    SET(OPT_FLAGS "-g -O0")
+    SET(OPT_FLAGS "-g")
 else()
     SET(OPT_FLAGS "-Os")
 endif()
@@ -31,7 +31,7 @@ SET(SECTIONS "-ffunction-sections -fdata-sections")
 SET(SHARE_SETTINGS "-fno-builtin -fomit-frame-pointer -fno-unroll-loops -ffast-math -ftree-vectorize -flto ")
 
 SET(CMAKE_C_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Wall -std=gnu99")
-SET(CMAKE_CXX_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Weffc++ -std=c++2a -fno-exceptions")
+SET(CMAKE_CXX_FLAGS "${PLATFORM_FLAGS} ${SECTIONS} ${SHARE_SETTINGS} ${OPT_FLAGS} -Weffc++ -std=c++17 -fno-exceptions")
 SET(CMAKE_ASM_FLAGS "${PLATFORM_FLAGS} ${OPT_FLAGS} -x assembler-with-cpp")
 
 SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections  ${PLATFORM_FLAGS} ${SPECS} -lc -lm -flto -T ${CMAKE_CURRENT_SOURCE_DIR}/chip/${CHIP}/${APP_START_ADDR}/link.ld") #  #-u _printf_float
