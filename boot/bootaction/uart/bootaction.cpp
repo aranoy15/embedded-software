@@ -1,10 +1,13 @@
 
-#include <uart.hpp>
+//#include <uart.hpp>
 #include <bsp.hpp>
+#include <wake.hpp>
+#include <timer.h>
 
 namespace
 {
 
+/*
 uint16_t crc16(const uint8_t* data, std::size_t size)
 {
 	uint16_t crc = 0;
@@ -71,12 +74,37 @@ static bool wait_start(lib::Uart& uart)
 
 	return false;
 }
+*/
+
+static uint8_t buffer[lib::wake::Protocol::max_frame_size];
 }
 
 void boot_action()
 {
-    bsp::usart::init();
+    using protocol_t = lib::wake::Protocol;
+    using packet_t = lib::wake::Packet;
 
+    bsp::usart::init();
+    bsp::usart::start_receive(buffer, sizeof(buffer));
+
+    Timer timer;
+
+    timer.start();
+
+    while(not timer.has_expired(Timer::minute(1))) {
+        if (bsp::usart::is_idle()) {
+
+            for (std::size_t i = 0; i < bsp::usart::count_receive(); ++i) {
+                if (protocol_t::process(buffer[i])) {
+                    packet_t packet = protocol_t::get_packet();
+                }
+            }
+
+            bsp::usart::restart_receive(buffer, sizeof(buffer));
+        }
+    }
+
+	/*
 	bsp::tick::delay(10);
 
 	lib::Uart uart;
@@ -90,4 +118,5 @@ void boot_action()
 		else uart.put_char('!');
 		bsp::AppArea::lock();
 	}
+	*/
 }
