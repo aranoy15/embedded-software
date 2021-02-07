@@ -12,7 +12,7 @@ namespace lib::timer
 class Timer final
 {
 public:
-    Timer() = default;
+    Timer();
     ~Timer() = default;
 
     static constexpr uint32_t millisecond(uint32_t ms) { return ms; }

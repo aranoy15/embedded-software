@@ -83,20 +83,21 @@ void boot_action()
 {
     using protocol_t = lib::wake::Protocol;
     using packet_t = lib::wake::Packet;
+    using timer_t = lib::timer::Timer;
 
     bsp::usart::init();
     bsp::usart::start_receive(buffer, sizeof(buffer));
 
-    Timer timer;
+    timer_t timer;
 
     timer.start();
 
-    while(not timer.has_expired(Timer::minute(1))) {
+    while(not timer.has_expired(timer_t ::minute(1))) {
         if (bsp::usart::is_idle()) {
 
             for (std::size_t i = 0; i < bsp::usart::count_receive(); ++i) {
                 if (protocol_t::process(buffer[i])) {
-                    packet_t packet = protocol_t::get_packet();
+                    packet_t packet = protocol_t::unpack();
                 }
             }
 

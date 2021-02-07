@@ -6,6 +6,8 @@
 
 using namespace lib::timer;
 
+Timer::Timer() : _current(0), _is_started(false) {}
+
 void Timer::start()
 {
     _current = bsp::tick::current();
