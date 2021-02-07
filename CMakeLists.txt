@@ -31,7 +31,6 @@ include(Tools)
 
 add_subdirectory(app)
 add_subdirectory(chip)
-add_subdirectory(drivers)
 
 target_include_directories(${TARGET} PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
