@@ -76,7 +76,7 @@ static bool wait_start(lib::Uart& uart)
 }
 */
 
-static uint8_t buffer[lib::wake::Protocol::max_frame_size];
+uint8_t buffer[lib::wake::Protocol::max_frame_size];
 }
 
 void boot_action()
