@@ -79,6 +79,22 @@ static bool wait_start(lib::Uart& uart)
 uint8_t buffer[lib::wake::Protocol::max_frame_size];
 }
 
+/*
+typedef struct
+{
+  	char build[64];
+	char hwver[16];
+	char blver[16];
+	char date[16];
+	char time[16];
+} TBootLoaderInfo;
+
+const TBootLoaderInfo info __attribute__((section(".device_info"))) = {"Omnicomm Optim3", "HW: 021", "1.0.1.5", __DATE__, __TIME__};
+*/
+
+//char var_static_name[6] __attribute__((section(".device_info"))) = "ANTON";
+//char var_static_last_name[9] __attribute__((section(".device_info"))) = "FEDOSEEV";
+
 void boot_action()
 {
     using protocol_t = lib::wake::Protocol;
