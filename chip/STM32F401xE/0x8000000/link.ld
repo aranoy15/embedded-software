@@ -76,6 +76,13 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
+  .device_info : 
+  { 
+    . = ALIGN(4);
+    KEEP(*(.device_info)) 
+    . = ALIGN(4);
+  } >FLASH
+
   /* The program code and other data goes into FLASH */
   .text :
   {

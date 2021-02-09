@@ -48,6 +48,13 @@ FLASH (rx)      : ORIGIN = 0x8000000, LENGTH = 127K
 /* Define output sections */
 SECTIONS
 {
+  .device_info : 
+  { 
+    . = ALIGN(4);
+    KEEP(*(.device_info)) 
+    . = ALIGN(4);
+  } >FLASH
+
   /* The startup code goes first into FLASH */
   .isr_vector :
   {
