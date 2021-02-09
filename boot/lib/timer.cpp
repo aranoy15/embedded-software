@@ -2,7 +2,7 @@
 // Created by Антон Федосеев on 07.02.2021.
 //
 
-#include "timer.h"
+#include "timer.hpp"
 
 using namespace lib::timer;
 

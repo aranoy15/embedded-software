@@ -1,8 +1,8 @@
 
 //#include <uart.hpp>
 #include <bsp.hpp>
+#include <timer.hpp>
 #include <wake.hpp>
-#include <timer.h>
 
 namespace
 {

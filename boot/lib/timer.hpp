@@ -2,8 +2,8 @@
 // Created by Антон Федосеев on 07.02.2021.
 //
 
-#ifndef TEST_TIMER_H
-#define TEST_TIMER_H
+#ifndef TEST_TIMER_HPP
+#define TEST_TIMER_HPP
 
 #include <bsp.hpp>
 
@@ -33,4 +33,4 @@ private:
 };
 }
 
-#endif  // TEST_TIMER_H
+#endif  // TEST_TIMER_HPP

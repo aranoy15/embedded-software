@@ -13,6 +13,6 @@ bool restart_receive();
 bool stop_receive();
 std::size_t count_receive();
 bool is_idle();
-}
+}  // namespace bsp::usb
 
 #endif /* BOOT_DRIVERS_BSP_F103XB_USB */
