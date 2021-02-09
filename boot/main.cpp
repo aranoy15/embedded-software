@@ -8,5 +8,5 @@ int main(void)
 
 	boot_action();
 
-	bsp::AppArea::jump_to_app();	
+	bsp::AppArea::jump_to_app();
 }

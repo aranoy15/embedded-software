@@ -1,4 +1,4 @@
-SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections ${PLATFORM_FLAGS} ${SPECS} -flto -T ${CMAKE_SOURCE_DIR}/chip/${CHIP}/${BOOT_START_ADDR}/link.ld")
+SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--gc-sections ${PLATFORM_FLAGS} ${SPECS} -flto -T ${CMAKE_SOURCE_DIR}/chip/${CHIP}/${BOOT_START_ADDR}/link.ld -Wl,-Map=boot.map")
 
 set(TARGET boot)
 
