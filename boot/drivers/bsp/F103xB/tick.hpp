@@ -5,6 +5,7 @@
 
 namespace bsp::tick
 {
+    uint32_t current();
     void delay(uint32_t ms);
 }
 
